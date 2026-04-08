@@ -6,302 +6,398 @@
   <title>Matéo Hoareau — Portfolio BTS SIO SLAM</title>
   <meta name="description" content="Portfolio de Matéo Hoareau, étudiant en BTS SIO option SLAM au Lycée Pierre-Poivre, La Réunion.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&family=Sora:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-    :root{--bg:#0a0a0f;--bg-card:#12121a;--bg-card-hover:#1a1a28;--border:#1e1e2e;--border-accent:#2d2d44;--text:#e4e4ef;--text-muted:#8888a4;--accent:#6c5ce7;--accent-light:#a29bfe;--accent-glow:rgba(108,92,231,0.15);--gradient-1:linear-gradient(135deg,#6c5ce7,#a29bfe);--gradient-2:linear-gradient(135deg,#6c5ce7 0%,#00cec9 100%);--success:#00b894;--radius:12px;--radius-lg:20px}
-    html{scroll-behavior:smooth}
-    body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);line-height:1.7;overflow-x:hidden}
-    ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--accent);border-radius:3px}
-    body::before{content:'';position:fixed;inset:0;background:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:9999}
-
-    nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,10,15,0.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:0 2rem}
-    .nav-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:64px}
-    .nav-logo{font-weight:700;font-size:1.2rem;background:var(--gradient-1);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-    .nav-links{display:flex;gap:.25rem;list-style:none}
-    .nav-links a{color:var(--text-muted);text-decoration:none;font-size:.85rem;font-weight:500;padding:.5rem .85rem;border-radius:8px;transition:all .2s}
-    .nav-links a:hover{color:var(--text);background:var(--accent-glow)}
-    .burger{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:4px}
-    .burger span{display:block;width:22px;height:2px;background:var(--text-muted);border-radius:2px}
-
-    section{padding:6rem 2rem}.container{max-width:1100px;margin:0 auto}
-    .section-tag{display:inline-block;font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:2px;color:var(--accent-light);margin-bottom:.75rem;font-family:'JetBrains Mono',monospace}
-    .section-title{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:800;letter-spacing:-1px;margin-bottom:1rem;line-height:1.2}
-    .section-desc{color:var(--text-muted);font-size:1.05rem;max-width:600px;margin-bottom:3rem}
-
-    #hero{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;position:relative;padding-top:64px}
-    .hero-orb{position:absolute;border-radius:50%;filter:blur(120px);opacity:.4;pointer-events:none}
-    .hero-orb-1{width:500px;height:500px;background:#6c5ce7;top:10%;left:10%}
-    .hero-orb-2{width:400px;height:400px;background:#00cec9;bottom:10%;right:10%}
-    .hero-content{position:relative;z-index:1}
-    .hero-badge{display:inline-flex;align-items:center;gap:.5rem;background:var(--bg-card);border:1px solid var(--border);padding:.4rem 1rem;border-radius:999px;font-size:.8rem;color:var(--text-muted);margin-bottom:2rem}
-    .hero-badge .dot{width:8px;height:8px;background:var(--success);border-radius:50%;animation:pulse 2s infinite}
-    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
-    .hero-name{font-size:clamp(2.5rem,7vw,5rem);font-weight:800;letter-spacing:-2px;line-height:1.1;margin-bottom:1rem}
-    .hero-name .gradient{background:var(--gradient-2);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-    .hero-subtitle{font-size:clamp(1rem,2vw,1.3rem);color:var(--text-muted);font-weight:400;margin-bottom:2.5rem;max-width:500px;margin-left:auto;margin-right:auto}
-    .hero-actions{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
-
-    .btn{display:inline-flex;align-items:center;gap:.5rem;padding:.75rem 1.75rem;border-radius:999px;font-family:'Outfit',sans-serif;font-weight:600;font-size:.9rem;text-decoration:none;cursor:pointer;border:none;transition:all .25s}
-    .btn-primary{background:var(--gradient-1);color:#fff;box-shadow:0 4px 24px rgba(108,92,231,.35)}
-    .btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(108,92,231,.5)}
-    .btn-outline{background:transparent;color:var(--text);border:1px solid var(--border-accent)}
-    .btn-outline:hover{border-color:var(--accent);background:var(--accent-glow)}
-
-    .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:start}
-    .about-text p{color:var(--text-muted);margin-bottom:1rem}
-    .about-info{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:2rem}
-    .info-item{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem}
-    .info-item .label{font-size:.75rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;font-family:'JetBrains Mono',monospace}
-    .info-item .value{font-weight:600;margin-top:.25rem}
-    .skills-list{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1.5rem}
-    .skill-tag{background:var(--accent-glow);border:1px solid var(--border-accent);color:var(--accent-light);padding:.35rem .9rem;border-radius:999px;font-size:.8rem;font-weight:500}
-
-    .card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:2rem;transition:all .3s;position:relative;overflow:hidden}
-    .card:hover{border-color:var(--border-accent);background:var(--bg-card-hover);transform:translateY(-4px)}
-    .card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--gradient-1);opacity:0;transition:opacity .3s}
-    .card:hover::before{opacity:1}
-
-    .timeline{position:relative;padding-left:2rem}
-    .timeline::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:linear-gradient(to bottom,var(--accent),transparent)}
-    .timeline-item{position:relative;margin-bottom:2.5rem}
-    .timeline-item::before{content:'';position:absolute;left:-2rem;top:.5rem;width:12px;height:12px;border-radius:50%;background:var(--accent);border:3px solid var(--bg);transform:translateX(-5px)}
-    .timeline-date{font-family:'JetBrains Mono',monospace;font-size:.8rem;color:var(--accent-light);margin-bottom:.25rem}
-    .timeline-title{font-weight:700;font-size:1.1rem}
-    .timeline-sub{color:var(--text-muted);font-size:.9rem}
-
-    .projects-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:1.5rem}
-    .project-icon{width:48px;height:48px;border-radius:var(--radius);background:var(--accent-glow);display:flex;align-items:center;justify-content:center;font-size:1.5rem;margin-bottom:1rem}
-    .project-title{font-weight:700;font-size:1.15rem;margin-bottom:.5rem}
-    .project-desc{color:var(--text-muted);font-size:.9rem;margin-bottom:1rem}
-    .project-tags{display:flex;flex-wrap:wrap;gap:.4rem}
-    .project-tag{font-size:.7rem;padding:.2rem .6rem;border-radius:999px;background:rgba(108,92,231,.1);color:var(--accent-light);border:1px solid rgba(108,92,231,.2);font-family:'JetBrains Mono',monospace}
-
-    .stages-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
-    .stage-period{font-family:'JetBrains Mono',monospace;font-size:.8rem;color:var(--accent-light);margin-bottom:.75rem;display:inline-block;background:var(--accent-glow);padding:.25rem .75rem;border-radius:999px}
-    .stage-title{font-weight:700;font-size:1.15rem;margin-bottom:.25rem}
-    .stage-company{color:var(--accent-light);font-weight:500;margin-bottom:.75rem}
-    .stage-desc{color:var(--text-muted);font-size:.9rem}
-
-    .veille-intro{color:var(--text-muted);max-width:700px;margin-bottom:2.5rem}
-    .veille-grid{display:grid;gap:1rem}
-    .veille-item{display:grid;grid-template-columns:120px 1fr;gap:1.5rem;align-items:start;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;transition:all .3s}
-    .veille-item:hover{border-color:var(--border-accent)}
-    .veille-month{font-family:'JetBrains Mono',monospace;font-size:.85rem;color:var(--accent-light);font-weight:500}
-    .veille-content h4{font-weight:600;margin-bottom:.35rem}
-    .veille-content p{color:var(--text-muted);font-size:.88rem}
-
-    .synthese-placeholder{background:var(--bg-card);border:2px dashed var(--border-accent);border-radius:var(--radius-lg);padding:3rem;text-align:center}
-    .synthese-placeholder p{color:var(--text-muted)}
-
-    .docs-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.25rem}
-    .doc-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;display:flex;align-items:center;gap:1rem;transition:all .3s;text-decoration:none;color:var(--text);cursor:pointer}
-    .doc-card:hover{border-color:var(--accent);background:var(--bg-card-hover);transform:translateY(-2px)}
-    .doc-icon{width:48px;height:48px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0}
-    .doc-icon.cv{background:rgba(108,92,231,.15)}
-    .doc-icon.cert{background:rgba(0,206,201,.15)}
-    .doc-icon.diplome{background:rgba(253,203,110,.15)}
-    .doc-icon.stage{background:rgba(0,184,148,.15)}
-    .doc-name{font-weight:600;font-size:.95rem}
-    .doc-status{font-size:.75rem;color:var(--text-muted)}
-
-    #contact{text-align:center}
-    .contact-links{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-top:2rem}
-    .contact-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem 2rem;text-decoration:none;color:var(--text);display:flex;align-items:center;gap:.75rem;transition:all .3s}
-    .contact-card:hover{border-color:var(--accent);transform:translateY(-2px)}
-    .contact-card span{font-size:1.3rem}
-
-    footer{text-align:center;padding:2rem;border-top:1px solid var(--border);color:var(--text-muted);font-size:.8rem}
-    footer a{color:var(--accent-light);text-decoration:none}
-
-    .rgpd-banner{position:fixed;bottom:0;left:0;right:0;background:var(--bg-card);border-top:1px solid var(--border);padding:1.25rem 2rem;display:flex;align-items:center;justify-content:center;gap:1.5rem;z-index:200;backdrop-filter:blur(20px);font-size:.85rem;color:var(--text-muted);transition:transform .4s}
-    .rgpd-banner.hidden{transform:translateY(100%)}
-    .rgpd-banner button{background:var(--accent);color:#fff;border:none;padding:.5rem 1.25rem;border-radius:999px;font-family:'Outfit',sans-serif;font-weight:600;cursor:pointer;font-size:.85rem}
-
-    @media(max-width:768px){
-      .nav-links{display:none;position:absolute;top:64px;left:0;right:0;background:rgba(10,10,15,.97);flex-direction:column;padding:1rem;border-bottom:1px solid var(--border)}
-      .nav-links.open{display:flex}
-      .burger{display:flex}
-      .about-grid,.stages-grid{grid-template-columns:1fr}
-      .veille-item{grid-template-columns:1fr}
-      section{padding:4rem 1.25rem}
+    :root{
+      --bg:#07080d;
+      --bg-2:#0d0f16;
+      --bg-card:#111318;
+      --bg-card-2:#15171f;
+      --bg-glass:rgba(17,19,24,.7);
+      --border:rgba(255,255,255,.05);
+      --border-2:rgba(255,255,255,.08);
+      --border-3:rgba(255,255,255,.12);
+      --text:#eef0f6;
+      --text-2:#b0b5c5;
+      --text-3:#6c7289;
+      --blue:#6366f1;
+      --blue-2:#818cf8;
+      --blue-3:#a5b4fc;
+      --cyan:#06b6d4;
+      --emerald:#10b981;
+      --amber:#f59e0b;
+      --rose:#f472b6;
+      --glow-blue:rgba(99,102,241,.12);
+      --glow-blue-2:rgba(99,102,241,.06);
+      --grad:linear-gradient(135deg,#6366f1,#06b6d4);
+      --grad-2:linear-gradient(135deg,#6366f1,#818cf8,#06b6d4);
+      --r:12px;--r2:18px;--r3:24px;
     }
-    .fade-in{opacity:0;transform:translateY(30px);transition:opacity .6s ease,transform .6s ease}
-    .fade-in.visible{opacity:1;transform:translateY(0)}
+    html{scroll-behavior:smooth}
+    body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.7;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+    ::selection{background:rgba(99,102,241,.3);color:#fff}
+    ::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--blue);border-radius:4px}
+ 
+    /* ─── NAV ─── */
+    nav{position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:100;
+      background:rgba(13,15,22,.75);backdrop-filter:blur(24px) saturate(1.8);
+      border:1px solid var(--border-2);border-radius:999px;padding:.35rem .5rem;
+      display:flex;align-items:center;gap:.15rem;max-width:fit-content;
+      box-shadow:0 8px 32px rgba(0,0,0,.4)}
+    nav a{color:var(--text-2);text-decoration:none;font-size:.78rem;font-weight:500;padding:.45rem .85rem;border-radius:999px;transition:all .25s;white-space:nowrap}
+    nav a:hover{color:var(--text);background:var(--glow-blue)}
+    nav a.active{color:#fff;background:var(--blue)}
+    .mob-toggle{display:none;background:none;border:none;color:var(--text-2);padding:.45rem .7rem;cursor:pointer;font-size:1rem}
+ 
+    /* ─── LAYOUT ─── */
+    section{padding:8rem 2rem}
+    .wrap{max-width:1120px;margin:0 auto}
+ 
+    .label{display:inline-flex;align-items:center;gap:.6rem;font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:3px;color:var(--blue-2);margin-bottom:1.25rem;font-family:'JetBrains Mono',monospace}
+    .label::before{content:'';width:24px;height:1.5px;background:var(--grad);border-radius:2px}
+    h2{font-family:'Sora',sans-serif;font-size:clamp(2rem,4.5vw,3rem);font-weight:800;letter-spacing:-.5px;margin-bottom:.6rem;line-height:1.15}
+    .intro{color:var(--text-2);font-size:.98rem;max-width:560px;margin-bottom:3.5rem;line-height:1.7}
+ 
+    /* ─── HERO ─── */
+    #hero{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;position:relative;padding-top:80px;overflow:hidden}
+    .hero-mesh{position:absolute;inset:0;
+      background:
+        radial-gradient(ellipse 80% 50% at 50% 0%,rgba(99,102,241,.1),transparent),
+        radial-gradient(ellipse 60% 40% at 20% 80%,rgba(6,182,212,.06),transparent),
+        radial-gradient(ellipse 50% 30% at 80% 60%,rgba(129,140,248,.06),transparent)}
+    .hero-lines{position:absolute;inset:0;
+      background-image:linear-gradient(rgba(255,255,255,.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.02) 1px,transparent 1px);
+      background-size:80px 80px;
+      mask-image:radial-gradient(ellipse 70% 50% at 50% 50%,black 10%,transparent 70%)}
+    .hero-inner{position:relative;z-index:1}
+    .hero-chip{display:inline-flex;align-items:center;gap:.6rem;background:var(--bg-card);border:1px solid var(--border-2);padding:.4rem 1.15rem;border-radius:999px;font-size:.78rem;color:var(--text-2);margin-bottom:2.5rem;backdrop-filter:blur(8px)}
+    .hero-chip .dot{width:7px;height:7px;background:var(--emerald);border-radius:50%;box-shadow:0 0 10px rgba(16,185,129,.5);animation:blink 2s infinite}
+    @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+    .hero-name{font-family:'Sora',sans-serif;font-size:clamp(3rem,9vw,6.5rem);font-weight:900;letter-spacing:-3px;line-height:1;margin-bottom:1.5rem}
+    .hero-name span{background:var(--grad-2);-webkit-background-clip:text;-webkit-text-fill-color:transparent;filter:brightness(1.2)}
+    .hero-role{font-size:clamp(.95rem,1.8vw,1.15rem);color:var(--text-2);font-weight:400;margin-bottom:3rem;max-width:480px;margin-left:auto;margin-right:auto;line-height:1.7}
+    .hero-btns{display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap}
+    .btn{display:inline-flex;align-items:center;gap:.5rem;padding:.75rem 1.8rem;border-radius:999px;font-family:'Inter',sans-serif;font-weight:600;font-size:.88rem;text-decoration:none;cursor:pointer;border:none;transition:all .3s}
+    .btn-fill{background:var(--blue);color:#fff;box-shadow:0 4px 20px rgba(99,102,241,.3),inset 0 1px 0 rgba(255,255,255,.1)}
+    .btn-fill:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(99,102,241,.45);background:#7577f5}
+    .btn-glass{background:var(--bg-glass);color:var(--text);border:1px solid var(--border-2);backdrop-filter:blur(12px)}
+    .btn-glass:hover{border-color:var(--blue);background:var(--glow-blue)}
+ 
+    /* ─── ABOUT ─── */
+    .about-cols{display:grid;grid-template-columns:1.1fr .9fr;gap:4rem;align-items:start}
+    .about-text p{color:var(--text-2);margin-bottom:1rem;font-size:.93rem;line-height:1.75}
+    .stat-row{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-top:1.75rem}
+    .stat{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r);padding:1rem 1.15rem;transition:all .3s}
+    .stat:hover{border-color:var(--border-3);background:var(--bg-card-2)}
+    .stat .k{font-size:.65rem;color:var(--text-3);text-transform:uppercase;letter-spacing:1.5px;font-family:'JetBrains Mono',monospace}
+    .stat .v{font-weight:700;font-size:.9rem;margin-top:.15rem}
+    .tags{display:flex;flex-wrap:wrap;gap:.35rem;margin-top:1rem}
+    .tag{background:var(--glow-blue);border:1px solid rgba(99,102,241,.12);color:var(--blue-3);padding:.3rem .75rem;border-radius:999px;font-size:.74rem;font-weight:500;transition:all .25s;cursor:default}
+    .tag:hover{background:rgba(99,102,241,.15);border-color:rgba(99,102,241,.25)}
+ 
+    /* ─── GLASS CARD ─── */
+    .gc{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r2);padding:1.75rem;position:relative;transition:all .35s;overflow:hidden}
+    .gc::after{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:var(--grad);opacity:0;transition:opacity .35s}
+    .gc:hover{border-color:var(--border-3);transform:translateY(-4px);box-shadow:0 12px 40px rgba(0,0,0,.25),0 0 0 1px var(--border-2)}
+    .gc:hover::after{opacity:1}
+ 
+    /* ─── TIMELINE ─── */
+    .tl{position:relative;padding-left:2.5rem}
+    .tl::before{content:'';position:absolute;left:5px;top:8px;bottom:8px;width:1.5px;background:linear-gradient(to bottom,var(--blue),var(--cyan),transparent)}
+    .tl-i{position:relative;margin-bottom:2.5rem}
+    .tl-i::before{content:'';position:absolute;left:-2.5rem;top:.45rem;width:12px;height:12px;border-radius:50%;background:var(--bg);border:2.5px solid var(--blue);box-shadow:0 0 0 4px var(--glow-blue),0 0 12px rgba(99,102,241,.15)}
+    .tl-d{font-family:'JetBrains Mono',monospace;font-size:.75rem;color:var(--blue-2);margin-bottom:.1rem}
+    .tl-t{font-family:'Sora',sans-serif;font-weight:700;font-size:1.05rem}
+    .tl-s{color:var(--text-2);font-size:.87rem}
+ 
+    /* ─── PROJECTS ─── */
+    .pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:1rem}
+    .p-emoji{font-size:2rem;margin-bottom:.75rem;display:block;filter:grayscale(0)}
+    .p-name{font-family:'Sora',sans-serif;font-weight:700;font-size:1.05rem;margin-bottom:.4rem}
+    .p-desc{color:var(--text-2);font-size:.85rem;margin-bottom:1rem;line-height:1.65}
+    .p-tags{display:flex;flex-wrap:wrap;gap:.3rem}
+    .p-tag{font-size:.65rem;padding:.18rem .5rem;border-radius:999px;background:rgba(6,182,212,.08);color:rgba(6,182,212,.8);border:1px solid rgba(6,182,212,.12);font-family:'JetBrains Mono',monospace}
+ 
+    /* ─── STAGES ─── */
+    .s-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+    .s-badge{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--emerald);display:inline-block;background:rgba(16,185,129,.08);padding:.2rem .7rem;border-radius:999px;border:1px solid rgba(16,185,129,.12);margin-bottom:.75rem}
+    .s-name{font-family:'Sora',sans-serif;font-weight:700;font-size:1.05rem;margin-bottom:.15rem}
+    .s-org{color:var(--blue-2);font-weight:500;font-size:.9rem;margin-bottom:.5rem}
+    .s-txt{color:var(--text-2);font-size:.85rem;line-height:1.65}
+ 
+    /* ─── VEILLE ─── */
+    .v-topic{color:var(--text-2);max-width:700px;margin-bottom:2.5rem;font-size:.93rem}
+    .v-topic strong{color:var(--text)}
+    .v-list{display:grid;gap:.6rem}
+    .vi{display:grid;grid-template-columns:100px 1fr;gap:1.5rem;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r);padding:1.25rem 1.4rem;transition:all .25s}
+    .vi:hover{border-color:var(--border-3);box-shadow:0 4px 20px rgba(0,0,0,.2)}
+    .vi-m{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--blue-2);font-weight:500;padding-top:.1rem}
+    .vi-b h4{font-family:'Sora',sans-serif;font-weight:600;font-size:.92rem;margin-bottom:.25rem}
+    .vi-b p{color:var(--text-2);font-size:.83rem;line-height:1.6;margin-bottom:.4rem}
+    .vi-links{display:flex;flex-wrap:wrap;gap:.3rem}
+    .vi-a{font-size:.65rem;color:var(--blue-3);text-decoration:none;background:var(--glow-blue-2);padding:.12rem .5rem;border-radius:999px;border:1px solid rgba(99,102,241,.08);transition:all .2s;font-family:'JetBrains Mono',monospace}
+    .vi-a:hover{background:var(--glow-blue);border-color:rgba(99,102,241,.2);color:#fff}
+ 
+    /* ─── E5 BOX ─── */
+    .e5-box{background:var(--bg-card);border:1px solid var(--border-2);border-radius:var(--r3);padding:3rem;text-align:center;position:relative;overflow:hidden}
+    .e5-box::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--grad)}
+    .e5-box p{color:var(--text-2)}
+ 
+    /* ─── DOCS ─── */
+    .d-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:.75rem}
+    .dl{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r);padding:1.15rem 1.3rem;display:flex;align-items:center;gap:1rem;transition:all .25s;text-decoration:none;color:var(--text)}
+    .dl:hover{border-color:var(--blue);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.2),0 0 0 1px rgba(99,102,241,.1)}
+    .dl-i{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.15rem;flex-shrink:0}
+    .dl-i.c1{background:rgba(99,102,241,.1)}.dl-i.c2{background:rgba(16,185,129,.1)}.dl-i.c3{background:rgba(245,158,11,.1)}.dl-i.c4{background:rgba(244,114,182,.1)}
+    .dl-t{font-weight:600;font-size:.88rem}.dl-s{font-size:.7rem;color:var(--text-3);margin-top:.05rem}
+ 
+    /* ─── CONTACT ─── */
+    #contact{text-align:center}
+    .c-row{display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap;margin-top:2rem}
+    .cc{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r);padding:1.1rem 1.75rem;text-decoration:none;color:var(--text);display:flex;align-items:center;gap:.7rem;transition:all .25s}
+    .cc:hover{border-color:var(--blue);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.2)}
+ 
+    /* ─── FOOTER ─── */
+    footer{text-align:center;padding:2.5rem 2rem;border-top:1px solid var(--border);color:var(--text-3);font-size:.75rem}
+    footer a{color:var(--blue-2);text-decoration:none}
+ 
+    /* ─── RGPD ─── */
+    .rgpd{position:fixed;bottom:0;left:0;right:0;background:rgba(13,15,22,.92);border-top:1px solid var(--border);padding:1rem 2rem;display:flex;align-items:center;justify-content:center;gap:1.25rem;z-index:200;backdrop-filter:blur(20px);font-size:.8rem;color:var(--text-2);transition:transform .4s}
+    .rgpd.off{transform:translateY(100%)}
+    .rgpd button{background:var(--blue);color:#fff;border:none;padding:.4rem 1rem;border-radius:999px;font-family:'Inter',sans-serif;font-weight:600;cursor:pointer;font-size:.8rem}
+ 
+    /* ─── RESPONSIVE ─── */
+    @media(max-width:900px){
+      nav{top:auto;bottom:16px;border-radius:16px;padding:.3rem;overflow-x:auto;max-width:calc(100% - 32px)}
+      nav a{font-size:.72rem;padding:.4rem .65rem}
+      section{padding:5rem 1.25rem}
+    }
+    @media(max-width:768px){
+      .about-cols,.s-grid{grid-template-columns:1fr}
+      .vi{grid-template-columns:1fr}
+      .hero-name{letter-spacing:-1.5px}
+    }
+ 
+    /* ─── SCROLL REVEAL ─── */
+    .sr{opacity:0;transform:translateY(28px);transition:opacity .7s cubic-bezier(.16,1,.3,1),transform .7s cubic-bezier(.16,1,.3,1)}
+    .sr.on{opacity:1;transform:none}
+    .sr-d1{transition-delay:.08s}.sr-d2{transition-delay:.16s}.sr-d3{transition-delay:.24s}
   </style>
 </head>
 <body>
-
-<nav>
-  <div class="nav-inner">
-    <div class="nav-logo">MH.</div>
-    <button class="burger" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu"><span></span><span></span><span></span></button>
-    <ul class="nav-links">
-      <li><a href="#about">À propos</a></li>
-      <li><a href="#formation">Formation</a></li>
-      <li><a href="#projets">Projets</a></li>
-      <li><a href="#stages">Stages</a></li>
-      <li><a href="#veille">Veille</a></li>
-      <li><a href="#synthese">Synthèse E5</a></li>
-      <li><a href="#documents">Documents</a></li>
-      <li><a href="#contact">Contact</a></li>
-    </ul>
-  </div>
+ 
+<!-- NAV -->
+<nav id="nav">
+  <a href="#about">À propos</a>
+  <a href="#formation">Formation</a>
+  <a href="#projets">Projets</a>
+  <a href="#stages">Stages</a>
+  <a href="#veille">Veille</a>
+  <a href="#synthese">E5</a>
+  <a href="#documents">Documents</a>
+  <a href="#contact">Contact</a>
 </nav>
-
+ 
+<!-- HERO -->
 <section id="hero">
-  <div class="hero-orb hero-orb-1"></div>
-  <div class="hero-orb hero-orb-2"></div>
-  <div class="hero-content">
-    <div class="hero-badge"><span class="dot"></span> Disponible pour alternance / emploi</div>
-    <h1 class="hero-name">Matéo<br><span class="gradient">Hoareau</span></h1>
-    <p class="hero-subtitle">Étudiant en BTS SIO option SLAM<br>Lycée Pierre-Poivre · La Réunion</p>
-    <div class="hero-actions">
-      <a href="#projets" class="btn btn-primary">Voir mes projets</a>
-      <a href="#documents" class="btn btn-outline">📄 Télécharger mon CV</a>
+  <div class="hero-mesh"></div>
+  <div class="hero-lines"></div>
+  <div class="hero-inner">
+    <div class="hero-chip"><span class="dot"></span>Candidat BTS SIO SLAM — Session 2026</div>
+    <h1 class="hero-name">Matéo<br><span>Hoareau</span></h1>
+    <p class="hero-role">Développeur en formation · BTS SIO option SLAM<br>Lycée Pierre-Poivre · Saint-Joseph, La Réunion</p>
+    <div class="hero-btns">
+      <a href="#projets" class="btn btn-fill">Découvrir mes projets</a>
+      <a href="docs/cv-mateo-hoareau.pdf" download class="btn btn-glass">📄 Télécharger mon CV</a>
     </div>
   </div>
 </section>
-
+ 
+<!-- ABOUT -->
 <section id="about">
-  <div class="container fade-in">
-    <span class="section-tag">// à propos</span>
-    <h2 class="section-title">Qui suis-je ?</h2>
-    <div class="about-grid">
+  <div class="wrap sr">
+    <span class="label">À propos</span>
+    <h2>Qui suis-je ?</h2>
+    <div class="about-cols">
       <div class="about-text">
-        <p>Passionné par le développement d'applications et les nouvelles technologies, je suis actuellement en deuxième année de BTS Services Informatiques aux Organisations, option Solutions Logicielles et Applications Métiers (SLAM), au Lycée Pierre-Poivre à Saint-Joseph, La Réunion.</p>
-        <p>Titulaire d'un Bac STMG obtenu en 2025 avec la mention Assez Bien, j'ai choisi de m'orienter vers l'informatique pour concrétiser ma passion pour le code et la création d'applications.</p>
-        <p>Mon parcours m'a permis de développer des compétences solides en développement web et logiciel, ainsi qu'une expérience concrète grâce à deux stages en entreprise. J'ai également participé à un voyage Erasmus en Allemagne durant lequel j'ai réalisé un projet de création de site web.</p>
-        <div class="about-info">
-          <div class="info-item"><div class="label">Localisation</div><div class="value">Saint-Joseph, La Réunion</div></div>
-          <div class="info-item"><div class="label">Formation</div><div class="value">BTS SIO SLAM</div></div>
-          <div class="info-item"><div class="label">Établissement</div><div class="value">Lycée Pierre-Poivre</div></div>
-          <div class="info-item"><div class="label">Candidat n°</div><div class="value" style="color:var(--text-muted);font-style:italic">À compléter</div></div>
+        <p>Passionné par le développement d'applications et les nouvelles technologies, je suis en deuxième année de BTS Services Informatiques aux Organisations, option Solutions Logicielles et Applications Métiers (SLAM), au Lycée Pierre-Poivre à Saint-Joseph, La Réunion.</p>
+        <p>Titulaire d'un Bac STMG obtenu en 2024 avec mention Assez Bien, j'ai choisi l'informatique pour concrétiser ma passion pour le code. Mon parcours inclut deux stages en entreprise et un voyage Erasmus en Allemagne où j'ai réalisé un site web en équipe internationale.</p>
+        <div class="stat-row">
+          <div class="stat"><div class="k">Localisation</div><div class="v">Saint-Joseph, Réunion</div></div>
+          <div class="stat"><div class="k">Formation</div><div class="v">BTS SIO SLAM</div></div>
+          <div class="stat"><div class="k">Établissement</div><div class="v">Lycée Pierre-Poivre</div></div>
+          <div class="stat"><div class="k">N° Candidat</div><div class="v" style="color:var(--text-3);font-style:italic">À compléter</div></div>
         </div>
       </div>
       <div>
-        <span class="section-tag">// compétences techniques</span>
-        <div class="skills-list" style="margin-top:1rem">
-          <span class="skill-tag">Java</span><span class="skill-tag">IntelliJ IDEA</span><span class="skill-tag">HTML5</span><span class="skill-tag">CSS3</span><span class="skill-tag">JavaScript</span><span class="skill-tag">PHP</span><span class="skill-tag">MySQL</span><span class="skill-tag">Python</span><span class="skill-tag">SQL</span><span class="skill-tag">Git / GitHub</span><span class="skill-tag">UML / Merise</span><span class="skill-tag">VS Code</span>
+        <span class="label">Compétences</span>
+        <div class="tags">
+          <span class="tag">Java</span><span class="tag">IntelliJ IDEA</span><span class="tag">Android Studio</span><span class="tag">HTML5</span><span class="tag">CSS3</span><span class="tag">JavaScript</span><span class="tag">PHP</span><span class="tag">MySQL</span><span class="tag">Python</span><span class="tag">Git / GitHub</span><span class="tag">UML / Merise</span><span class="tag">WordPress</span>
         </div>
-        <span class="section-tag" style="margin-top:2rem;display:inline-block">// langues</span>
-        <div class="skills-list" style="margin-top:1rem">
-          <span class="skill-tag">🇫🇷 Français — natif</span><span class="skill-tag">🇬🇧 Anglais — bon niveau</span><span class="skill-tag">🇩🇪 Allemand — notions (Erasmus)</span>
+        <span class="label" style="margin-top:1.75rem;display:inline-flex">Langues</span>
+        <div class="tags">
+          <span class="tag">🇫🇷 Français — natif</span><span class="tag">🇬🇧 Anglais — bon niveau</span><span class="tag">🇩🇪 Allemand — notions</span>
+        </div>
+        <span class="label" style="margin-top:1.75rem;display:inline-flex">Certifications</span>
+        <div class="tags">
+          <span class="tag">🛡️ CNIL RGPD — 5 modules (100%)</span><span class="tag">🏅 Pix — 538/895 Avancé 1</span>
         </div>
       </div>
     </div>
   </div>
 </section>
-
-<section id="formation" style="background:rgba(18,18,26,0.5)">
-  <div class="container fade-in">
-    <span class="section-tag">// parcours</span>
-    <h2 class="section-title">Formation</h2>
-    <div class="timeline">
-      <div class="timeline-item"><div class="timeline-date">2025 – 2027</div><div class="timeline-title">BTS SIO — Option SLAM</div><div class="timeline-sub">Lycée Pierre-Poivre, Saint-Joseph, La Réunion</div><div class="timeline-sub">Solutions Logicielles et Applications Métiers</div></div>
-      <div class="timeline-item"><div class="timeline-date">2024 – 2025</div><div class="timeline-title">Baccalauréat STMG — Mention Assez Bien</div><div class="timeline-sub">Lycée Pierre-Poivre, Saint-Joseph, La Réunion</div></div>
-      <div class="timeline-item"><div class="timeline-date">2025</div><div class="timeline-title">Voyage Erasmus — Allemagne</div><div class="timeline-sub">Création d'un site web dans un contexte international</div></div>
+ 
+<!-- FORMATION -->
+<section id="formation" style="background:var(--bg-2)">
+  <div class="wrap sr">
+    <span class="label">Parcours</span>
+    <h2>Formation</h2>
+    <div class="tl">
+      <div class="tl-i"><div class="tl-d">2024 – 2026</div><div class="tl-t">BTS SIO — Option SLAM</div><div class="tl-s">Lycée Pierre-Poivre, Saint-Joseph — Solutions Logicielles et Applications Métiers</div></div>
+      <div class="tl-i"><div class="tl-d">2023 – 2024</div><div class="tl-t">Baccalauréat STMG — Mention Assez Bien</div><div class="tl-s">Lycée Pierre-Poivre, Saint-Joseph, La Réunion</div></div>
+      <div class="tl-i"><div class="tl-d">2024</div><div class="tl-t">Voyage Erasmus — Allemagne</div><div class="tl-s">Création d'un site web en équipe internationale</div></div>
     </div>
   </div>
 </section>
-
+ 
+<!-- PROJETS -->
 <section id="projets">
-  <div class="container fade-in">
-    <span class="section-tag">// réalisations</span>
-    <h2 class="section-title">Projets</h2>
-    <p class="section-desc">Projets réalisés au cours de mon BTS SIO SLAM.</p>
-    <div class="projects-grid">
-      <div class="card"><div class="project-icon">🎬</div><div class="project-title">Base de données Cinéma</div><div class="project-desc">Conception et implémentation d'une base de données relationnelle pour la gestion d'un cinéma : films, séances, salles, réservations. Modélisation MCD/MLD et requêtes SQL avancées.</div><div class="project-tags"><span class="project-tag">SQL</span><span class="project-tag">MySQL</span><span class="project-tag">Merise</span><span class="project-tag">MCD/MLD</span></div></div>
-      <div class="card"><div class="project-icon">🅿️</div><div class="project-title">QR Code Parking</div><div class="project-desc">Application de gestion de parking par QR code. Génération, lecture et validation de QR codes pour l'accès au stationnement. Projet réalisé sous IntelliJ IDEA.</div><div class="project-tags"><span class="project-tag">Java</span><span class="project-tag">IntelliJ</span><span class="project-tag">QR Code</span></div></div>
-      <div class="card"><div class="project-icon">💊</div><div class="project-title">Application Web Pharmacie</div><div class="project-desc">Application web complète de gestion de pharmacie avec base de données intégrée : gestion des médicaments, stocks, ordonnances et clients.</div><div class="project-tags"><span class="project-tag">PHP</span><span class="project-tag">MySQL</span><span class="project-tag">HTML/CSS</span><span class="project-tag">JavaScript</span></div></div>
-      <div class="card"><div class="project-icon">🎫</div><div class="project-title">Billetterie Komidi (Stage)</div><div class="project-desc">Application de billetterie basée sur une instance TiBillet, développée pour l'association Komidi. Gestion des événements et vente de billets en ligne.</div><div class="project-tags"><span class="project-tag">TiBillet</span><span class="project-tag">Python</span><span class="project-tag">Web</span><span class="project-tag">API</span></div></div>
+  <div class="wrap sr">
+    <span class="label">Réalisations</span>
+    <h2>Projets</h2>
+    <p class="intro">Projets réalisés en formation et en stage durant mon BTS SIO SLAM.</p>
+    <div class="pgrid">
+      <div class="gc"><span class="p-emoji">🎬</span><div class="p-name">Application Web Cinéma</div><div class="p-desc">Application web de gestion de cinéma en Java : films, séances, salles et réservations. Modélisation MCD/MLD.</div><div class="p-tags"><span class="p-tag">Java</span><span class="p-tag">SQL</span><span class="p-tag">MySQL</span><span class="p-tag">Merise</span></div></div>
+      <div class="gc"><span class="p-emoji">💊</span><div class="p-name">Application Web Pharmacie</div><div class="p-desc">Application complète de gestion de pharmacie avec base de données intégrée : médicaments, stocks, ordonnances.</div><div class="p-tags"><span class="p-tag">Java</span><span class="p-tag">MySQL</span><span class="p-tag">HTML/CSS</span><span class="p-tag">JS</span></div></div>
+      <div class="gc"><span class="p-emoji">📱</span><div class="p-name">Application Mobile Parking</div><div class="p-desc">Application mobile de gestion de parking par QR code via Android Studio : génération, lecture et validation.</div><div class="p-tags"><span class="p-tag">Java</span><span class="p-tag">Android Studio</span><span class="p-tag">QR Code</span></div></div>
+      <div class="gc"><span class="p-emoji">🎫</span><div class="p-name">Billetterie Komidi</div><div class="p-desc">Application de billetterie basée sur TiBillet pour l'association Komidi. Vente de billets en ligne pour événements culturels.</div><div class="p-tags"><span class="p-tag">TiBillet</span><span class="p-tag">Python</span><span class="p-tag">API</span></div></div>
+      <div class="gc"><span class="p-emoji">🌍</span><div class="p-name">Site WordPress — Erasmus</div><div class="p-desc">Création d'un site WordPress en équipe internationale lors du voyage Erasmus en Allemagne.</div><div class="p-tags"><span class="p-tag">WordPress</span><span class="p-tag">HTML/CSS</span><span class="p-tag">Erasmus</span></div></div>
+      <div class="gc"><span class="p-emoji">🔗</span><div class="p-name">Développement d'une API</div><div class="p-desc">Conception et développement d'une API pour la communication entre applications et services.</div><div class="p-tags"><span class="p-tag">API</span><span class="p-tag">REST</span><span class="p-tag">Java</span></div></div>
+      <div class="gc"><span class="p-emoji">🧮</span><div class="p-name">Fonctions mathématiques</div><div class="p-desc">Développement de fonctions en Java et Python : moyenne, inverseur de tableau, compteur de voyelles. Algorithmie.</div><div class="p-tags"><span class="p-tag">Java</span><span class="p-tag">Python</span><span class="p-tag">Algo</span></div></div>
     </div>
   </div>
 </section>
-
-<section id="stages" style="background:rgba(18,18,26,0.5)">
-  <div class="container fade-in">
-    <span class="section-tag">// expérience professionnelle</span>
-    <h2 class="section-title">Stages</h2>
-    <div class="stages-grid">
-      <div class="card"><div class="stage-period">02 Juin – 27 Juin 2025 · 4 semaines</div><div class="stage-title">Stage de première année</div><div class="stage-company">Mairie de Saint-Joseph — Service Informatique</div><div class="stage-desc">Découverte du fonctionnement d'un service informatique en collectivité territoriale. Maintenance du parc informatique, assistance utilisateurs et gestion réseau.</div></div>
-      <div class="card"><div class="stage-period">14 Janvier – 24 Février 2026 · 6 semaines</div><div class="stage-title">Stage de deuxième année</div><div class="stage-company">Association Komidi</div><div class="stage-desc">Développement d'une application de billetterie basée sur une instance TiBillet. Conception, développement et déploiement d'une solution de vente de billets en ligne pour les événements culturels.</div></div>
+ 
+<!-- STAGES -->
+<section id="stages" style="background:var(--bg-2)">
+  <div class="wrap sr">
+    <span class="label">Expérience</span>
+    <h2>Stages en entreprise</h2>
+    <div class="s-grid">
+      <div class="gc">
+        <div class="s-badge">02 Juin – 27 Juin 2025 · 4 semaines</div>
+        <div class="s-name">Stage de première année</div>
+        <div class="s-org">Mairie de Saint-Joseph — Service Informatique</div>
+        <div class="s-txt">Découverte du service informatique d'une collectivité territoriale. Maintenance du parc informatique, assistance utilisateurs, gestion réseau.</div>
+      </div>
+      <div class="gc">
+        <div class="s-badge">14 Janv. – 24 Fév. 2026 · 6 semaines</div>
+        <div class="s-name">Stage de deuxième année</div>
+        <div class="s-org">Association Komidi — Saint-Joseph</div>
+        <div class="s-txt">Développement d'une application de billetterie basée sur TiBillet. Conception, développement et déploiement d'une solution de vente de billets pour événements culturels.</div>
+      </div>
     </div>
   </div>
 </section>
-
+ 
+<!-- VEILLE -->
 <section id="veille">
-  <div class="container fade-in">
-    <span class="section-tag">// veille technologique</span>
-    <h2 class="section-title">Veille Technologique</h2>
-    <p class="veille-intro">Sujet : <strong>L'Intelligence Artificielle générative — impact sur le développement logiciel et la société</strong><br>Période : 24 Octobre 2025 – 20 Avril 2026</p>
-    <div class="veille-grid">
-      <div class="veille-item"><div class="veille-month">Oct. 2025</div><div class="veille-content"><h4>Les agents IA autonomes émergent</h4><p>Les agents IA capables d'exécuter des tâches complexes se multiplient. OpenAI atteint 500 milliards de dollars de valorisation. L'IA agentique devient le mot-clé de la fin d'année.</p></div></div>
-      <div class="veille-item"><div class="veille-month">Nov. 2025</div><div class="veille-content"><h4>Multi-agents et levées de fonds records</h4><p>Anthropic valorisée à 350 milliards de dollars. L'orchestration multi-agents se développe : plusieurs IA spécialisées collaborent en entreprise. L'IA embarquée gagne du terrain pour la confidentialité.</p></div></div>
-      <div class="veille-item"><div class="veille-month">Déc. 2025</div><div class="veille-content"><h4>Bilan 2025 — L'IA devient concrète</h4><p>xAI lève 15 milliards de dollars. 78 % des organisations utilisent l'IA dans au moins une fonction. L'investissement mondial atteint 202 milliards de dollars. Le ROI reste la question centrale.</p></div></div>
-      <div class="veille-item"><div class="veille-month">Janv. 2026</div><div class="veille-content"><h4>DeepSeek et l'AI Act européen</h4><p>La Chine dévoile DeepSeek, modèle open source rivalisant avec les leaders. L'AI Act européen entre en application. La CNIL sanctionne lourdement Free pour manquement au RGPD.</p></div></div>
-      <div class="veille-item"><div class="veille-month">Fév. 2026</div><div class="veille-content"><h4>48 % des Français utilisent l'IA</h4><p>Le baromètre CREDOC révèle une adoption plus rapide que celle d'Internet ou du smartphone. 26 % des TPE/PME intègrent l'IA. Le Sommet pour l'action sur l'IA se tient à Paris.</p></div></div>
-      <div class="veille-item"><div class="veille-month">Mars 2026</div><div class="veille-content"><h4>Yann LeCun lance Ami Labs</h4><p>Le chercheur français quitte Meta et fonde Ami Labs avec une levée record d'un milliard de dollars. L'IA agentique s'intègre réellement dans les processus métier.</p></div></div>
-      <div class="veille-item"><div class="veille-month">Avr. 2026</div><div class="veille-content"><h4>De l'IA de promesse à l'IA de résultat</h4><p>Les investissements mondiaux dépassent 1 500 milliards de dollars. L'enjeu : gouvernance, traçabilité et ROI mesurable. L'IA entre dans sa phase de maturité industrielle.</p></div></div>
+  <div class="wrap sr">
+    <span class="label">Veille technologique</span>
+    <h2>L'IA générative et son impact</h2>
+    <p class="v-topic">Sujet : <strong>L'Intelligence Artificielle générative — évolution, impact sur le développement logiciel et la société</strong><br>Période : <strong>24 octobre 2024 – 20 avril 2026</strong> (18 mois)</p>
+    <div class="v-list">
+      <div class="vi"><div class="vi-m">Oct. 2024</div><div class="vi-b"><h4>Prix Nobel de l'IA et ChatGPT Search</h4><p>Geoffrey Hinton et John Hopfield reçoivent le Prix Nobel pour leurs travaux fondateurs sur l'IA. OpenAI lance ChatGPT Search le 31 octobre, moteur de recherche basé sur GPT-4o.</p><div class="vi-links"><a class="vi-a" href="https://openai.com/fr-FR/index/introducing-chatgpt-search/" target="_blank">OpenAI</a><a class="vi-a" href="https://outilsveille.com/2024/10/openai-lance-chatgpt-search/" target="_blank">OutilsVeille</a></div></div></div>
+      <div class="vi"><div class="vi-m">Nov. 2024</div><div class="vi-b"><h4>L'essor des modèles open source</h4><p>Meta publie Llama 3.1 405B, rivalisant avec GPT-4o. Mistral AI lance Mistral Large 2, très performant en français. Le débat open source vs propriétaire s'intensifie.</p><div class="vi-links"><a class="vi-a" href="https://www.itforbusiness.fr/mistral-large-2-meta-llama-3-1-les-llm-frontieres-font-de-la-resistance-79869" target="_blank">IT for Business</a></div></div></div>
+      <div class="vi"><div class="vi-m">Déc. 2024</div><div class="vi-b"><h4>ChatGPT Pro à 200 $/mois</h4><p>OpenAI lance un abonnement Pro avec accès illimité à o1. ChatGPT Search s'ouvre à tous les utilisateurs. La monétisation de l'IA s'accélère.</p><div class="vi-links"><a class="vi-a" href="https://fr.wikipedia.org/wiki/ChatGPT" target="_blank">Wikipédia</a></div></div></div>
+      <div class="vi"><div class="vi-m">Janv. 2025</div><div class="vi-b"><h4>DeepSeek R1 bouleverse le marché</h4><p>La startup chinoise DeepSeek publie R1, modèle open source de raisonnement rivalisant avec les leaders à coût réduit. OpenAI lance Operator et o3-mini.</p><div class="vi-links"><a class="vi-a" href="https://www.informatiquenews.fr/recap-2025-les-principales-actualites-ia-de-lannee-108702" target="_blank">InformatiqueNews</a></div></div></div>
+      <div class="vi"><div class="vi-m">Fév. 2025</div><div class="vi-b"><h4>Sommet IA de Paris et AI Act</h4><p>Le Sommet pour l'action sur l'IA se tient à Paris. L'AI Act européen impose ses premières obligations de transparence et de sécurité aux fournisseurs d'IA.</p><div class="vi-links"><a class="vi-a" href="https://www.macertif.com/blog/les-10-tendances-cles-de-lia-generative-en-2025-et-apres-2026" target="_blank">MaCertif</a></div></div></div>
+      <div class="vi"><div class="vi-m">Mars 2025</div><div class="vi-b"><h4>Claude 3.7 Sonnet — Extended Thinking</h4><p>Anthropic dévoile Claude 3.7 Sonnet avec raisonnement approfondi et lance Claude Code. La course au raisonnement avancé bat son plein.</p><div class="vi-links"><a class="vi-a" href="https://www.informatiquenews.fr/recap-2025-les-principales-actualites-ia-de-lannee-108702" target="_blank">InformatiqueNews</a></div></div></div>
+      <div class="vi"><div class="vi-m">Avr. 2025</div><div class="vi-b"><h4>L'IA envahit le quotidien</h4><p>Microsoft Copilot est utilisé dans 70 % des entreprises du Fortune 500. Les assistants passent du statut d'outil à celui d'agent autonome.</p><div class="vi-links"><a class="vi-a" href="https://news.microsoft.com/source/emea/2025/01/les-6-tendances-incontournables-de-lia-en-2025-selon-microsoft/?lang=fr" target="_blank">Microsoft</a></div></div></div>
+      <div class="vi"><div class="vi-m">Mai 2025</div><div class="vi-b"><h4>Mistral Medium 3 — souveraineté</h4><p>Mistral lance Medium 3, atteignant 90 % des performances de Claude pour un coût 8× inférieur. L'IA souveraine européenne s'organise avec INESIA.</p><div class="vi-links"><a class="vi-a" href="https://www.informatiquenews.fr/mistral-lance-un-nouveau-modele-medium-3-et-le-chat-en-version-entreprise-104770" target="_blank">InformatiqueNews</a></div></div></div>
+      <div class="vi"><div class="vi-m">Juin 2025</div><div class="vi-b"><h4>L'IA médaillée d'or en maths</h4><p>Google Gemini remporte l'or aux Olympiades internationales de mathématiques, égalant les meilleurs humains. L'IA progresse en codage, recherche et santé.</p><div class="vi-links"><a class="vi-a" href="https://www.informatiquenews.fr/recap-2025-les-principales-actualites-ia-de-lannee-108702" target="_blank">InformatiqueNews</a></div></div></div>
+      <div class="vi"><div class="vi-m">Juil.–Août 25</div><div class="vi-b"><h4>GPT-5 et l'ère agentique</h4><p>OpenAI lance GPT-5. L'IA cesse d'être un copilote pour devenir un acteur autonome exécutant des tâches complexes. Les dépenses mondiales explosent.</p><div class="vi-links"><a class="vi-a" href="https://help.openai.com/en/articles/6825453-chatgpt-release-notes" target="_blank">OpenAI</a></div></div></div>
+      <div class="vi"><div class="vi-m">Sept. 2025</div><div class="vi-b"><h4>Mistral AI décacorne — 14 Mds $</h4><p>Mistral lève 2 milliards d'euros (valorisation 14 Mds $), première décacorne de la French Tech. ASML investit 1,3 milliard pour la souveraineté européenne.</p><div class="vi-links"><a class="vi-a" href="https://24pm.com/intelligence-artificielle/ia-generative/mistral/1295-mistral-en-2026-utilisateurs-produits-chatbots-modeles-levee-de-fonds-investisseurs" target="_blank">24pm</a></div></div></div>
+      <div class="vi"><div class="vi-m">Oct. 2025</div><div class="vi-b"><h4>OpenAI à 500 Mds $ — agents autonomes</h4><p>OpenAI atteint 500 milliards de valorisation. Les agents IA autonomes qui observent, raisonnent et agissent deviennent le sujet dominant du secteur.</p><div class="vi-links"><a class="vi-a" href="https://www.france-epargne.fr/research/fr/state-of-ai-entering-2026" target="_blank">France Épargne</a></div></div></div>
+      <div class="vi"><div class="vi-m">Nov. 2025</div><div class="vi-b"><h4>Anthropic 350 Mds $ — multi-agents</h4><p>Anthropic atteint 350 milliards de valorisation. L'orchestration multi-agents se développe. Mistral lance Mistral 3 et Mistral Large 3.</p><div class="vi-links"><a class="vi-a" href="https://www.france-epargne.fr/research/fr/state-of-ai-entering-2026" target="_blank">France Épargne</a><a class="vi-a" href="https://www.hightechnews.fr/tendances-intelligence-artificielle-2026/" target="_blank">HighTechNews</a></div></div></div>
+      <div class="vi"><div class="vi-m">Déc. 2025</div><div class="vi-b"><h4>Bilan 2025 — 202 Mds $ investis</h4><p>L'investissement mondial atteint 202 milliards de dollars (50 % du capital-risque). 78 % des organisations utilisent l'IA. Le « AI slop » pollue Internet.</p><div class="vi-links"><a class="vi-a" href="https://www.france-epargne.fr/research/fr/state-of-ai-entering-2026" target="_blank">France Épargne</a><a class="vi-a" href="https://fr.euronews.com/next/2025/12/28/2025-annee-de-banalisation-des-contenus-ia-mediocres-internet-est-il-pret-a-murir" target="_blank">Euronews</a></div></div></div>
+      <div class="vi"><div class="vi-m">Janv. 2026</div><div class="vi-b"><h4>CNIL sanctionne Free — ROI de l'IA</h4><p>La CNIL sanctionne Free pour manquement au RGPD. Seule 1 entreprise sur 10 déclare un ROI mesurable de l'IA selon Deloitte.</p><div class="vi-links"><a class="vi-a" href="https://itsocial.fr/intelligence-artificielle/intelligence-artificielle-articles/2026-annee-de-verite-pour-le-roi-de-lia-dans-les-systemes-dinformation/" target="_blank">IT Social</a></div></div></div>
+      <div class="vi"><div class="vi-m">Fév. 2026</div><div class="vi-b"><h4>48 % des Français utilisent l'IA</h4><p>Le baromètre CREDOC révèle une adoption plus rapide que celle d'Internet. 26 % des TPE/PME intègrent l'IA. 52 % restent néanmoins méfiants.</p><div class="vi-links"><a class="vi-a" href="https://osmova.com/intelligence-artificielle/" target="_blank">Osmova</a></div></div></div>
+      <div class="vi"><div class="vi-m">Mars 2026</div><div class="vi-b"><h4>Yann LeCun lance Ami Labs — 1 Md $</h4><p>Le chercheur français quitte Meta et fonde Ami Labs avec une levée record. L'IA entre dans sa phase de maturité avec des exigences de gouvernance.</p><div class="vi-links"><a class="vi-a" href="https://bigmedia.bpifrance.fr/nos-dossiers/nouvelles-tendances-ia-ce-qui-va-transformer-2026" target="_blank">BPI Big Media</a></div></div></div>
+      <div class="vi"><div class="vi-m">Avr. 2026</div><div class="vi-b"><h4>De l'IA de promesse à l'IA de résultat</h4><p>Investissements mondiaux &gt; 1 500 milliards de dollars. L'IA déclenche la moitié des contrôles fiscaux en France. Priorité : gouvernance et ROI mesurable.</p><div class="vi-links"><a class="vi-a" href="https://www.journaldunet.com/intelligence-artificielle/" target="_blank">JDN</a><a class="vi-a" href="https://osmova.com/intelligence-artificielle/" target="_blank">Osmova</a></div></div></div>
     </div>
   </div>
 </section>
-
-<section id="synthese" style="background:rgba(18,18,26,0.5)">
-  <div class="container fade-in">
-    <span class="section-tag">// épreuve E5</span>
-    <h2 class="section-title">Tableau de Synthèse E5</h2>
-    <p class="section-desc">Tableau récapitulatif des situations professionnelles présentées à l'épreuve E5.</p>
-    <div class="synthese-placeholder">
-      <p style="font-size:2rem;margin-bottom:1rem">📋</p>
-      <p><strong>Tableau de synthèse à venir</strong></p>
-      <p>Le document sera intégré au format PDF téléchargeable une fois finalisé.</p>
+ 
+<!-- E5 -->
+<section id="synthese" style="background:var(--bg-2)">
+  <div class="wrap sr">
+    <span class="label">Épreuve E5</span>
+    <h2>Tableau de Synthèse E5</h2>
+    <p class="intro">Récapitulatif des situations professionnelles — Option SLAM.</p>
+    <div class="e5-box">
+      <p style="font-size:2rem;margin-bottom:.75rem">📋</p>
+      <p style="font-weight:700;margin-bottom:.25rem">Tableau de synthèse disponible</p>
+      <p style="margin-bottom:1.25rem">Réalisations en formation et en milieu professionnel</p>
+      <a class="btn btn-fill" href="docs/tableau-synthese-e5.ods" download>Télécharger le tableau E5</a>
     </div>
   </div>
 </section>
-
+ 
+<!-- DOCUMENTS -->
 <section id="documents">
-  <div class="container fade-in">
-    <span class="section-tag">// documents</span>
-    <h2 class="section-title">Téléchargements</h2>
-    <p class="section-desc">Retrouvez ici l'ensemble de mes documents officiels.</p>
-    <div class="docs-grid">
-      <a class="doc-card" href="docs/cv-mateo-hoareau.pdf" download><div class="doc-icon cv">📄</div><div><div class="doc-name">Curriculum Vitae</div><div class="doc-status">PDF — Télécharger</div></div></a>
-      <a class="doc-card" href="docs/tableau-synthese-e5.pdf" download><div class="doc-icon diplome">📋</div><div><div class="doc-name">Tableau de Synthèse E5</div><div class="doc-status">À venir</div></div></a>
-      <a class="doc-card" href="docs/attestation-stage-1.pdf" download><div class="doc-icon stage">📎</div><div><div class="doc-name">Attestation de stage — 1ère année</div><div class="doc-status">Mairie de Saint-Joseph</div></div></a>
-      <a class="doc-card" href="docs/attestation-stage-2.pdf" download><div class="doc-icon stage">📎</div><div><div class="doc-name">Attestation de stage — 2ème année</div><div class="doc-status">Association Komidi</div></div></a>
-      <a class="doc-card" href="docs/certifications.pdf" download><div class="doc-icon cert">🏅</div><div><div class="doc-name">Certifications</div><div class="doc-status">À fournir</div></div></a>
-      <a class="doc-card" href="docs/diplome-bac-stmg.pdf" download><div class="doc-icon diplome">🎓</div><div><div class="doc-name">Diplôme Bac STMG</div><div class="doc-status">À fournir</div></div></a>
+  <div class="wrap sr">
+    <span class="label">Documents</span>
+    <h2>Téléchargements</h2>
+    <p class="intro">Ensemble de mes documents officiels téléchargeables.</p>
+    <div class="d-grid">
+      <a class="dl" href="docs/cv-mateo-hoareau.pdf" download><div class="dl-i c1">📄</div><div><div class="dl-t">Curriculum Vitae</div><div class="dl-s">PDF — Télécharger</div></div></a>
+      <a class="dl" href="docs/tableau-synthese-e5.ods" download><div class="dl-i c3">📋</div><div><div class="dl-t">Tableau de Synthèse E5</div><div class="dl-s">ODS — Télécharger</div></div></a>
+      <a class="dl" href="docs/attestation-stage-2.pdf" download><div class="dl-i c2">📎</div><div><div class="dl-t">Attestation de stage — 2ème année</div><div class="dl-s">Association Komidi — 14/01 au 24/02/2026</div></div></a>
+      <a class="dl" href="docs/certification-cnil-rgpd.pdf" download><div class="dl-i c4">🛡️</div><div><div class="dl-t">Certification CNIL — RGPD</div><div class="dl-s">5 modules — 100, 97, 94, 100, 100%</div></div></a>
+      <a class="dl" href="docs/certification-pix.pdf" download><div class="dl-i c4">🏅</div><div><div class="dl-t">Certification Pix — 538/895</div><div class="dl-s">Niveau Avancé 1 — 23/03/2026</div></div></a>
+      <a class="dl" href="#"><div class="dl-i c2">📎</div><div><div class="dl-t">Attestation de stage — 1ère année</div><div class="dl-s">Mairie de Saint-Joseph — À fournir</div></div></a>
+      <a class="dl" href="#"><div class="dl-i c3">🎓</div><div><div class="dl-t">Diplôme Bac STMG</div><div class="dl-s">À fournir</div></div></a>
     </div>
   </div>
 </section>
-
-<section id="contact" style="background:rgba(18,18,26,0.5)">
-  <div class="container fade-in">
-    <span class="section-tag">// contact</span>
-    <h2 class="section-title">Me contacter</h2>
-    <p class="section-desc" style="margin-left:auto;margin-right:auto">N'hésitez pas à me contacter pour toute question ou opportunité.</p>
-    <div class="contact-links">
-      <a class="contact-card" href="mailto:mateohoareau21@gmail.com"><span>✉️</span><div><div style="font-weight:600">Email</div><div style="color:var(--text-muted);font-size:.85rem">mateohoareau21@gmail.com</div></div></a>
-      <a class="contact-card" href="https://github.com/mateohoareau" target="_blank" rel="noopener"><span>🐙</span><div><div style="font-weight:600">GitHub</div><div style="color:var(--text-muted);font-size:.85rem">github.com/mateohoareau</div></div></a>
+ 
+<!-- CONTACT -->
+<section id="contact" style="background:var(--bg-2)">
+  <div class="wrap sr">
+    <span class="label">Contact</span>
+    <h2>Me contacter</h2>
+    <p class="intro" style="margin-left:auto;margin-right:auto">Pour toute question ou opportunité professionnelle.</p>
+    <div class="c-row">
+      <a class="cc" href="mailto:mateohoareau21@gmail.com"><span style="font-size:1.2rem">✉️</span><div><div style="font-weight:600">Email</div><div style="color:var(--text-3);font-size:.8rem">mateohoareau21@gmail.com</div></div></a>
+      <a class="cc" href="https://github.com/mateohoareau" target="_blank" rel="noopener"><span style="font-size:1.2rem">🐙</span><div><div style="font-weight:600">GitHub</div><div style="color:var(--text-3);font-size:.8rem">github.com/mateohoareau</div></div></a>
     </div>
   </div>
 </section>
-
+ 
 <footer>
   <p>© 2026 Matéo Hoareau — Portfolio BTS SIO SLAM</p>
-  <p style="margin-top:.5rem">Ce site ne collecte aucune donnée personnelle et n'utilise aucun cookie. Conforme au <a href="https://www.cnil.fr/fr/rgpd-de-quoi-parle-t-on" target="_blank" rel="noopener">RGPD</a>.</p>
+  <p style="margin-top:.35rem">Ce site ne collecte aucune donnée personnelle et n'utilise aucun cookie. Conforme au <a href="https://www.cnil.fr/fr/rgpd-de-quoi-parle-t-on" target="_blank" rel="noopener">RGPD</a>.</p>
 </footer>
-
-<div class="rgpd-banner" id="rgpdBanner">
-  <span>ℹ️ Ce site est statique, il ne collecte aucune donnée personnelle et n'utilise aucun cookie ni traceur.</span>
-  <button onclick="document.getElementById('rgpdBanner').classList.add('hidden')">Compris</button>
+ 
+<div class="rgpd" id="rgpd">
+  <span>ℹ️ Site statique — aucune donnée collectée, aucun cookie.</span>
+  <button onclick="document.getElementById('rgpd').classList.add('off')">Compris</button>
 </div>
-
+ 
 <script>
-  const observer=new IntersectionObserver(e=>{e.forEach(el=>{if(el.isIntersecting)el.target.classList.add('visible')})},{threshold:0.1});
-  document.querySelectorAll('.fade-in').forEach(el=>observer.observe(el));
-  document.querySelectorAll('.nav-links a').forEach(a=>{a.addEventListener('click',()=>document.querySelector('.nav-links').classList.remove('open'))});
+  // Scroll reveal
+  const io=new IntersectionObserver(e=>{e.forEach(el=>{if(el.isIntersecting)el.target.classList.add('on')})},{threshold:.06});
+  document.querySelectorAll('.sr').forEach(el=>io.observe(el));
+  // Active nav
+  const secs=document.querySelectorAll('section[id]');
+  const links=document.querySelectorAll('nav a');
+  window.addEventListener('scroll',()=>{
+    let cur='';
+    secs.forEach(s=>{if(window.scrollY>=s.offsetTop-200)cur=s.id});
+    links.forEach(a=>{a.classList.toggle('active',a.getAttribute('href')==='#'+cur)});
+  });
 </script>
 </body>
 </html>
