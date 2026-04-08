@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Matéo Hoareau — Portfolio BTS SIO SLAM</title>
+  <meta name="description" content="Portfolio de Matéo Hoareau, étudiant en BTS SIO option SLAM au Lycée Pierre-Poivre, La Réunion.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+    :root{--bg:#0a0a0f;--bg-card:#12121a;--bg-card-hover:#1a1a28;--border:#1e1e2e;--border-accent:#2d2d44;--text:#e4e4ef;--text-muted:#8888a4;--accent:#6c5ce7;--accent-light:#a29bfe;--accent-glow:rgba(108,92,231,0.15);--gradient-1:linear-gradient(135deg,#6c5ce7,#a29bfe);--gradient-2:linear-gradient(135deg,#6c5ce7 0%,#00cec9 100%);--success:#00b894;--radius:12px;--radius-lg:20px}
+    html{scroll-behavior:smooth}
+    body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);line-height:1.7;overflow-x:hidden}
+    ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--accent);border-radius:3px}
+    body::before{content:'';position:fixed;inset:0;background:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:9999}
+
+    nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,10,15,0.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:0 2rem}
+    .nav-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:64px}
+    .nav-logo{font-weight:700;font-size:1.2rem;background:var(--gradient-1);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+    .nav-links{display:flex;gap:.25rem;list-style:none}
+    .nav-links a{color:var(--text-muted);text-decoration:none;font-size:.85rem;font-weight:500;padding:.5rem .85rem;border-radius:8px;transition:all .2s}
+    .nav-links a:hover{color:var(--text);background:var(--accent-glow)}
+    .burger{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:4px}
+    .burger span{display:block;width:22px;height:2px;background:var(--text-muted);border-radius:2px}
+
+    section{padding:6rem 2rem}.container{max-width:1100px;margin:0 auto}
+    .section-tag{display:inline-block;font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:2px;color:var(--accent-light);margin-bottom:.75rem;font-family:'JetBrains Mono',monospace}
+    .section-title{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:800;letter-spacing:-1px;margin-bottom:1rem;line-height:1.2}
+    .section-desc{color:var(--text-muted);font-size:1.05rem;max-width:600px;margin-bottom:3rem}
+
+    #hero{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;position:relative;padding-top:64px}
+    .hero-orb{position:absolute;border-radius:50%;filter:blur(120px);opacity:.4;pointer-events:none}
+    .hero-orb-1{width:500px;height:500px;background:#6c5ce7;top:10%;left:10%}
+    .hero-orb-2{width:400px;height:400px;background:#00cec9;bottom:10%;right:10%}
+    .hero-content{position:relative;z-index:1}
+    .hero-badge{display:inline-flex;align-items:center;gap:.5rem;background:var(--bg-card);border:1px solid var(--border);padding:.4rem 1rem;border-radius:999px;font-size:.8rem;color:var(--text-muted);margin-bottom:2rem}
+    .hero-badge .dot{width:8px;height:8px;background:var(--success);border-radius:50%;animation:pulse 2s infinite}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+    .hero-name{font-size:clamp(2.5rem,7vw,5rem);font-weight:800;letter-spacing:-2px;line-height:1.1;margin-bottom:1rem}
+    .hero-name .gradient{background:var(--gradient-2);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+    .hero-subtitle{font-size:clamp(1rem,2vw,1.3rem);color:var(--text-muted);font-weight:400;margin-bottom:2.5rem;max-width:500px;margin-left:auto;margin-right:auto}
+    .hero-actions{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
+
+    .btn{display:inline-flex;align-items:center;gap:.5rem;padding:.75rem 1.75rem;border-radius:999px;font-family:'Outfit',sans-serif;font-weight:600;font-size:.9rem;text-decoration:none;cursor:pointer;border:none;transition:all .25s}
+    .btn-primary{background:var(--gradient-1);color:#fff;box-shadow:0 4px 24px rgba(108,92,231,.35)}
+    .btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(108,92,231,.5)}
+    .btn-outline{background:transparent;color:var(--text);border:1px solid var(--border-accent)}
+    .btn-outline:hover{border-color:var(--accent);background:var(--accent-glow)}
+
+    .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:start}
+    .about-text p{color:var(--text-muted);margin-bottom:1rem}
+    .about-info{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:2rem}
+    .info-item{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem}
+    .info-item .label{font-size:.75rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;font-family:'JetBrains Mono',monospace}
+    .info-item .value{font-weight:600;margin-top:.25rem}
+    .skills-list{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1.5rem}
+    .skill-tag{background:var(--accent-glow);border:1px solid var(--border-accent);color:var(--accent-light);padding:.35rem .9rem;border-radius:999px;font-size:.8rem;font-weight:500}
+
+    .card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:2rem;transition:all .3s;position:relative;overflow:hidden}
+    .card:hover{border-color:var(--border-accent);background:var(--bg-card-hover);transform:translateY(-4px)}
+    .card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--gradient-1);opacity:0;transition:opacity .3s}
+    .card:hover::before{opacity:1}
+
+    .timeline{position:relative;padding-left:2rem}
+    .timeline::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:linear-gradient(to bottom,var(--accent),transparent)}
+    .timeline-item{position:relative;margin-bottom:2.5rem}
+    .timeline-item::before{content:'';position:absolute;left:-2rem;top:.5rem;width:12px;height:12px;border-radius:50%;background:var(--accent);border:3px solid var(--bg);transform:translateX(-5px)}
+    .timeline-date{font-family:'JetBrains Mono',monospace;font-size:.8rem;color:var(--accent-light);margin-bottom:.25rem}
+    .timeline-title{font-weight:700;font-size:1.1rem}
+    .timeline-sub{color:var(--text-muted);font-size:.9rem}
+
+    .projects-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:1.5rem}
+    .project-icon{width:48px;height:48px;border-radius:var(--radius);background:var(--accent-glow);display:flex;align-items:center;justify-content:center;font-size:1.5rem;margin-bottom:1rem}
+    .project-title{font-weight:700;font-size:1.15rem;margin-bottom:.5rem}
+    .project-desc{color:var(--text-muted);font-size:.9rem;margin-bottom:1rem}
+    .project-tags{display:flex;flex-wrap:wrap;gap:.4rem}
+    .project-tag{font-size:.7rem;padding:.2rem .6rem;border-radius:999px;background:rgba(108,92,231,.1);color:var(--accent-light);border:1px solid rgba(108,92,231,.2);font-family:'JetBrains Mono',monospace}
+
+    .stages-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+    .stage-period{font-family:'JetBrains Mono',monospace;font-size:.8rem;color:var(--accent-light);margin-bottom:.75rem;display:inline-block;background:var(--accent-glow);padding:.25rem .75rem;border-radius:999px}
+    .stage-title{font-weight:700;font-size:1.15rem;margin-bottom:.25rem}
+    .stage-company{color:var(--accent-light);font-weight:500;margin-bottom:.75rem}
+    .stage-desc{color:var(--text-muted);font-size:.9rem}
+
+    .veille-intro{color:var(--text-muted);max-width:700px;margin-bottom:2.5rem}
+    .veille-grid{display:grid;gap:1rem}
+    .veille-item{display:grid;grid-template-columns:120px 1fr;gap:1.5rem;align-items:start;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;transition:all .3s}
+    .veille-item:hover{border-color:var(--border-accent)}
+    .veille-month{font-family:'JetBrains Mono',monospace;font-size:.85rem;color:var(--accent-light);font-weight:500}
+    .veille-content h4{font-weight:600;margin-bottom:.35rem}
+    .veille-content p{color:var(--text-muted);font-size:.88rem}
+
+    .synthese-placeholder{background:var(--bg-card);border:2px dashed var(--border-accent);border-radius:var(--radius-lg);padding:3rem;text-align:center}
+    .synthese-placeholder p{color:var(--text-muted)}
+
+    .docs-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.25rem}
+    .doc-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;display:flex;align-items:center;gap:1rem;transition:all .3s;text-decoration:none;color:var(--text);cursor:pointer}
+    .doc-card:hover{border-color:var(--accent);background:var(--bg-card-hover);transform:translateY(-2px)}
+    .doc-icon{width:48px;height:48px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0}
+    .doc-icon.cv{background:rgba(108,92,231,.15)}
+    .doc-icon.cert{background:rgba(0,206,201,.15)}
+    .doc-icon.diplome{background:rgba(253,203,110,.15)}
+    .doc-icon.stage{background:rgba(0,184,148,.15)}
+    .doc-name{font-weight:600;font-size:.95rem}
+    .doc-status{font-size:.75rem;color:var(--text-muted)}
+
+    #contact{text-align:center}
+    .contact-links{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-top:2rem}
+    .contact-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem 2rem;text-decoration:none;color:var(--text);display:flex;align-items:center;gap:.75rem;transition:all .3s}
+    .contact-card:hover{border-color:var(--accent);transform:translateY(-2px)}
+    .contact-card span{font-size:1.3rem}
+
+    footer{text-align:center;padding:2rem;border-top:1px solid var(--border);color:var(--text-muted);font-size:.8rem}
+    footer a{color:var(--accent-light);text-decoration:none}
+
+    .rgpd-banner{position:fixed;bottom:0;left:0;right:0;background:var(--bg-card);border-top:1px solid var(--border);padding:1.25rem 2rem;display:flex;align-items:center;justify-content:center;gap:1.5rem;z-index:200;backdrop-filter:blur(20px);font-size:.85rem;color:var(--text-muted);transition:transform .4s}
+    .rgpd-banner.hidden{transform:translateY(100%)}
+    .rgpd-banner button{background:var(--accent);color:#fff;border:none;padding:.5rem 1.25rem;border-radius:999px;font-family:'Outfit',sans-serif;font-weight:600;cursor:pointer;font-size:.85rem}
+
+    @media(max-width:768px){
+      .nav-links{display:none;position:absolute;top:64px;left:0;right:0;background:rgba(10,10,15,.97);flex-direction:column;padding:1rem;border-bottom:1px solid var(--border)}
+      .nav-links.open{display:flex}
+      .burger{display:flex}
+      .about-grid,.stages-grid{grid-template-columns:1fr}
+      .veille-item{grid-template-columns:1fr}
+      section{padding:4rem 1.25rem}
+    }
+    .fade-in{opacity:0;transform:translateY(30px);transition:opacity .6s ease,transform .6s ease}
+    .fade-in.visible{opacity:1;transform:translateY(0)}
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <div class="nav-logo">MH.</div>
+    <button class="burger" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu"><span></span><span></span><span></span></button>
+    <ul class="nav-links">
+      <li><a href="#about">À propos</a></li>
+      <li><a href="#formation">Formation</a></li>
+      <li><a href="#projets">Projets</a></li>
+      <li><a href="#stages">Stages</a></li>
+      <li><a href="#veille">Veille</a></li>
+      <li><a href="#synthese">Synthèse E5</a></li>
+      <li><a href="#documents">Documents</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<section id="hero">
+  <div class="hero-orb hero-orb-1"></div>
+  <div class="hero-orb hero-orb-2"></div>
+  <div class="hero-content">
+    <div class="hero-badge"><span class="dot"></span> Disponible pour alternance / emploi</div>
+    <h1 class="hero-name">Matéo<br><span class="gradient">Hoareau</span></h1>
+    <p class="hero-subtitle">Étudiant en BTS SIO option SLAM<br>Lycée Pierre-Poivre · La Réunion</p>
+    <div class="hero-actions">
+      <a href="#projets" class="btn btn-primary">Voir mes projets</a>
+      <a href="#documents" class="btn btn-outline">📄 Télécharger mon CV</a>
+    </div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="container fade-in">
+    <span class="section-tag">// à propos</span>
+    <h2 class="section-title">Qui suis-je ?</h2>
+    <div class="about-grid">
+      <div class="about-text">
+        <p>Passionné par le développement d'applications et les nouvelles technologies, je suis actuellement en deuxième année de BTS Services Informatiques aux Organisations, option Solutions Logicielles et Applications Métiers (SLAM), au Lycée Pierre-Poivre à Saint-Joseph, La Réunion.</p>
+        <p>Titulaire d'un Bac STMG obtenu en 2025 avec la mention Assez Bien, j'ai choisi de m'orienter vers l'informatique pour concrétiser ma passion pour le code et la création d'applications.</p>
+        <p>Mon parcours m'a permis de développer des compétences solides en développement web et logiciel, ainsi qu'une expérience concrète grâce à deux stages en entreprise. J'ai également participé à un voyage Erasmus en Allemagne durant lequel j'ai réalisé un projet de création de site web.</p>
+        <div class="about-info">
+          <div class="info-item"><div class="label">Localisation</div><div class="value">Saint-Joseph, La Réunion</div></div>
+          <div class="info-item"><div class="label">Formation</div><div class="value">BTS SIO SLAM</div></div>
+          <div class="info-item"><div class="label">Établissement</div><div class="value">Lycée Pierre-Poivre</div></div>
+          <div class="info-item"><div class="label">Candidat n°</div><div class="value" style="color:var(--text-muted);font-style:italic">À compléter</div></div>
+        </div>
+      </div>
+      <div>
+        <span class="section-tag">// compétences techniques</span>
+        <div class="skills-list" style="margin-top:1rem">
+          <span class="skill-tag">Java</span><span class="skill-tag">IntelliJ IDEA</span><span class="skill-tag">HTML5</span><span class="skill-tag">CSS3</span><span class="skill-tag">JavaScript</span><span class="skill-tag">PHP</span><span class="skill-tag">MySQL</span><span class="skill-tag">Python</span><span class="skill-tag">SQL</span><span class="skill-tag">Git / GitHub</span><span class="skill-tag">UML / Merise</span><span class="skill-tag">VS Code</span>
+        </div>
+        <span class="section-tag" style="margin-top:2rem;display:inline-block">// langues</span>
+        <div class="skills-list" style="margin-top:1rem">
+          <span class="skill-tag">🇫🇷 Français — natif</span><span class="skill-tag">🇬🇧 Anglais — bon niveau</span><span class="skill-tag">🇩🇪 Allemand — notions (Erasmus)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="formation" style="background:rgba(18,18,26,0.5)">
+  <div class="container fade-in">
+    <span class="section-tag">// parcours</span>
+    <h2 class="section-title">Formation</h2>
+    <div class="timeline">
+      <div class="timeline-item"><div class="timeline-date">2025 – 2027</div><div class="timeline-title">BTS SIO — Option SLAM</div><div class="timeline-sub">Lycée Pierre-Poivre, Saint-Joseph, La Réunion</div><div class="timeline-sub">Solutions Logicielles et Applications Métiers</div></div>
+      <div class="timeline-item"><div class="timeline-date">2024 – 2025</div><div class="timeline-title">Baccalauréat STMG — Mention Assez Bien</div><div class="timeline-sub">Lycée Pierre-Poivre, Saint-Joseph, La Réunion</div></div>
+      <div class="timeline-item"><div class="timeline-date">2025</div><div class="timeline-title">Voyage Erasmus — Allemagne</div><div class="timeline-sub">Création d'un site web dans un contexte international</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="projets">
+  <div class="container fade-in">
+    <span class="section-tag">// réalisations</span>
+    <h2 class="section-title">Projets</h2>
+    <p class="section-desc">Projets réalisés au cours de mon BTS SIO SLAM.</p>
+    <div class="projects-grid">
+      <div class="card"><div class="project-icon">🎬</div><div class="project-title">Base de données Cinéma</div><div class="project-desc">Conception et implémentation d'une base de données relationnelle pour la gestion d'un cinéma : films, séances, salles, réservations. Modélisation MCD/MLD et requêtes SQL avancées.</div><div class="project-tags"><span class="project-tag">SQL</span><span class="project-tag">MySQL</span><span class="project-tag">Merise</span><span class="project-tag">MCD/MLD</span></div></div>
+      <div class="card"><div class="project-icon">🅿️</div><div class="project-title">QR Code Parking</div><div class="project-desc">Application de gestion de parking par QR code. Génération, lecture et validation de QR codes pour l'accès au stationnement. Projet réalisé sous IntelliJ IDEA.</div><div class="project-tags"><span class="project-tag">Java</span><span class="project-tag">IntelliJ</span><span class="project-tag">QR Code</span></div></div>
+      <div class="card"><div class="project-icon">💊</div><div class="project-title">Application Web Pharmacie</div><div class="project-desc">Application web complète de gestion de pharmacie avec base de données intégrée : gestion des médicaments, stocks, ordonnances et clients.</div><div class="project-tags"><span class="project-tag">PHP</span><span class="project-tag">MySQL</span><span class="project-tag">HTML/CSS</span><span class="project-tag">JavaScript</span></div></div>
+      <div class="card"><div class="project-icon">🎫</div><div class="project-title">Billetterie Komidi (Stage)</div><div class="project-desc">Application de billetterie basée sur une instance TiBillet, développée pour l'association Komidi. Gestion des événements et vente de billets en ligne.</div><div class="project-tags"><span class="project-tag">TiBillet</span><span class="project-tag">Python</span><span class="project-tag">Web</span><span class="project-tag">API</span></div></div>
+    </div>
+  </div>
+</section>
+
+<section id="stages" style="background:rgba(18,18,26,0.5)">
+  <div class="container fade-in">
+    <span class="section-tag">// expérience professionnelle</span>
+    <h2 class="section-title">Stages</h2>
+    <div class="stages-grid">
+      <div class="card"><div class="stage-period">02 Juin – 27 Juin 2025 · 4 semaines</div><div class="stage-title">Stage de première année</div><div class="stage-company">Mairie de Saint-Joseph — Service Informatique</div><div class="stage-desc">Découverte du fonctionnement d'un service informatique en collectivité territoriale. Maintenance du parc informatique, assistance utilisateurs et gestion réseau.</div></div>
+      <div class="card"><div class="stage-period">14 Janvier – 24 Février 2026 · 6 semaines</div><div class="stage-title">Stage de deuxième année</div><div class="stage-company">Association Komidi</div><div class="stage-desc">Développement d'une application de billetterie basée sur une instance TiBillet. Conception, développement et déploiement d'une solution de vente de billets en ligne pour les événements culturels.</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="veille">
+  <div class="container fade-in">
+    <span class="section-tag">// veille technologique</span>
+    <h2 class="section-title">Veille Technologique</h2>
+    <p class="veille-intro">Sujet : <strong>L'Intelligence Artificielle générative — impact sur le développement logiciel et la société</strong><br>Période : 24 Octobre 2025 – 20 Avril 2026</p>
+    <div class="veille-grid">
+      <div class="veille-item"><div class="veille-month">Oct. 2025</div><div class="veille-content"><h4>Les agents IA autonomes émergent</h4><p>Les agents IA capables d'exécuter des tâches complexes se multiplient. OpenAI atteint 500 milliards de dollars de valorisation. L'IA agentique devient le mot-clé de la fin d'année.</p></div></div>
+      <div class="veille-item"><div class="veille-month">Nov. 2025</div><div class="veille-content"><h4>Multi-agents et levées de fonds records</h4><p>Anthropic valorisée à 350 milliards de dollars. L'orchestration multi-agents se développe : plusieurs IA spécialisées collaborent en entreprise. L'IA embarquée gagne du terrain pour la confidentialité.</p></div></div>
+      <div class="veille-item"><div class="veille-month">Déc. 2025</div><div class="veille-content"><h4>Bilan 2025 — L'IA devient concrète</h4><p>xAI lève 15 milliards de dollars. 78 % des organisations utilisent l'IA dans au moins une fonction. L'investissement mondial atteint 202 milliards de dollars. Le ROI reste la question centrale.</p></div></div>
+      <div class="veille-item"><div class="veille-month">Janv. 2026</div><div class="veille-content"><h4>DeepSeek et l'AI Act européen</h4><p>La Chine dévoile DeepSeek, modèle open source rivalisant avec les leaders. L'AI Act européen entre en application. La CNIL sanctionne lourdement Free pour manquement au RGPD.</p></div></div>
+      <div class="veille-item"><div class="veille-month">Fév. 2026</div><div class="veille-content"><h4>48 % des Français utilisent l'IA</h4><p>Le baromètre CREDOC révèle une adoption plus rapide que celle d'Internet ou du smartphone. 26 % des TPE/PME intègrent l'IA. Le Sommet pour l'action sur l'IA se tient à Paris.</p></div></div>
+      <div class="veille-item"><div class="veille-month">Mars 2026</div><div class="veille-content"><h4>Yann LeCun lance Ami Labs</h4><p>Le chercheur français quitte Meta et fonde Ami Labs avec une levée record d'un milliard de dollars. L'IA agentique s'intègre réellement dans les processus métier.</p></div></div>
+      <div class="veille-item"><div class="veille-month">Avr. 2026</div><div class="veille-content"><h4>De l'IA de promesse à l'IA de résultat</h4><p>Les investissements mondiaux dépassent 1 500 milliards de dollars. L'enjeu : gouvernance, traçabilité et ROI mesurable. L'IA entre dans sa phase de maturité industrielle.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<section id="synthese" style="background:rgba(18,18,26,0.5)">
+  <div class="container fade-in">
+    <span class="section-tag">// épreuve E5</span>
+    <h2 class="section-title">Tableau de Synthèse E5</h2>
+    <p class="section-desc">Tableau récapitulatif des situations professionnelles présentées à l'épreuve E5.</p>
+    <div class="synthese-placeholder">
+      <p style="font-size:2rem;margin-bottom:1rem">📋</p>
+      <p><strong>Tableau de synthèse à venir</strong></p>
+      <p>Le document sera intégré au format PDF téléchargeable une fois finalisé.</p>
+    </div>
+  </div>
+</section>
+
+<section id="documents">
+  <div class="container fade-in">
+    <span class="section-tag">// documents</span>
+    <h2 class="section-title">Téléchargements</h2>
+    <p class="section-desc">Retrouvez ici l'ensemble de mes documents officiels.</p>
+    <div class="docs-grid">
+      <a class="doc-card" href="docs/cv-mateo-hoareau.pdf" download><div class="doc-icon cv">📄</div><div><div class="doc-name">Curriculum Vitae</div><div class="doc-status">PDF — Télécharger</div></div></a>
+      <a class="doc-card" href="docs/tableau-synthese-e5.pdf" download><div class="doc-icon diplome">📋</div><div><div class="doc-name">Tableau de Synthèse E5</div><div class="doc-status">À venir</div></div></a>
+      <a class="doc-card" href="docs/attestation-stage-1.pdf" download><div class="doc-icon stage">📎</div><div><div class="doc-name">Attestation de stage — 1ère année</div><div class="doc-status">Mairie de Saint-Joseph</div></div></a>
+      <a class="doc-card" href="docs/attestation-stage-2.pdf" download><div class="doc-icon stage">📎</div><div><div class="doc-name">Attestation de stage — 2ème année</div><div class="doc-status">Association Komidi</div></div></a>
+      <a class="doc-card" href="docs/certifications.pdf" download><div class="doc-icon cert">🏅</div><div><div class="doc-name">Certifications</div><div class="doc-status">À fournir</div></div></a>
+      <a class="doc-card" href="docs/diplome-bac-stmg.pdf" download><div class="doc-icon diplome">🎓</div><div><div class="doc-name">Diplôme Bac STMG</div><div class="doc-status">À fournir</div></div></a>
+    </div>
+  </div>
+</section>
+
+<section id="contact" style="background:rgba(18,18,26,0.5)">
+  <div class="container fade-in">
+    <span class="section-tag">// contact</span>
+    <h2 class="section-title">Me contacter</h2>
+    <p class="section-desc" style="margin-left:auto;margin-right:auto">N'hésitez pas à me contacter pour toute question ou opportunité.</p>
+    <div class="contact-links">
+      <a class="contact-card" href="mailto:mateohoareau21@gmail.com"><span>✉️</span><div><div style="font-weight:600">Email</div><div style="color:var(--text-muted);font-size:.85rem">mateohoareau21@gmail.com</div></div></a>
+      <a class="contact-card" href="https://github.com/mateohoareau" target="_blank" rel="noopener"><span>🐙</span><div><div style="font-weight:600">GitHub</div><div style="color:var(--text-muted);font-size:.85rem">github.com/mateohoareau</div></div></a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>© 2026 Matéo Hoareau — Portfolio BTS SIO SLAM</p>
+  <p style="margin-top:.5rem">Ce site ne collecte aucune donnée personnelle et n'utilise aucun cookie. Conforme au <a href="https://www.cnil.fr/fr/rgpd-de-quoi-parle-t-on" target="_blank" rel="noopener">RGPD</a>.</p>
+</footer>
+
+<div class="rgpd-banner" id="rgpdBanner">
+  <span>ℹ️ Ce site est statique, il ne collecte aucune donnée personnelle et n'utilise aucun cookie ni traceur.</span>
+  <button onclick="document.getElementById('rgpdBanner').classList.add('hidden')">Compris</button>
+</div>
+
+<script>
+  const observer=new IntersectionObserver(e=>{e.forEach(el=>{if(el.isIntersecting)el.target.classList.add('visible')})},{threshold:0.1});
+  document.querySelectorAll('.fade-in').forEach(el=>observer.observe(el));
+  document.querySelectorAll('.nav-links a').forEach(a=>{a.addEventListener('click',()=>document.querySelector('.nav-links').classList.remove('open'))});
+</script>
+</body>
+</html>
