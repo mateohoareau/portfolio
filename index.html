@@ -3,400 +3,1925 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Matéo Hoareau — Portfolio BTS SIO SLAM</title>
+  <title>Matéo Hoareau — Portfolio</title>
   <meta name="description" content="Portfolio de Matéo Hoareau, étudiant en BTS SIO option SLAM au Lycée Pierre-Poivre, La Réunion.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&family=Sora:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
     *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+
     :root{
-      --bg:#07080d;
-      --bg-2:#0d0f16;
-      --bg-card:#111318;
-      --bg-card-2:#15171f;
-      --bg-glass:rgba(17,19,24,.7);
-      --border:rgba(255,255,255,.05);
-      --border-2:rgba(255,255,255,.08);
-      --border-3:rgba(255,255,255,.12);
-      --text:#eef0f6;
-      --text-2:#b0b5c5;
-      --text-3:#6c7289;
-      --blue:#6366f1;
-      --blue-2:#818cf8;
-      --blue-3:#a5b4fc;
-      --cyan:#06b6d4;
-      --emerald:#10b981;
-      --amber:#f59e0b;
-      --rose:#f472b6;
-      --glow-blue:rgba(99,102,241,.12);
-      --glow-blue-2:rgba(99,102,241,.06);
-      --grad:linear-gradient(135deg,#6366f1,#06b6d4);
-      --grad-2:linear-gradient(135deg,#6366f1,#818cf8,#06b6d4);
-      --r:12px;--r2:18px;--r3:24px;
+      --ink:#06060a;
+      --ink-soft:#0a0a10;
+      --ink-card:#0f0f16;
+      --ink-card-2:#13131c;
+      --ink-elevated:#17171f;
+
+      --gold:#d4b880;
+      --gold-soft:#e8d4a8;
+      --gold-warm:#c9a876;
+      --gold-deep:#9d7f4f;
+      --gold-glow:rgba(212,184,128,.15);
+      --gold-glow-strong:rgba(212,184,128,.25);
+      --gold-glow-faint:rgba(212,184,128,.06);
+
+      --text:#f0ebe0;
+      --text-2:#b8b3a5;
+      --text-3:#7d7868;
+      --text-4:#52503d;
+
+      --line:rgba(212,184,128,.08);
+      --line-2:rgba(212,184,128,.14);
+      --line-3:rgba(212,184,128,.22);
+
+      --r:4px;--r2:8px;--r3:16px;
+
+      --ease:cubic-bezier(.22,1,.36,1);
+      --ease-out:cubic-bezier(.16,1,.3,1);
     }
+
     html{scroll-behavior:smooth}
-    body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.7;overflow-x:hidden;-webkit-font-smoothing:antialiased}
-    ::selection{background:rgba(99,102,241,.3);color:#fff}
-    ::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--blue);border-radius:4px}
- 
+    body{
+      font-family:'Inter',system-ui,sans-serif;
+      background:var(--ink);
+      color:var(--text);
+      line-height:1.7;
+      overflow-x:hidden;
+      -webkit-font-smoothing:antialiased;
+      font-weight:300;
+      cursor:none;
+      position:relative;
+    }
+    @media(hover:none){body{cursor:auto}}
+
+    ::selection{background:var(--gold);color:var(--ink)}
+    ::-webkit-scrollbar{width:3px}
+    ::-webkit-scrollbar-track{background:var(--ink)}
+    ::-webkit-scrollbar-thumb{background:var(--gold-deep);border-radius:3px}
+
+    /* ═══ FIXED ATMOSPHERIC LAYERS ═══ */
+    /* Scroll-driven ambient spotlight */
+    .ambient-light{
+      position:fixed;
+      top:0;left:0;right:0;bottom:0;
+      pointer-events:none;
+      z-index:0;
+      transition:background 1.5s var(--ease);
+    }
+
+    /* Scroll-driven atmospheric tint */
+    .atmo{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      z-index:0;
+      opacity:.5;
+      transition:opacity 1.2s var(--ease),background 1.5s var(--ease);
+    }
+
+    /* Gold particles canvas */
+    #particles{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      z-index:1;
+    }
+
+    /* Progress line at edge */
+    .progress-line{
+      position:fixed;
+      top:0;
+      left:0;
+      height:2px;
+      background:linear-gradient(90deg,transparent,var(--gold),var(--gold-soft),var(--gold));
+      z-index:200;
+      width:0%;
+      transition:width .1s linear;
+      box-shadow:0 0 10px var(--gold),0 0 20px rgba(212,184,128,.5);
+    }
+
+    /* ─── CURSOR ─── */
+    .cursor{
+      position:fixed;
+      top:0;left:0;
+      width:8px;height:8px;
+      background:var(--gold);
+      border-radius:50%;
+      pointer-events:none;
+      z-index:9999;
+      transform:translate(-50%,-50%);
+      mix-blend-mode:difference;
+      transition:width .3s var(--ease),height .3s var(--ease);
+    }
+    .cursor.hover{width:36px;height:36px;background:var(--gold-soft)}
+    .cursor-halo{
+      position:fixed;
+      top:0;left:0;
+      width:300px;height:300px;
+      border-radius:50%;
+      background:radial-gradient(circle,rgba(212,184,128,.05) 0%,rgba(212,184,128,.02) 40%,transparent 70%);
+      pointer-events:none;
+      z-index:2;
+      transform:translate(-50%,-50%);
+      filter:blur(20px);
+    }
+    @media(hover:none){.cursor,.cursor-halo{display:none}}
+
+    /* ─── GRAIN ─── */
+    body::before{
+      content:'';
+      position:fixed;
+      inset:0;
+      background:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events:none;
+      z-index:9998;
+      mix-blend-mode:overlay;
+    }
+
     /* ─── NAV ─── */
-    nav{position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:100;
-      background:rgba(13,15,22,.75);backdrop-filter:blur(24px) saturate(1.8);
-      border:1px solid var(--border-2);border-radius:999px;padding:.35rem .5rem;
-      display:flex;align-items:center;gap:.15rem;max-width:fit-content;
-      box-shadow:0 8px 32px rgba(0,0,0,.4)}
-    nav a{color:var(--text-2);text-decoration:none;font-size:.78rem;font-weight:500;padding:.45rem .85rem;border-radius:999px;transition:all .25s;white-space:nowrap}
-    nav a:hover{color:var(--text);background:var(--glow-blue)}
-    nav a.active{color:#fff;background:var(--blue)}
-    .mob-toggle{display:none;background:none;border:none;color:var(--text-2);padding:.45rem .7rem;cursor:pointer;font-size:1rem}
- 
-    /* ─── LAYOUT ─── */
-    section{padding:8rem 2rem}
-    .wrap{max-width:1120px;margin:0 auto}
- 
-    .label{display:inline-flex;align-items:center;gap:.6rem;font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:3px;color:var(--blue-2);margin-bottom:1.25rem;font-family:'JetBrains Mono',monospace}
-    .label::before{content:'';width:24px;height:1.5px;background:var(--grad);border-radius:2px}
-    h2{font-family:'Sora',sans-serif;font-size:clamp(2rem,4.5vw,3rem);font-weight:800;letter-spacing:-.5px;margin-bottom:.6rem;line-height:1.15}
-    .intro{color:var(--text-2);font-size:.98rem;max-width:560px;margin-bottom:3.5rem;line-height:1.7}
- 
+    nav{
+      position:fixed;
+      top:24px;
+      left:50%;
+      transform:translateX(-50%);
+      z-index:100;
+      background:rgba(6,6,10,.5);
+      backdrop-filter:blur(32px) saturate(1.8);
+      border:1px solid var(--line);
+      border-radius:999px;
+      padding:.35rem .45rem;
+      display:flex;
+      align-items:center;
+      gap:.1rem;
+      box-shadow:0 20px 60px rgba(0,0,0,.5),inset 0 1px 0 rgba(212,184,128,.06);
+    }
+    nav a{
+      color:var(--text-2);
+      text-decoration:none;
+      font-size:.72rem;
+      font-weight:400;
+      padding:.5rem 1rem;
+      border-radius:999px;
+      transition:all .4s var(--ease);
+      white-space:nowrap;
+      letter-spacing:.05em;
+      text-transform:uppercase;
+      position:relative;
+    }
+    nav a:hover{color:var(--gold-soft)}
+    nav a.active{color:var(--ink);background:var(--gold)}
+
+    /* ─── STRUCTURE ─── */
+    section{
+      padding:10rem 2rem;
+      position:relative;
+      z-index:3;
+    }
+    .wrap{max-width:1100px;margin:0 auto;position:relative}
+
+    .eyebrow{
+      display:inline-flex;
+      align-items:center;
+      gap:.85rem;
+      font-size:.68rem;
+      font-weight:500;
+      text-transform:uppercase;
+      letter-spacing:4px;
+      color:var(--gold);
+      margin-bottom:1.5rem;
+      font-family:'JetBrains Mono',monospace;
+    }
+    .eyebrow::before{
+      content:'';
+      width:32px;
+      height:1px;
+      background:var(--gold);
+    }
+
+    h2{
+      font-family:'Cormorant Garamond',serif;
+      font-size:clamp(2.5rem,5.5vw,4.2rem);
+      font-weight:400;
+      letter-spacing:-.02em;
+      margin-bottom:1.5rem;
+      line-height:1.05;
+      color:var(--text);
+    }
+    h2 em{
+      font-style:italic;
+      font-weight:300;
+      color:var(--gold);
+    }
+    .lede{
+      font-family:'Cormorant Garamond',serif;
+      font-size:clamp(1.05rem,1.6vw,1.3rem);
+      color:var(--text-2);
+      font-weight:300;
+      font-style:italic;
+      max-width:640px;
+      margin-bottom:4rem;
+      line-height:1.5;
+    }
+
     /* ─── HERO ─── */
-    #hero{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;position:relative;padding-top:80px;overflow:hidden}
-    .hero-mesh{position:absolute;inset:0;
+    #hero{
+      min-height:100vh;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      position:relative;
+      padding-top:120px;
+      overflow:hidden;
+    }
+    .hero-aura{
+      position:absolute;
+      inset:0;
       background:
-        radial-gradient(ellipse 80% 50% at 50% 0%,rgba(99,102,241,.1),transparent),
-        radial-gradient(ellipse 60% 40% at 20% 80%,rgba(6,182,212,.06),transparent),
-        radial-gradient(ellipse 50% 30% at 80% 60%,rgba(129,140,248,.06),transparent)}
-    .hero-lines{position:absolute;inset:0;
-      background-image:linear-gradient(rgba(255,255,255,.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.02) 1px,transparent 1px);
-      background-size:80px 80px;
-      mask-image:radial-gradient(ellipse 70% 50% at 50% 50%,black 10%,transparent 70%)}
-    .hero-inner{position:relative;z-index:1}
-    .hero-chip{display:inline-flex;align-items:center;gap:.6rem;background:var(--bg-card);border:1px solid var(--border-2);padding:.4rem 1.15rem;border-radius:999px;font-size:.78rem;color:var(--text-2);margin-bottom:2.5rem;backdrop-filter:blur(8px)}
-    .hero-chip .dot{width:7px;height:7px;background:var(--emerald);border-radius:50%;box-shadow:0 0 10px rgba(16,185,129,.5);animation:blink 2s infinite}
-    @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
-    .hero-name{font-family:'Sora',sans-serif;font-size:clamp(3rem,9vw,6.5rem);font-weight:900;letter-spacing:-3px;line-height:1;margin-bottom:1.5rem}
-    .hero-name span{background:var(--grad-2);-webkit-background-clip:text;-webkit-text-fill-color:transparent;filter:brightness(1.2)}
-    .hero-role{font-size:clamp(.95rem,1.8vw,1.15rem);color:var(--text-2);font-weight:400;margin-bottom:3rem;max-width:480px;margin-left:auto;margin-right:auto;line-height:1.7}
-    .hero-btns{display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap}
-    .btn{display:inline-flex;align-items:center;gap:.5rem;padding:.75rem 1.8rem;border-radius:999px;font-family:'Inter',sans-serif;font-weight:600;font-size:.88rem;text-decoration:none;cursor:pointer;border:none;transition:all .3s}
-    .btn-fill{background:var(--blue);color:#fff;box-shadow:0 4px 20px rgba(99,102,241,.3),inset 0 1px 0 rgba(255,255,255,.1)}
-    .btn-fill:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(99,102,241,.45);background:#7577f5}
-    .btn-glass{background:var(--bg-glass);color:var(--text);border:1px solid var(--border-2);backdrop-filter:blur(12px)}
-    .btn-glass:hover{border-color:var(--blue);background:var(--glow-blue)}
- 
-    /* ─── ABOUT ─── */
-    .about-cols{display:grid;grid-template-columns:1.1fr .9fr;gap:4rem;align-items:start}
-    .about-text p{color:var(--text-2);margin-bottom:1rem;font-size:.93rem;line-height:1.75}
-    .stat-row{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-top:1.75rem}
-    .stat{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r);padding:1rem 1.15rem;transition:all .3s}
-    .stat:hover{border-color:var(--border-3);background:var(--bg-card-2)}
-    .stat .k{font-size:.65rem;color:var(--text-3);text-transform:uppercase;letter-spacing:1.5px;font-family:'JetBrains Mono',monospace}
-    .stat .v{font-weight:700;font-size:.9rem;margin-top:.15rem}
-    .tags{display:flex;flex-wrap:wrap;gap:.35rem;margin-top:1rem}
-    .tag{background:var(--glow-blue);border:1px solid rgba(99,102,241,.12);color:var(--blue-3);padding:.3rem .75rem;border-radius:999px;font-size:.74rem;font-weight:500;transition:all .25s;cursor:default}
-    .tag:hover{background:rgba(99,102,241,.15);border-color:rgba(99,102,241,.25)}
- 
-    /* ─── GLASS CARD ─── */
-    .gc{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r2);padding:1.75rem;position:relative;transition:all .35s;overflow:hidden}
-    .gc::after{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:var(--grad);opacity:0;transition:opacity .35s}
-    .gc:hover{border-color:var(--border-3);transform:translateY(-4px);box-shadow:0 12px 40px rgba(0,0,0,.25),0 0 0 1px var(--border-2)}
-    .gc:hover::after{opacity:1}
- 
+        radial-gradient(ellipse 70% 40% at 50% 0%,rgba(212,184,128,.12),transparent 60%),
+        radial-gradient(ellipse 40% 30% at 50% 50%,rgba(212,184,128,.04),transparent);
+      z-index:0;
+      pointer-events:none;
+    }
+    .hero-grain{
+      position:absolute;
+      inset:0;
+      background-image:
+        linear-gradient(rgba(212,184,128,.02) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(212,184,128,.02) 1px,transparent 1px);
+      background-size:100px 100px;
+      mask-image:radial-gradient(ellipse 70% 50% at 50% 50%,black 5%,transparent 65%);
+      pointer-events:none;
+    }
+    .hero-top{
+      position:absolute;
+      top:0;left:0;right:0;
+      text-align:center;
+      padding-top:110px;
+      pointer-events:none;
+    }
+    .hero-serial{
+      font-family:'JetBrains Mono',monospace;
+      font-size:.65rem;
+      color:var(--text-3);
+      letter-spacing:4px;
+      text-transform:uppercase;
+    }
+    .hero-inner{position:relative;z-index:2}
+    .hero-ornament{
+      font-family:'Cormorant Garamond',serif;
+      font-size:1rem;
+      color:var(--gold);
+      margin-bottom:2rem;
+      letter-spacing:2px;
+      font-style:italic;
+    }
+    .hero-ornament::before,.hero-ornament::after{
+      content:'';
+      display:inline-block;
+      width:40px;
+      height:1px;
+      background:var(--gold-deep);
+      vertical-align:middle;
+      margin:0 1rem;
+    }
+    h1.hero-name{
+      font-family:'Cormorant Garamond',serif;
+      font-size:clamp(4rem,12vw,9rem);
+      font-weight:300;
+      letter-spacing:-.04em;
+      line-height:.95;
+      margin-bottom:2rem;
+      color:var(--text);
+    }
+    h1.hero-name em{
+      font-style:italic;
+      font-weight:300;
+      color:var(--gold-soft);
+      display:block;
+      margin-top:-.1em;
+    }
+    .hero-role{
+      font-family:'Inter',sans-serif;
+      font-size:.8rem;
+      font-weight:400;
+      text-transform:uppercase;
+      letter-spacing:4px;
+      color:var(--text-2);
+      margin-bottom:3.5rem;
+      line-height:2;
+    }
+    .hero-role span{color:var(--gold);font-weight:500}
+    .hero-btns{
+      display:flex;
+      gap:1rem;
+      justify-content:center;
+      flex-wrap:wrap;
+    }
+
+    .btn{
+      font-family:'Inter',sans-serif;
+      font-size:.72rem;
+      font-weight:500;
+      text-transform:uppercase;
+      letter-spacing:3px;
+      padding:1.1rem 2.2rem;
+      text-decoration:none;
+      cursor:none;
+      border:none;
+      transition:all .5s var(--ease);
+      display:inline-flex;
+      align-items:center;
+      gap:.75rem;
+      position:relative;
+      overflow:hidden;
+    }
+    .btn-gold{
+      background:var(--gold);
+      color:var(--ink);
+      box-shadow:0 10px 40px rgba(212,184,128,.2);
+    }
+    .btn-gold::before{
+      content:'';
+      position:absolute;
+      top:0;left:-100%;
+      width:100%;height:100%;
+      background:linear-gradient(90deg,transparent,rgba(255,255,255,.4),transparent);
+      transition:left .8s var(--ease);
+    }
+    .btn-gold:hover::before{left:100%}
+    .btn-gold:hover{box-shadow:0 15px 50px rgba(212,184,128,.35);transform:translateY(-2px)}
+    .btn-outline{
+      background:transparent;
+      color:var(--gold-soft);
+      border:1px solid var(--line-3);
+    }
+    .btn-outline:hover{border-color:var(--gold);color:var(--gold);background:var(--gold-glow-faint);transform:translateY(-2px)}
+
+    .hero-scroll{
+      position:absolute;
+      bottom:3rem;
+      left:50%;
+      transform:translateX(-50%);
+      color:var(--text-3);
+      font-family:'JetBrains Mono',monospace;
+      font-size:.65rem;
+      letter-spacing:3px;
+      text-transform:uppercase;
+      text-align:center;
+      animation:fadeFloat 3s ease-in-out infinite;
+      z-index:2;
+    }
+    .hero-scroll::after{
+      content:'';
+      display:block;
+      width:1px;
+      height:60px;
+      background:linear-gradient(to bottom,var(--gold),transparent);
+      margin:.75rem auto 0;
+    }
+    @keyframes fadeFloat{
+      0%,100%{opacity:.5;transform:translate(-50%,0)}
+      50%{opacity:1;transform:translate(-50%,8px)}
+    }
+
+    /* ─── CHAPTER TRANSITIONS ─── */
+    .chapter-enter{
+      position:relative;
+      overflow:hidden;
+    }
+    .chapter-veil{
+      position:absolute;
+      top:0;left:0;right:0;bottom:0;
+      background:linear-gradient(180deg,var(--ink) 0%,transparent 30%);
+      pointer-events:none;
+      z-index:4;
+      opacity:0;
+      transition:opacity 1.5s var(--ease);
+    }
+    .chapter-enter.revealed .chapter-veil{opacity:0}
+
+    /* ─── SECTION DIVIDERS ─── */
+    .divider{
+      position:relative;
+      height:1px;
+      background:linear-gradient(90deg,transparent,var(--line-2),transparent);
+      margin:5rem auto;
+      max-width:400px;
+      z-index:3;
+    }
+    .divider::before{
+      content:'❦';
+      position:absolute;
+      top:50%;
+      left:50%;
+      transform:translate(-50%,-50%);
+      background:var(--ink);
+      color:var(--gold);
+      padding:0 1rem;
+      font-size:1rem;
+      transition:transform 2s var(--ease),color .8s var(--ease);
+    }
+    .divider.revealed::before{
+      transform:translate(-50%,-50%) rotate(180deg);
+      color:var(--gold-soft);
+    }
+
+    /* ─── PRESENTATION ─── */
+    .about-grid{
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      gap:5rem;
+      align-items:start;
+    }
+    .about-text p{
+      color:var(--text-2);
+      margin-bottom:1.25rem;
+      font-size:1rem;
+      line-height:1.85;
+      font-weight:300;
+    }
+    .about-text p .acc{color:var(--gold-soft);font-style:italic}
+
+    .info-list{
+      margin-top:2.5rem;
+      border-top:1px solid var(--line);
+    }
+    .info-row{
+      display:flex;
+      justify-content:space-between;
+      align-items:baseline;
+      padding:1rem 0;
+      border-bottom:1px solid var(--line);
+      transition:all .4s var(--ease);
+    }
+    .info-row:hover{padding-left:.5rem;border-bottom-color:var(--line-2)}
+    .info-row .k{
+      font-family:'JetBrains Mono',monospace;
+      font-size:.65rem;
+      color:var(--text-3);
+      text-transform:uppercase;
+      letter-spacing:2px;
+    }
+    .info-row .v{
+      font-family:'Cormorant Garamond',serif;
+      font-size:1.1rem;
+      color:var(--text);
+      font-weight:400;
+      font-style:italic;
+    }
+
+    .side-title{
+      font-family:'Cormorant Garamond',serif;
+      font-style:italic;
+      font-size:1.5rem;
+      color:var(--gold-soft);
+      margin-bottom:1.25rem;
+      font-weight:400;
+    }
+    .tags{
+      display:flex;
+      flex-wrap:wrap;
+      gap:.4rem;
+      margin-bottom:2.5rem;
+    }
+    .tag{
+      font-size:.7rem;
+      font-family:'JetBrains Mono',monospace;
+      color:var(--text-2);
+      border:1px solid var(--line-2);
+      padding:.4rem .9rem;
+      border-radius:999px;
+      transition:all .3s var(--ease);
+      letter-spacing:.5px;
+      background:rgba(212,184,128,.02);
+    }
+    .tag:hover{border-color:var(--gold);color:var(--gold-soft);background:var(--gold-glow-faint)}
+
     /* ─── TIMELINE ─── */
-    .tl{position:relative;padding-left:2.5rem}
-    .tl::before{content:'';position:absolute;left:5px;top:8px;bottom:8px;width:1.5px;background:linear-gradient(to bottom,var(--blue),var(--cyan),transparent)}
+    .tl{position:relative;padding-left:3rem;margin-top:1rem}
+    .tl::before{
+      content:'';
+      position:absolute;
+      left:5px;
+      top:10px;
+      bottom:10px;
+      width:1px;
+      background:linear-gradient(to bottom,var(--gold),var(--gold-deep),transparent);
+    }
     .tl-i{position:relative;margin-bottom:2.5rem}
-    .tl-i::before{content:'';position:absolute;left:-2.5rem;top:.45rem;width:12px;height:12px;border-radius:50%;background:var(--bg);border:2.5px solid var(--blue);box-shadow:0 0 0 4px var(--glow-blue),0 0 12px rgba(99,102,241,.15)}
-    .tl-d{font-family:'JetBrains Mono',monospace;font-size:.75rem;color:var(--blue-2);margin-bottom:.1rem}
-    .tl-t{font-family:'Sora',sans-serif;font-weight:700;font-size:1.05rem}
-    .tl-s{color:var(--text-2);font-size:.87rem}
- 
-    /* ─── PROJECTS ─── */
-    .pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:1rem}
-    .p-emoji{font-size:2rem;margin-bottom:.75rem;display:block;filter:grayscale(0)}
-    .p-name{font-family:'Sora',sans-serif;font-weight:700;font-size:1.05rem;margin-bottom:.4rem}
-    .p-desc{color:var(--text-2);font-size:.85rem;margin-bottom:1rem;line-height:1.65}
-    .p-tags{display:flex;flex-wrap:wrap;gap:.3rem}
-    .p-tag{font-size:.65rem;padding:.18rem .5rem;border-radius:999px;background:rgba(6,182,212,.08);color:rgba(6,182,212,.8);border:1px solid rgba(6,182,212,.12);font-family:'JetBrains Mono',monospace}
- 
+    .tl-i::before{
+      content:'';
+      position:absolute;
+      left:-3rem;
+      top:.5rem;
+      width:11px;
+      height:11px;
+      border-radius:50%;
+      background:var(--ink);
+      border:1.5px solid var(--gold);
+      box-shadow:0 0 0 4px rgba(212,184,128,.08);
+    }
+    .tl-d{
+      font-family:'JetBrains Mono',monospace;
+      font-size:.68rem;
+      color:var(--gold);
+      letter-spacing:1.5px;
+      text-transform:uppercase;
+      margin-bottom:.3rem;
+    }
+    .tl-t{
+      font-family:'Cormorant Garamond',serif;
+      font-weight:500;
+      font-size:1.3rem;
+      color:var(--text);
+      margin-bottom:.1rem;
+    }
+    .tl-s{color:var(--text-3);font-size:.85rem;font-style:italic;font-family:'Cormorant Garamond',serif}
+
+    /* ─── CARDS ─── */
+    .card{
+      background:var(--ink-card);
+      border:1px solid var(--line);
+      border-radius:var(--r2);
+      padding:2rem;
+      position:relative;
+      transition:all .5s var(--ease);
+      overflow:hidden;
+    }
+    .card::before{
+      content:'';
+      position:absolute;
+      inset:0;
+      background:linear-gradient(135deg,var(--gold-glow-faint),transparent 50%);
+      opacity:0;
+      transition:opacity .5s var(--ease);
+      pointer-events:none;
+    }
+    .card::after{
+      content:'';
+      position:absolute;
+      top:0;left:0;right:0;
+      height:1px;
+      background:linear-gradient(90deg,transparent,var(--gold),transparent);
+      opacity:0;
+      transition:opacity .5s var(--ease);
+    }
+    .card:hover{border-color:var(--line-3);transform:translateY(-4px)}
+    .card:hover::before{opacity:1}
+    .card:hover::after{opacity:1}
+
     /* ─── STAGES ─── */
-    .s-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
-    .s-badge{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--emerald);display:inline-block;background:rgba(16,185,129,.08);padding:.2rem .7rem;border-radius:999px;border:1px solid rgba(16,185,129,.12);margin-bottom:.75rem}
-    .s-name{font-family:'Sora',sans-serif;font-weight:700;font-size:1.05rem;margin-bottom:.15rem}
-    .s-org{color:var(--blue-2);font-weight:500;font-size:.9rem;margin-bottom:.5rem}
-    .s-txt{color:var(--text-2);font-size:.85rem;line-height:1.65}
- 
+    .s-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+    .s-period{
+      font-family:'JetBrains Mono',monospace;
+      font-size:.65rem;
+      color:var(--gold);
+      letter-spacing:2px;
+      text-transform:uppercase;
+      margin-bottom:1rem;
+      padding-bottom:.75rem;
+      border-bottom:1px solid var(--line);
+    }
+    .s-name{
+      font-family:'Cormorant Garamond',serif;
+      font-size:1.6rem;
+      font-weight:400;
+      margin-bottom:.35rem;
+      color:var(--text);
+    }
+    .s-org{
+      color:var(--gold-soft);
+      font-family:'Cormorant Garamond',serif;
+      font-style:italic;
+      font-size:1rem;
+      margin-bottom:1rem;
+    }
+    .s-txt{color:var(--text-2);font-size:.9rem;line-height:1.8;font-weight:300}
+    .s-txt strong{color:var(--gold-soft);font-weight:500}
+    .s-skills{display:flex;flex-wrap:wrap;gap:.35rem;margin-top:1.25rem;padding-top:1rem;border-top:1px solid var(--line)}
+    .s-skill{
+      font-size:.65rem;
+      font-family:'JetBrains Mono',monospace;
+      color:var(--text-3);
+      padding:.25rem .65rem;
+      letter-spacing:.5px;
+    }
+
+    /* ─── PROJECTS ─── */
+    .pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1.25rem}
+    .p-num{
+      font-family:'Cormorant Garamond',serif;
+      font-style:italic;
+      font-size:.85rem;
+      color:var(--gold-deep);
+      margin-bottom:.5rem;
+      letter-spacing:1px;
+    }
+    .p-emoji{font-size:1.6rem;margin-bottom:.85rem;display:block;opacity:.85;filter:sepia(.3) saturate(.8)}
+    .p-name{
+      font-family:'Cormorant Garamond',serif;
+      font-size:1.5rem;
+      font-weight:500;
+      margin-bottom:.5rem;
+      color:var(--text);
+    }
+    .p-desc{color:var(--text-2);font-size:.88rem;margin-bottom:1.25rem;line-height:1.8;font-weight:300}
+    .p-tags{display:flex;flex-wrap:wrap;gap:.3rem;padding-top:1rem;border-top:1px solid var(--line)}
+    .p-tag{
+      font-size:.6rem;
+      padding:.22rem .55rem;
+      color:var(--text-3);
+      font-family:'JetBrains Mono',monospace;
+      letter-spacing:.5px;
+    }
+    .p-featured{
+      background:linear-gradient(135deg,rgba(212,184,128,.05),rgba(212,184,128,.02));
+      border:1px solid var(--line-2);
+    }
+    .p-badge{
+      display:inline-block;
+      font-size:.6rem;
+      font-family:'JetBrains Mono',monospace;
+      color:var(--gold);
+      background:var(--gold-glow);
+      border:1px solid var(--line-2);
+      padding:.25rem .7rem;
+      border-radius:999px;
+      margin-bottom:1rem;
+      text-transform:uppercase;
+      letter-spacing:1.5px;
+    }
+
+    /* ─── E5 ─── */
+    .e5-hero{
+      background:var(--ink-card);
+      border:1px solid var(--line-2);
+      border-radius:var(--r3);
+      padding:3rem;
+      margin-bottom:2rem;
+      position:relative;
+      overflow:hidden;
+    }
+    .e5-hero::before{
+      content:'';
+      position:absolute;
+      top:0;left:0;right:0;
+      height:1px;
+      background:linear-gradient(90deg,transparent,var(--gold),transparent);
+    }
+    .e5-hero h3{
+      font-family:'Cormorant Garamond',serif;
+      font-size:2rem;
+      font-weight:400;
+      font-style:italic;
+      margin-bottom:1rem;
+      color:var(--gold-soft);
+    }
+    .e5-hero p{color:var(--text-2);font-size:.98rem;max-width:780px;margin-bottom:1rem;line-height:1.85;font-weight:300}
+    .e5-hero p strong{color:var(--gold-soft);font-weight:500}
+    .method-box{
+      background:rgba(212,184,128,.04);
+      border-left:2px solid var(--gold);
+      padding:1.25rem 1.5rem;
+      margin-top:1.5rem;
+    }
+    .method-box .mt{
+      font-family:'JetBrains Mono',monospace;
+      font-size:.65rem;
+      color:var(--gold);
+      text-transform:uppercase;
+      letter-spacing:2px;
+      margin-bottom:.5rem;
+    }
+    .method-box p{font-size:.9rem;color:var(--text-2);margin-bottom:0;font-style:italic;font-family:'Cormorant Garamond',serif;font-size:1.05rem}
+
+    .st-wrapper{
+      background:var(--ink-card);
+      border:1px solid var(--line-2);
+      border-radius:var(--r3);
+      padding:2rem;
+      overflow-x:auto;
+      margin-bottom:1.5rem;
+    }
+    .st-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      margin-bottom:1.5rem;
+      flex-wrap:wrap;
+      gap:1rem;
+      padding-bottom:1.25rem;
+      border-bottom:1px solid var(--line);
+    }
+    .st-head h4{
+      font-family:'Cormorant Garamond',serif;
+      font-size:1.5rem;
+      font-weight:500;
+      font-style:italic;
+      color:var(--text);
+    }
+    .st-btns{display:flex;gap:.5rem}
+    .st-btn{
+      font-size:.68rem;
+      padding:.55rem 1.1rem;
+      text-decoration:none;
+      transition:all .4s var(--ease);
+      display:inline-flex;
+      align-items:center;
+      gap:.45rem;
+      font-family:'JetBrains Mono',monospace;
+      letter-spacing:1.5px;
+      text-transform:uppercase;
+      cursor:none;
+    }
+    .st-btn-primary{background:var(--gold);color:var(--ink);font-weight:500}
+    .st-btn-primary:hover{background:var(--gold-soft);transform:translateY(-1px)}
+    .st-btn-ghost{color:var(--text-2);border:1px solid var(--line-2)}
+    .st-btn-ghost:hover{border-color:var(--gold);color:var(--gold-soft)}
+
+    table.synth{
+      width:100%;
+      border-collapse:separate;
+      border-spacing:0;
+      font-size:.83rem;
+      min-width:920px;
+    }
+    table.synth th,table.synth td{
+      padding:.85rem .95rem;
+      text-align:left;
+      vertical-align:middle;
+      border-bottom:1px solid var(--line);
+    }
+    table.synth thead th{
+      background:transparent;
+      color:var(--gold-soft);
+      font-family:'JetBrains Mono',monospace;
+      font-size:.62rem;
+      font-weight:500;
+      text-transform:uppercase;
+      letter-spacing:1.5px;
+      text-align:center;
+      border-bottom:1px solid var(--line-2);
+      line-height:1.4;
+      padding-bottom:1rem;
+    }
+    table.synth thead th:first-child,
+    table.synth thead th:nth-child(2){text-align:left}
+    table.synth tbody tr{transition:background .3s var(--ease)}
+    table.synth tbody tr:hover{background:var(--gold-glow-faint)}
+    table.synth tbody td:first-child{
+      color:var(--text);
+      font-weight:400;
+      max-width:280px;
+      font-family:'Cormorant Garamond',serif;
+      font-size:1rem;
+    }
+    table.synth tbody td:nth-child(2){
+      color:var(--text-3);
+      font-family:'JetBrains Mono',monospace;
+      font-size:.68rem;
+      white-space:nowrap;
+      letter-spacing:.5px;
+    }
+    .cat-row td{
+      background:rgba(212,184,128,.04)!important;
+      color:var(--gold)!important;
+      font-family:'JetBrains Mono',monospace!important;
+      font-size:.62rem!important;
+      font-weight:500;
+      text-transform:uppercase;
+      letter-spacing:2px;
+      padding:.65rem .95rem!important;
+    }
+    .comp-cell{text-align:center}
+    .comp-box{
+      display:inline-block;
+      width:20px;height:20px;
+      background:var(--gold);
+      border-radius:3px;
+      box-shadow:0 2px 12px rgba(212,184,128,.3),inset 0 1px 0 rgba(255,255,255,.2);
+      transition:all .3s var(--ease);
+    }
+    table.synth tbody tr:hover .comp-box{
+      background:var(--gold-soft);
+      box-shadow:0 4px 20px rgba(212,184,128,.5);
+    }
+    .st-legend{
+      display:flex;
+      align-items:center;
+      gap:.6rem;
+      color:var(--text-3);
+      font-size:.75rem;
+      margin-top:1.25rem;
+      padding-top:1.25rem;
+      border-top:1px solid var(--line);
+      font-family:'Cormorant Garamond',serif;
+      font-style:italic;
+    }
+    .st-legend .comp-box{width:12px;height:12px;border-radius:2px}
+
     /* ─── VEILLE ─── */
-    .v-topic{color:var(--text-2);max-width:700px;margin-bottom:2.5rem;font-size:.93rem}
-    .v-topic strong{color:var(--text)}
-    .v-list{display:grid;gap:.6rem}
-    .vi{display:grid;grid-template-columns:100px 1fr;gap:1.5rem;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r);padding:1.25rem 1.4rem;transition:all .25s}
-    .vi:hover{border-color:var(--border-3);box-shadow:0 4px 20px rgba(0,0,0,.2)}
-    .vi-m{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--blue-2);font-weight:500;padding-top:.1rem}
-    .vi-b h4{font-family:'Sora',sans-serif;font-weight:600;font-size:.92rem;margin-bottom:.25rem}
-    .vi-b p{color:var(--text-2);font-size:.83rem;line-height:1.6;margin-bottom:.4rem}
-    .vi-links{display:flex;flex-wrap:wrap;gap:.3rem}
-    .vi-a{font-size:.65rem;color:var(--blue-3);text-decoration:none;background:var(--glow-blue-2);padding:.12rem .5rem;border-radius:999px;border:1px solid rgba(99,102,241,.08);transition:all .2s;font-family:'JetBrains Mono',monospace}
-    .vi-a:hover{background:var(--glow-blue);border-color:rgba(99,102,241,.2);color:#fff}
- 
-    /* ─── E5 BOX ─── */
-    .e5-box{background:var(--bg-card);border:1px solid var(--border-2);border-radius:var(--r3);padding:3rem;text-align:center;position:relative;overflow:hidden}
-    .e5-box::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--grad)}
-    .e5-box p{color:var(--text-2)}
- 
+    .v-summary{
+      background:var(--ink-card);
+      border:1px solid var(--line-2);
+      border-radius:var(--r3);
+      padding:2.5rem;
+      margin-bottom:3rem;
+      position:relative;
+    }
+    .v-summary::before{
+      content:'“';
+      position:absolute;
+      top:-20px;left:20px;
+      font-family:'Cormorant Garamond',serif;
+      font-size:6rem;
+      color:var(--gold);
+      opacity:.3;
+      line-height:1;
+    }
+    .v-summary h4{
+      font-family:'Cormorant Garamond',serif;
+      font-style:italic;
+      font-size:1.75rem;
+      font-weight:400;
+      color:var(--gold-soft);
+      margin-bottom:1rem;
+    }
+    .v-summary p{color:var(--text-2);font-size:.95rem;line-height:1.85;margin-bottom:.85rem;font-weight:300}
+    .v-summary .note{
+      color:var(--text-3);
+      font-style:italic;
+      font-family:'Cormorant Garamond',serif;
+      font-size:.95rem;
+      margin-top:1rem;
+      padding-top:1rem;
+      border-top:1px solid var(--line);
+    }
+
+    .v-section-title{
+      font-family:'Cormorant Garamond',serif;
+      font-size:2rem;
+      font-weight:400;
+      font-style:italic;
+      color:var(--gold-soft);
+      margin:3.5rem 0 1.5rem;
+    }
+
+    .v-tools{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem;margin-bottom:3rem}
+    .vt{
+      background:var(--ink-card);
+      border:1px solid var(--line);
+      border-radius:var(--r2);
+      padding:1.75rem;
+      transition:all .5s var(--ease);
+      position:relative;
+      overflow:hidden;
+    }
+    .vt::before{
+      content:'';
+      position:absolute;
+      top:0;left:0;
+      width:100%;height:1px;
+      background:linear-gradient(90deg,transparent,var(--gold),transparent);
+      opacity:0;
+      transition:opacity .5s var(--ease);
+    }
+    .vt:hover{border-color:var(--line-3);transform:translateY(-3px)}
+    .vt:hover::before{opacity:1}
+    .vt-i{font-size:1.4rem;margin-bottom:1rem;filter:sepia(.3) saturate(.8);opacity:.9}
+    .vt-name{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:500;margin-bottom:.4rem;color:var(--text)}
+    .vt-desc{color:var(--text-2);font-size:.85rem;line-height:1.75;font-weight:300}
+    .vt-link{
+      color:var(--gold);
+      font-size:.65rem;
+      font-family:'JetBrains Mono',monospace;
+      text-decoration:none;
+      margin-top:.85rem;
+      display:inline-block;
+      letter-spacing:1px;
+      text-transform:uppercase;
+      transition:all .3s var(--ease);
+    }
+    .vt-link:hover{color:var(--gold-soft);letter-spacing:1.5px}
+
+    .v-articles{display:grid;gap:.75rem}
+    .va{
+      display:grid;
+      grid-template-columns:130px 1fr;
+      gap:2rem;
+      background:var(--ink-card);
+      border:1px solid var(--line);
+      border-radius:var(--r2);
+      padding:1.5rem 1.75rem;
+      transition:all .4s var(--ease);
+    }
+    .va:hover{border-color:var(--line-2);background:var(--ink-card-2)}
+    .va-m{
+      font-family:'JetBrains Mono',monospace;
+      font-size:.7rem;
+      color:var(--gold);
+      font-weight:500;
+      letter-spacing:1.5px;
+      text-transform:uppercase;
+      padding-top:.2rem;
+    }
+    .va-b h4{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:1.2rem;margin-bottom:.3rem;color:var(--text)}
+    .va-b p{color:var(--text-2);font-size:.87rem;line-height:1.75;margin-bottom:.6rem;font-weight:300}
+    .va-links{display:flex;flex-wrap:wrap;gap:.4rem}
+    .va-link{
+      font-size:.62rem;
+      color:var(--gold);
+      text-decoration:none;
+      padding:.2rem .65rem;
+      border:1px solid var(--line-2);
+      border-radius:999px;
+      transition:all .3s var(--ease);
+      font-family:'JetBrains Mono',monospace;
+      letter-spacing:.5px;
+    }
+    .va-link:hover{background:var(--gold);color:var(--ink);border-color:var(--gold)}
+
+    /* ─── AVENIR ─── */
+    .av-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem}
+    .av-emoji{font-size:1.75rem;margin-bottom:1rem;display:block;opacity:.85;filter:sepia(.3) saturate(.8)}
+
     /* ─── DOCS ─── */
-    .d-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:.75rem}
-    .dl{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r);padding:1.15rem 1.3rem;display:flex;align-items:center;gap:1rem;transition:all .25s;text-decoration:none;color:var(--text)}
-    .dl:hover{border-color:var(--blue);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.2),0 0 0 1px rgba(99,102,241,.1)}
-    .dl-i{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.15rem;flex-shrink:0}
-    .dl-i.c1{background:rgba(99,102,241,.1)}.dl-i.c2{background:rgba(16,185,129,.1)}.dl-i.c3{background:rgba(245,158,11,.1)}.dl-i.c4{background:rgba(244,114,182,.1)}
-    .dl-t{font-weight:600;font-size:.88rem}.dl-s{font-size:.7rem;color:var(--text-3);margin-top:.05rem}
- 
+    .d-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1rem}
+    .dl{
+      background:var(--ink-card);
+      border:1px solid var(--line);
+      border-radius:var(--r2);
+      padding:1.5rem;
+      display:flex;
+      align-items:center;
+      gap:1.25rem;
+      transition:all .4s var(--ease);
+      text-decoration:none;
+      color:var(--text);
+      cursor:none;
+    }
+    .dl:hover{border-color:var(--gold);transform:translateY(-3px);background:var(--ink-card-2)}
+    .dl-i{
+      width:48px;height:48px;
+      border-radius:var(--r);
+      display:flex;
+      align-items:center;justify-content:center;
+      font-size:1.2rem;
+      flex-shrink:0;
+      background:var(--gold-glow-faint);
+      border:1px solid var(--line);
+      transition:all .4s var(--ease);
+    }
+    .dl:hover .dl-i{background:var(--gold-glow);border-color:var(--line-2)}
+    .dl-t{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:1.05rem}
+    .dl-s{font-size:.7rem;color:var(--text-3);margin-top:.15rem;font-family:'JetBrains Mono',monospace;letter-spacing:.5px}
+    .dl-missing{opacity:.4;cursor:default}.dl-missing:hover{border-color:var(--line);transform:none;background:var(--ink-card)}
+
     /* ─── CONTACT ─── */
-    #contact{text-align:center}
-    .c-row{display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap;margin-top:2rem}
-    .cc{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r);padding:1.1rem 1.75rem;text-decoration:none;color:var(--text);display:flex;align-items:center;gap:.7rem;transition:all .25s}
-    .cc:hover{border-color:var(--blue);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.2)}
- 
+    #contact{text-align:center;padding-bottom:8rem}
+    .contact-name{
+      font-family:'Cormorant Garamond',serif;
+      font-size:clamp(2.5rem,6vw,4.5rem);
+      font-weight:300;
+      font-style:italic;
+      color:var(--gold-soft);
+      margin-bottom:1rem;
+      line-height:1.1;
+    }
+    .c-row{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-top:2.5rem}
+    .cc{
+      background:var(--ink-card);
+      border:1px solid var(--line);
+      border-radius:999px;
+      padding:1.1rem 2rem;
+      text-decoration:none;
+      color:var(--text);
+      display:flex;
+      align-items:center;
+      gap:.85rem;
+      transition:all .4s var(--ease);
+      cursor:none;
+    }
+    .cc:hover{border-color:var(--gold);background:var(--gold-glow-faint);transform:translateY(-2px)}
+    .cc span{font-size:1.1rem;color:var(--gold)}
+    .cc div{text-align:left}
+    .cc .ct{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:500}
+    .cc .cs{font-size:.7rem;color:var(--text-3);font-family:'JetBrains Mono',monospace;letter-spacing:.5px}
+
     /* ─── FOOTER ─── */
-    footer{text-align:center;padding:2.5rem 2rem;border-top:1px solid var(--border);color:var(--text-3);font-size:.75rem}
-    footer a{color:var(--blue-2);text-decoration:none}
- 
+    footer{
+      text-align:center;
+      padding:3rem 2rem;
+      border-top:1px solid var(--line);
+      color:var(--text-3);
+      font-size:.72rem;
+      font-family:'JetBrains Mono',monospace;
+      letter-spacing:1.5px;
+      text-transform:uppercase;
+      position:relative;
+      z-index:3;
+    }
+    footer a{color:var(--gold);text-decoration:none}
+    footer .mark{
+      font-family:'Cormorant Garamond',serif;
+      font-style:italic;
+      font-size:1.5rem;
+      color:var(--gold);
+      margin-bottom:1rem;
+      text-transform:none;
+      letter-spacing:0;
+    }
+
+    /* ─── DOT NAV (side indicators) ─── */
+    .dot-nav{
+      position:fixed;
+      right:1.75rem;
+      top:50%;
+      transform:translateY(-50%);
+      z-index:99;
+      display:flex;
+      flex-direction:column;
+      gap:.65rem;
+      padding:1rem .25rem;
+    }
+    .dot-nav a{
+      position:relative;
+      width:28px;
+      height:28px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      cursor:none;
+    }
+    .dot-nav .dot{
+      width:5px;
+      height:5px;
+      border-radius:50%;
+      background:var(--text-4);
+      transition:all .5s var(--ease);
+    }
+    .dot-nav a:hover .dot{
+      background:var(--gold-soft);
+      transform:scale(1.6);
+    }
+    .dot-nav a.active .dot{
+      background:var(--gold);
+      width:8px;
+      height:8px;
+      box-shadow:0 0 16px var(--gold),0 0 32px rgba(212,184,128,.5);
+    }
+    .dot-nav a::before{
+      content:attr(data-label);
+      position:absolute;
+      right:calc(100% + .85rem);
+      top:50%;
+      transform:translateY(-50%) translateX(8px);
+      background:rgba(6,6,10,.9);
+      backdrop-filter:blur(20px) saturate(1.5);
+      border:1px solid var(--line-2);
+      color:var(--gold-soft);
+      padding:.45rem .9rem;
+      border-radius:6px;
+      font-family:'JetBrains Mono',monospace;
+      font-size:.62rem;
+      letter-spacing:1.5px;
+      text-transform:uppercase;
+      white-space:nowrap;
+      opacity:0;
+      pointer-events:none;
+      transition:all .4s var(--ease);
+      box-shadow:0 8px 24px rgba(0,0,0,.4);
+    }
+    .dot-nav a::after{
+      content:'';
+      position:absolute;
+      right:calc(100% + .4rem);
+      top:50%;
+      transform:translateY(-50%);
+      width:6px;
+      height:1px;
+      background:var(--gold);
+      opacity:0;
+      transition:opacity .4s var(--ease),width .4s var(--ease);
+    }
+    .dot-nav a:hover::before{
+      opacity:1;
+      transform:translateY(-50%) translateX(0);
+    }
+    .dot-nav a:hover::after{
+      opacity:1;
+      width:10px;
+    }
+
+    /* Connecting line between dots */
+    .dot-nav::before{
+      content:'';
+      position:absolute;
+      left:50%;
+      top:1.5rem;
+      bottom:1.5rem;
+      width:1px;
+      background:linear-gradient(to bottom,transparent,var(--line-2) 10%,var(--line-2) 90%,transparent);
+      transform:translateX(-50%);
+      z-index:-1;
+    }
+
     /* ─── RGPD ─── */
-    .rgpd{position:fixed;bottom:0;left:0;right:0;background:rgba(13,15,22,.92);border-top:1px solid var(--border);padding:1rem 2rem;display:flex;align-items:center;justify-content:center;gap:1.25rem;z-index:200;backdrop-filter:blur(20px);font-size:.8rem;color:var(--text-2);transition:transform .4s}
+    .rgpd{
+      position:fixed;
+      bottom:0;left:0;right:0;
+      background:rgba(6,6,10,.92);
+      border-top:1px solid var(--line);
+      padding:1rem 2rem;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:1.5rem;
+      z-index:200;
+      backdrop-filter:blur(24px);
+      font-size:.75rem;
+      color:var(--text-2);
+      transition:transform .6s var(--ease);
+      font-family:'Cormorant Garamond',serif;
+      font-style:italic;
+    }
     .rgpd.off{transform:translateY(100%)}
-    .rgpd button{background:var(--blue);color:#fff;border:none;padding:.4rem 1rem;border-radius:999px;font-family:'Inter',sans-serif;font-weight:600;cursor:pointer;font-size:.8rem}
- 
+    .rgpd button{
+      background:transparent;
+      color:var(--gold);
+      border:1px solid var(--line-2);
+      padding:.45rem 1.1rem;
+      border-radius:999px;
+      font-family:'JetBrains Mono',monospace;
+      font-weight:500;
+      cursor:none;
+      font-size:.65rem;
+      text-transform:uppercase;
+      letter-spacing:1.5px;
+      transition:all .3s var(--ease);
+    }
+    .rgpd button:hover{background:var(--gold);color:var(--ink)}
+
     /* ─── RESPONSIVE ─── */
     @media(max-width:900px){
-      nav{top:auto;bottom:16px;border-radius:16px;padding:.3rem;overflow-x:auto;max-width:calc(100% - 32px)}
-      nav a{font-size:.72rem;padding:.4rem .65rem}
+      nav{top:auto;bottom:16px;border-radius:12px;padding:.3rem;overflow-x:auto;max-width:calc(100% - 32px)}
+      nav a{font-size:.65rem;padding:.4rem .65rem;letter-spacing:.04em}
       section{padding:5rem 1.25rem}
+      body{cursor:auto}
+      .cursor,.cursor-halo{display:none}
+      .btn,.dl,.cc,.st-btn,.rgpd button{cursor:pointer}
+      .dot-nav{display:none}
     }
     @media(max-width:768px){
-      .about-cols,.s-grid{grid-template-columns:1fr}
-      .vi{grid-template-columns:1fr}
-      .hero-name{letter-spacing:-1.5px}
+      .about-grid,.s-grid{grid-template-columns:1fr;gap:3rem}
+      .va{grid-template-columns:1fr}
+      h1.hero-name{letter-spacing:-.03em}
+      .e5-hero{padding:2rem}
     }
- 
-    /* ─── SCROLL REVEAL ─── */
-    .sr{opacity:0;transform:translateY(28px);transition:opacity .7s cubic-bezier(.16,1,.3,1),transform .7s cubic-bezier(.16,1,.3,1)}
-    .sr.on{opacity:1;transform:none}
-    .sr-d1{transition-delay:.08s}.sr-d2{transition-delay:.16s}.sr-d3{transition-delay:.24s}
+
+    /* ─── REVEAL ANIMATIONS ─── */
+    .reveal{
+      opacity:0;
+      transform:translateY(40px);
+      transition:opacity 1s var(--ease-out),transform 1s var(--ease-out);
+    }
+    .reveal.on{opacity:1;transform:none}
+
+    /* Chapter entrance animation */
+    .chapter-title-wrap{
+      position:relative;
+      overflow:hidden;
+      display:inline-block;
+    }
+    .chapter-title-reveal{
+      display:inline-block;
+      transform:translateY(110%);
+      transition:transform 1.2s var(--ease-out);
+    }
+    .reveal.on .chapter-title-reveal{transform:none}
+
+    .fade-in{
+      opacity:0;
+      animation:fadeIn 1.5s var(--ease-out) forwards;
+    }
+    .fade-in-d1{animation-delay:.2s}
+    .fade-in-d2{animation-delay:.5s}
+    .fade-in-d3{animation-delay:.8s}
+    .fade-in-d4{animation-delay:1.1s}
+    @keyframes fadeIn{
+      from{opacity:0;transform:translateY(20px)}
+      to{opacity:1;transform:none}
+    }
   </style>
 </head>
 <body>
- 
+
+<!-- Scroll-driven atmospheric layers -->
+<div class="atmo" id="atmo"></div>
+<div class="ambient-light" id="ambient"></div>
+<canvas id="particles"></canvas>
+
+<!-- Progress line -->
+<div class="progress-line" id="progressLine"></div>
+
+<!-- CURSOR -->
+<div class="cursor-halo" id="cursorHalo"></div>
+<div class="cursor" id="cursor"></div>
+
 <!-- NAV -->
 <nav id="nav">
-  <a href="#about">À propos</a>
-  <a href="#formation">Formation</a>
-  <a href="#projets">Projets</a>
+  <a href="#presentation">Présentation</a>
   <a href="#stages">Stages</a>
+  <a href="#projets">Projets</a>
+  <a href="#synthese">Tableau E5</a>
   <a href="#veille">Veille</a>
-  <a href="#synthese">E5</a>
+  <a href="#avenir">Avenir</a>
   <a href="#documents">Documents</a>
   <a href="#contact">Contact</a>
 </nav>
- 
+
+<!-- DOT NAV (vertical side) -->
+<aside class="dot-nav" id="dotNav" aria-label="Navigation rapide">
+  <a href="#hero" data-label="Accueil"><span class="dot"></span></a>
+  <a href="#presentation" data-label="Présentation"><span class="dot"></span></a>
+  <a href="#stages" data-label="Stages"><span class="dot"></span></a>
+  <a href="#projets" data-label="Projets"><span class="dot"></span></a>
+  <a href="#synthese" data-label="Tableau E5"><span class="dot"></span></a>
+  <a href="#veille" data-label="Veille"><span class="dot"></span></a>
+  <a href="#avenir" data-label="Avenir"><span class="dot"></span></a>
+  <a href="#documents" data-label="Documents"><span class="dot"></span></a>
+  <a href="#contact" data-label="Contact"><span class="dot"></span></a>
+</aside>
+
 <!-- HERO -->
-<section id="hero">
-  <div class="hero-mesh"></div>
-  <div class="hero-lines"></div>
+<section id="hero" data-chapter="0">
+  <div class="hero-aura"></div>
+  <div class="hero-grain"></div>
+  <div class="hero-top fade-in">
+    <div class="hero-serial">Portfolio · Matéo Hoareau · MMXXVI</div>
+  </div>
   <div class="hero-inner">
-    <div class="hero-chip"><span class="dot"></span>Candidat BTS SIO SLAM — Session 2026</div>
-    <h1 class="hero-name">Matéo<br><span>Hoareau</span></h1>
-    <p class="hero-role">Développeur en formation · BTS SIO option SLAM<br>Lycée Pierre-Poivre · Saint-Joseph, La Réunion</p>
-    <div class="hero-btns">
-      <a href="#projets" class="btn btn-fill">Découvrir mes projets</a>
-      <a href="docs/cv-mateo-hoareau.pdf" download class="btn btn-glass">📄 Télécharger mon CV</a>
+    <div class="hero-ornament fade-in fade-in-d1">Candidat BTS SIO SLAM</div>
+    <h1 class="hero-name fade-in fade-in-d2">
+      Matéo<br>
+      <em>Hoareau</em>
+    </h1>
+    <p class="hero-role fade-in fade-in-d3">
+      Développeur en formation <span>·</span> BTS SIO option SLAM<br>
+      Lycée Pierre-Poivre <span>·</span> Saint-Joseph, La Réunion
+    </p>
+    <div class="hero-btns fade-in fade-in-d4">
+      <a href="#presentation" class="btn btn-gold">Commencer la visite</a>
+      <a href="docs/cv-mateo-hoareau.pdf" download class="btn btn-outline">Télécharger le CV</a>
     </div>
   </div>
+  <div class="hero-scroll">Scrollez pour découvrir</div>
 </section>
- 
-<!-- ABOUT -->
-<section id="about">
-  <div class="wrap sr">
-    <span class="label">À propos</span>
-    <h2>Qui suis-je ?</h2>
-    <div class="about-cols">
+
+<!-- 1. PRÉSENTATION -->
+<section id="presentation" data-chapter="1">
+  <div class="wrap reveal">
+    <span class="eyebrow">Chapitre I · Présentation</span>
+    <h2><span class="chapter-title-wrap"><span class="chapter-title-reveal">Qui <em>suis-je ?</em></span></span></h2>
+    <p class="lede">Une passion pour le code, une formation à La Réunion, et l'envie de donner vie aux applications de demain.</p>
+
+    <div class="about-grid">
       <div class="about-text">
-        <p>Passionné par le développement d'applications et les nouvelles technologies, je suis en deuxième année de BTS Services Informatiques aux Organisations, option Solutions Logicielles et Applications Métiers (SLAM), au Lycée Pierre-Poivre à Saint-Joseph, La Réunion.</p>
-        <p>Titulaire d'un Bac STMG obtenu en 2024 avec mention Assez Bien, j'ai choisi l'informatique pour concrétiser ma passion pour le code. Mon parcours inclut deux stages en entreprise et un voyage Erasmus en Allemagne où j'ai réalisé un site web en équipe internationale.</p>
-        <div class="stat-row">
-          <div class="stat"><div class="k">Localisation</div><div class="v">Saint-Joseph, Réunion</div></div>
-          <div class="stat"><div class="k">Formation</div><div class="v">BTS SIO SLAM</div></div>
-          <div class="stat"><div class="k">Établissement</div><div class="v">Lycée Pierre-Poivre</div></div>
-          <div class="stat"><div class="k">N° Candidat</div><div class="v" style="color:var(--text-3);font-style:italic">À compléter</div></div>
+        <p>Je m'appelle Matéo Hoareau. Je suis étudiant en deuxième année de <span class="acc">BTS Services Informatiques aux Organisations</span>, option SLAM — Solutions Logicielles et Applications Métiers — au Lycée Pierre-Poivre à Saint-Joseph.</p>
+        <p>Titulaire d'un Bac STMG obtenu en 2024 avec la mention Assez Bien, j'ai choisi de m'orienter vers l'informatique pour concrétiser ma passion pour le développement.</p>
+        <p>Mon parcours s'est enrichi de <span class="acc">deux stages en entreprise</span>, d'un voyage <span class="acc">Erasmus en Allemagne</span> et de <span class="acc">deux certifications professionnelles</span>.</p>
+
+        <div class="info-list">
+          <div class="info-row"><span class="k">Localisation</span><span class="v">Saint-Joseph, Réunion</span></div>
+          <div class="info-row"><span class="k">Formation</span><span class="v">BTS SIO · SLAM</span></div>
+          <div class="info-row"><span class="k">Établissement</span><span class="v">Lycée Pierre-Poivre</span></div>
+          <div class="info-row"><span class="k">Candidat n°</span><span class="v" style="color:var(--text-3)">À compléter</span></div>
         </div>
       </div>
+
       <div>
-        <span class="label">Compétences</span>
-        <div class="tags">
-          <span class="tag">Java</span><span class="tag">IntelliJ IDEA</span><span class="tag">Android Studio</span><span class="tag">HTML5</span><span class="tag">CSS3</span><span class="tag">JavaScript</span><span class="tag">PHP</span><span class="tag">MySQL</span><span class="tag">Python</span><span class="tag">Git / GitHub</span><span class="tag">UML / Merise</span><span class="tag">WordPress</span>
+        <div class="side-title">Parcours</div>
+        <div class="tl">
+          <div class="tl-i"><div class="tl-d">2024 — 2026</div><div class="tl-t">BTS SIO — Option SLAM</div><div class="tl-s">Lycée Pierre-Poivre, Saint-Joseph</div></div>
+          <div class="tl-i"><div class="tl-d">2023 — 2024</div><div class="tl-t">Baccalauréat STMG</div><div class="tl-s">Mention Assez Bien · Lycée Pierre-Poivre</div></div>
+          <div class="tl-i"><div class="tl-d">2024</div><div class="tl-t">Voyage Erasmus</div><div class="tl-s">Allemagne · Site web en équipe internationale</div></div>
         </div>
-        <span class="label" style="margin-top:1.75rem;display:inline-flex">Langues</span>
+
+        <div class="side-title" style="margin-top:2.5rem">Compétences</div>
         <div class="tags">
-          <span class="tag">🇫🇷 Français — natif</span><span class="tag">🇬🇧 Anglais — bon niveau</span><span class="tag">🇩🇪 Allemand — notions</span>
+          <span class="tag">Java</span><span class="tag">IntelliJ</span><span class="tag">Android Studio</span><span class="tag">HTML/CSS</span><span class="tag">JavaScript</span><span class="tag">PHP</span><span class="tag">MySQL</span><span class="tag">Python</span><span class="tag">Git</span><span class="tag">UML · Merise</span><span class="tag">WordPress</span><span class="tag">GLPI</span>
         </div>
-        <span class="label" style="margin-top:1.75rem;display:inline-flex">Certifications</span>
+
+        <div class="side-title">Langues</div>
         <div class="tags">
-          <span class="tag">🛡️ CNIL RGPD — 5 modules (100%)</span><span class="tag">🏅 Pix — 538/895 Avancé 1</span>
+          <span class="tag">Français — natif</span><span class="tag">Anglais — bon niveau</span><span class="tag">Allemand — notions</span>
+        </div>
+
+        <div class="side-title">Certifications</div>
+        <div class="tags">
+          <span class="tag">CNIL RGPD · 5 modules</span><span class="tag">Pix · 538/895 · Avancé 1</span>
         </div>
       </div>
     </div>
   </div>
 </section>
- 
-<!-- FORMATION -->
-<section id="formation" style="background:var(--bg-2)">
-  <div class="wrap sr">
-    <span class="label">Parcours</span>
-    <h2>Formation</h2>
-    <div class="tl">
-      <div class="tl-i"><div class="tl-d">2024 – 2026</div><div class="tl-t">BTS SIO — Option SLAM</div><div class="tl-s">Lycée Pierre-Poivre, Saint-Joseph — Solutions Logicielles et Applications Métiers</div></div>
-      <div class="tl-i"><div class="tl-d">2023 – 2024</div><div class="tl-t">Baccalauréat STMG — Mention Assez Bien</div><div class="tl-s">Lycée Pierre-Poivre, Saint-Joseph, La Réunion</div></div>
-      <div class="tl-i"><div class="tl-d">2024</div><div class="tl-t">Voyage Erasmus — Allemagne</div><div class="tl-s">Création d'un site web en équipe internationale</div></div>
-    </div>
-  </div>
-</section>
- 
-<!-- PROJETS -->
-<section id="projets">
-  <div class="wrap sr">
-    <span class="label">Réalisations</span>
-    <h2>Projets</h2>
-    <p class="intro">Projets réalisés en formation et en stage durant mon BTS SIO SLAM.</p>
-    <div class="pgrid">
-      <div class="gc"><span class="p-emoji">🎬</span><div class="p-name">Application Web Cinéma</div><div class="p-desc">Application web de gestion de cinéma en Java : films, séances, salles et réservations. Modélisation MCD/MLD.</div><div class="p-tags"><span class="p-tag">Java</span><span class="p-tag">SQL</span><span class="p-tag">MySQL</span><span class="p-tag">Merise</span></div></div>
-      <div class="gc"><span class="p-emoji">💊</span><div class="p-name">Application Web Pharmacie</div><div class="p-desc">Application complète de gestion de pharmacie avec base de données intégrée : médicaments, stocks, ordonnances.</div><div class="p-tags"><span class="p-tag">Java</span><span class="p-tag">MySQL</span><span class="p-tag">HTML/CSS</span><span class="p-tag">JS</span></div></div>
-      <div class="gc"><span class="p-emoji">📱</span><div class="p-name">Application Mobile Parking</div><div class="p-desc">Application mobile de gestion de parking par QR code via Android Studio : génération, lecture et validation.</div><div class="p-tags"><span class="p-tag">Java</span><span class="p-tag">Android Studio</span><span class="p-tag">QR Code</span></div></div>
-      <div class="gc"><span class="p-emoji">🎫</span><div class="p-name">Billetterie Komidi</div><div class="p-desc">Application de billetterie basée sur TiBillet pour l'association Komidi. Vente de billets en ligne pour événements culturels.</div><div class="p-tags"><span class="p-tag">TiBillet</span><span class="p-tag">Python</span><span class="p-tag">API</span></div></div>
-      <div class="gc"><span class="p-emoji">🌍</span><div class="p-name">Site WordPress — Erasmus</div><div class="p-desc">Création d'un site WordPress en équipe internationale lors du voyage Erasmus en Allemagne.</div><div class="p-tags"><span class="p-tag">WordPress</span><span class="p-tag">HTML/CSS</span><span class="p-tag">Erasmus</span></div></div>
-      <div class="gc"><span class="p-emoji">🔗</span><div class="p-name">Développement d'une API</div><div class="p-desc">Conception et développement d'une API pour la communication entre applications et services.</div><div class="p-tags"><span class="p-tag">API</span><span class="p-tag">REST</span><span class="p-tag">Java</span></div></div>
-      <div class="gc"><span class="p-emoji">🧮</span><div class="p-name">Fonctions mathématiques</div><div class="p-desc">Développement de fonctions en Java et Python : moyenne, inverseur de tableau, compteur de voyelles. Algorithmie.</div><div class="p-tags"><span class="p-tag">Java</span><span class="p-tag">Python</span><span class="p-tag">Algo</span></div></div>
-    </div>
-  </div>
-</section>
- 
-<!-- STAGES -->
-<section id="stages" style="background:var(--bg-2)">
-  <div class="wrap sr">
-    <span class="label">Expérience</span>
-    <h2>Stages en entreprise</h2>
+
+<div class="divider"></div>
+
+<!-- 2. STAGES -->
+<section id="stages" data-chapter="2">
+  <div class="wrap reveal">
+    <span class="eyebrow">Chapitre II · Expérience</span>
+    <h2><span class="chapter-title-wrap"><span class="chapter-title-reveal">Deux <em>stages</em>, deux univers.</span></span></h2>
+    <p class="lede">De la découverte en collectivité territoriale à un projet de développement pour une association culturelle.</p>
+
     <div class="s-grid">
-      <div class="gc">
-        <div class="s-badge">02 Juin – 27 Juin 2025 · 4 semaines</div>
-        <div class="s-name">Stage de première année</div>
-        <div class="s-org">Mairie de Saint-Joseph — Service Informatique</div>
-        <div class="s-txt">Découverte du service informatique d'une collectivité territoriale. Maintenance du parc informatique, assistance utilisateurs, gestion réseau.</div>
+      <div class="card">
+        <div class="s-period">02 — 27 Juin 2025 · 4 semaines · 1ʳᵉ année</div>
+        <div class="s-name">Mairie de Saint-Joseph</div>
+        <div class="s-org">Service Informatique — Collectivité territoriale</div>
+        <div class="s-txt">Découverte du service IT d'une collectivité. Maintenance du parc informatique, <strong>assistance utilisateurs</strong>, gestion réseau et support technique.</div>
+        <div class="s-skills">
+          <span class="s-skill">PARC IT</span><span class="s-skill">SUPPORT</span><span class="s-skill">RÉSEAU</span>
+        </div>
       </div>
-      <div class="gc">
-        <div class="s-badge">14 Janv. – 24 Fév. 2026 · 6 semaines</div>
-        <div class="s-name">Stage de deuxième année</div>
-        <div class="s-org">Association Komidi — Saint-Joseph</div>
-        <div class="s-txt">Développement d'une application de billetterie basée sur TiBillet. Conception, développement et déploiement d'une solution de vente de billets pour événements culturels.</div>
+      <div class="card">
+        <div class="s-period">14 Janv. — 24 Fév. 2026 · 6 semaines · 2ᵉ année</div>
+        <div class="s-name">Association Komidi</div>
+        <div class="s-org">Projet TiBillet — Billetterie en ligne</div>
+        <div class="s-txt">Développement d'une application de <strong>billetterie basée sur TiBillet</strong>. Projet en équipe avec des points de synchronisation inspirés de Scrum — bilan de la veille et objectifs du jour.</div>
+        <div class="s-skills">
+          <span class="s-skill">TIBILLET</span><span class="s-skill">PYTHON</span><span class="s-skill">API</span><span class="s-skill">SCRUM</span>
+        </div>
       </div>
     </div>
   </div>
 </section>
- 
-<!-- VEILLE -->
-<section id="veille">
-  <div class="wrap sr">
-    <span class="label">Veille technologique</span>
-    <h2>L'IA générative et son impact</h2>
-    <p class="v-topic">Sujet : <strong>L'Intelligence Artificielle générative — évolution, impact sur le développement logiciel et la société</strong><br>Période : <strong>24 octobre 2024 – 20 avril 2026</strong> (18 mois)</p>
-    <div class="v-list">
-      <div class="vi"><div class="vi-m">Oct. 2024</div><div class="vi-b"><h4>Prix Nobel de l'IA et ChatGPT Search</h4><p>Geoffrey Hinton et John Hopfield reçoivent le Prix Nobel pour leurs travaux fondateurs sur l'IA. OpenAI lance ChatGPT Search le 31 octobre, moteur de recherche basé sur GPT-4o.</p><div class="vi-links"><a class="vi-a" href="https://openai.com/fr-FR/index/introducing-chatgpt-search/" target="_blank">OpenAI</a><a class="vi-a" href="https://outilsveille.com/2024/10/openai-lance-chatgpt-search/" target="_blank">OutilsVeille</a></div></div></div>
-      <div class="vi"><div class="vi-m">Nov. 2024</div><div class="vi-b"><h4>L'essor des modèles open source</h4><p>Meta publie Llama 3.1 405B, rivalisant avec GPT-4o. Mistral AI lance Mistral Large 2, très performant en français. Le débat open source vs propriétaire s'intensifie.</p><div class="vi-links"><a class="vi-a" href="https://www.itforbusiness.fr/mistral-large-2-meta-llama-3-1-les-llm-frontieres-font-de-la-resistance-79869" target="_blank">IT for Business</a></div></div></div>
-      <div class="vi"><div class="vi-m">Déc. 2024</div><div class="vi-b"><h4>ChatGPT Pro à 200 $/mois</h4><p>OpenAI lance un abonnement Pro avec accès illimité à o1. ChatGPT Search s'ouvre à tous les utilisateurs. La monétisation de l'IA s'accélère.</p><div class="vi-links"><a class="vi-a" href="https://fr.wikipedia.org/wiki/ChatGPT" target="_blank">Wikipédia</a></div></div></div>
-      <div class="vi"><div class="vi-m">Janv. 2025</div><div class="vi-b"><h4>DeepSeek R1 bouleverse le marché</h4><p>La startup chinoise DeepSeek publie R1, modèle open source de raisonnement rivalisant avec les leaders à coût réduit. OpenAI lance Operator et o3-mini.</p><div class="vi-links"><a class="vi-a" href="https://www.informatiquenews.fr/recap-2025-les-principales-actualites-ia-de-lannee-108702" target="_blank">InformatiqueNews</a></div></div></div>
-      <div class="vi"><div class="vi-m">Fév. 2025</div><div class="vi-b"><h4>Sommet IA de Paris et AI Act</h4><p>Le Sommet pour l'action sur l'IA se tient à Paris. L'AI Act européen impose ses premières obligations de transparence et de sécurité aux fournisseurs d'IA.</p><div class="vi-links"><a class="vi-a" href="https://www.macertif.com/blog/les-10-tendances-cles-de-lia-generative-en-2025-et-apres-2026" target="_blank">MaCertif</a></div></div></div>
-      <div class="vi"><div class="vi-m">Mars 2025</div><div class="vi-b"><h4>Claude 3.7 Sonnet — Extended Thinking</h4><p>Anthropic dévoile Claude 3.7 Sonnet avec raisonnement approfondi et lance Claude Code. La course au raisonnement avancé bat son plein.</p><div class="vi-links"><a class="vi-a" href="https://www.informatiquenews.fr/recap-2025-les-principales-actualites-ia-de-lannee-108702" target="_blank">InformatiqueNews</a></div></div></div>
-      <div class="vi"><div class="vi-m">Avr. 2025</div><div class="vi-b"><h4>L'IA envahit le quotidien</h4><p>Microsoft Copilot est utilisé dans 70 % des entreprises du Fortune 500. Les assistants passent du statut d'outil à celui d'agent autonome.</p><div class="vi-links"><a class="vi-a" href="https://news.microsoft.com/source/emea/2025/01/les-6-tendances-incontournables-de-lia-en-2025-selon-microsoft/?lang=fr" target="_blank">Microsoft</a></div></div></div>
-      <div class="vi"><div class="vi-m">Mai 2025</div><div class="vi-b"><h4>Mistral Medium 3 — souveraineté</h4><p>Mistral lance Medium 3, atteignant 90 % des performances de Claude pour un coût 8× inférieur. L'IA souveraine européenne s'organise avec INESIA.</p><div class="vi-links"><a class="vi-a" href="https://www.informatiquenews.fr/mistral-lance-un-nouveau-modele-medium-3-et-le-chat-en-version-entreprise-104770" target="_blank">InformatiqueNews</a></div></div></div>
-      <div class="vi"><div class="vi-m">Juin 2025</div><div class="vi-b"><h4>L'IA médaillée d'or en maths</h4><p>Google Gemini remporte l'or aux Olympiades internationales de mathématiques, égalant les meilleurs humains. L'IA progresse en codage, recherche et santé.</p><div class="vi-links"><a class="vi-a" href="https://www.informatiquenews.fr/recap-2025-les-principales-actualites-ia-de-lannee-108702" target="_blank">InformatiqueNews</a></div></div></div>
-      <div class="vi"><div class="vi-m">Juil.–Août 25</div><div class="vi-b"><h4>GPT-5 et l'ère agentique</h4><p>OpenAI lance GPT-5. L'IA cesse d'être un copilote pour devenir un acteur autonome exécutant des tâches complexes. Les dépenses mondiales explosent.</p><div class="vi-links"><a class="vi-a" href="https://help.openai.com/en/articles/6825453-chatgpt-release-notes" target="_blank">OpenAI</a></div></div></div>
-      <div class="vi"><div class="vi-m">Sept. 2025</div><div class="vi-b"><h4>Mistral AI décacorne — 14 Mds $</h4><p>Mistral lève 2 milliards d'euros (valorisation 14 Mds $), première décacorne de la French Tech. ASML investit 1,3 milliard pour la souveraineté européenne.</p><div class="vi-links"><a class="vi-a" href="https://24pm.com/intelligence-artificielle/ia-generative/mistral/1295-mistral-en-2026-utilisateurs-produits-chatbots-modeles-levee-de-fonds-investisseurs" target="_blank">24pm</a></div></div></div>
-      <div class="vi"><div class="vi-m">Oct. 2025</div><div class="vi-b"><h4>OpenAI à 500 Mds $ — agents autonomes</h4><p>OpenAI atteint 500 milliards de valorisation. Les agents IA autonomes qui observent, raisonnent et agissent deviennent le sujet dominant du secteur.</p><div class="vi-links"><a class="vi-a" href="https://www.france-epargne.fr/research/fr/state-of-ai-entering-2026" target="_blank">France Épargne</a></div></div></div>
-      <div class="vi"><div class="vi-m">Nov. 2025</div><div class="vi-b"><h4>Anthropic 350 Mds $ — multi-agents</h4><p>Anthropic atteint 350 milliards de valorisation. L'orchestration multi-agents se développe. Mistral lance Mistral 3 et Mistral Large 3.</p><div class="vi-links"><a class="vi-a" href="https://www.france-epargne.fr/research/fr/state-of-ai-entering-2026" target="_blank">France Épargne</a><a class="vi-a" href="https://www.hightechnews.fr/tendances-intelligence-artificielle-2026/" target="_blank">HighTechNews</a></div></div></div>
-      <div class="vi"><div class="vi-m">Déc. 2025</div><div class="vi-b"><h4>Bilan 2025 — 202 Mds $ investis</h4><p>L'investissement mondial atteint 202 milliards de dollars (50 % du capital-risque). 78 % des organisations utilisent l'IA. Le « AI slop » pollue Internet.</p><div class="vi-links"><a class="vi-a" href="https://www.france-epargne.fr/research/fr/state-of-ai-entering-2026" target="_blank">France Épargne</a><a class="vi-a" href="https://fr.euronews.com/next/2025/12/28/2025-annee-de-banalisation-des-contenus-ia-mediocres-internet-est-il-pret-a-murir" target="_blank">Euronews</a></div></div></div>
-      <div class="vi"><div class="vi-m">Janv. 2026</div><div class="vi-b"><h4>CNIL sanctionne Free — ROI de l'IA</h4><p>La CNIL sanctionne Free pour manquement au RGPD. Seule 1 entreprise sur 10 déclare un ROI mesurable de l'IA selon Deloitte.</p><div class="vi-links"><a class="vi-a" href="https://itsocial.fr/intelligence-artificielle/intelligence-artificielle-articles/2026-annee-de-verite-pour-le-roi-de-lia-dans-les-systemes-dinformation/" target="_blank">IT Social</a></div></div></div>
-      <div class="vi"><div class="vi-m">Fév. 2026</div><div class="vi-b"><h4>48 % des Français utilisent l'IA</h4><p>Le baromètre CREDOC révèle une adoption plus rapide que celle d'Internet. 26 % des TPE/PME intègrent l'IA. 52 % restent néanmoins méfiants.</p><div class="vi-links"><a class="vi-a" href="https://osmova.com/intelligence-artificielle/" target="_blank">Osmova</a></div></div></div>
-      <div class="vi"><div class="vi-m">Mars 2026</div><div class="vi-b"><h4>Yann LeCun lance Ami Labs — 1 Md $</h4><p>Le chercheur français quitte Meta et fonde Ami Labs avec une levée record. L'IA entre dans sa phase de maturité avec des exigences de gouvernance.</p><div class="vi-links"><a class="vi-a" href="https://bigmedia.bpifrance.fr/nos-dossiers/nouvelles-tendances-ia-ce-qui-va-transformer-2026" target="_blank">BPI Big Media</a></div></div></div>
-      <div class="vi"><div class="vi-m">Avr. 2026</div><div class="vi-b"><h4>De l'IA de promesse à l'IA de résultat</h4><p>Investissements mondiaux &gt; 1 500 milliards de dollars. L'IA déclenche la moitié des contrôles fiscaux en France. Priorité : gouvernance et ROI mesurable.</p><div class="vi-links"><a class="vi-a" href="https://www.journaldunet.com/intelligence-artificielle/" target="_blank">JDN</a><a class="vi-a" href="https://osmova.com/intelligence-artificielle/" target="_blank">Osmova</a></div></div></div>
+
+<div class="divider"></div>
+
+<!-- 3. PROJETS -->
+<section id="projets" data-chapter="3">
+  <div class="wrap reveal">
+    <span class="eyebrow">Chapitre III · Réalisations</span>
+    <h2><span class="chapter-title-wrap"><span class="chapter-title-reveal">Une sélection de <em>projets</em>.</span></span></h2>
+    <p class="lede">En commençant par le plus marquant — l'application de billetterie Komidi, mené en stage —, puis ceux menés en formation.</p>
+
+    <div class="pgrid">
+
+      <div class="card p-featured">
+        <span class="p-badge">Projet principal · Stage Komidi</span>
+        <span class="p-emoji">✦</span>
+        <div class="p-name">TiBillet — Billetterie Komidi</div>
+        <div class="p-desc">Modification et déploiement d'une solution de billetterie pour l'association Komidi. Mené en équipe avec une méthodologie Scrum revisitée : réunions quotidiennes de synchronisation.</div>
+        <div class="p-tags"><span class="p-tag">TIBILLET</span><span class="p-tag">PYTHON</span><span class="p-tag">API</span><span class="p-tag">SCRUM</span></div>
+      </div>
+
+      <div class="card">
+        <div class="p-num">Nº 01</div>
+        <span class="p-emoji">◈</span>
+        <div class="p-name">Site WordPress — Erasmus</div>
+        <div class="p-desc">Création d'un site WordPress en équipe internationale lors du voyage Erasmus en Allemagne. Collaboration multilingue et présence en ligne.</div>
+        <div class="p-tags"><span class="p-tag">WORDPRESS</span><span class="p-tag">HTML/CSS</span></div>
+      </div>
+
+      <div class="card">
+        <div class="p-num">Nº 02</div>
+        <span class="p-emoji">◊</span>
+        <div class="p-name">CinemaDB — Application Cinéma</div>
+        <div class="p-desc">Application web de gestion de cinéma en Java : films, séances, salles et réservations. Modélisation MCD/MLD et requêtes SQL.</div>
+        <div class="p-tags"><span class="p-tag">JAVA</span><span class="p-tag">MYSQL</span><span class="p-tag">MERISE</span></div>
+      </div>
+
+      <div class="card">
+        <div class="p-num">Nº 03</div>
+        <span class="p-emoji">◉</span>
+        <div class="p-name">PharmaPays — Pharmacie</div>
+        <div class="p-desc">Application de gestion de pharmacie avec base de données intégrée : médicaments, stocks, ordonnances et clients.</div>
+        <div class="p-tags"><span class="p-tag">JAVA</span><span class="p-tag">MYSQL</span><span class="p-tag">JS</span></div>
+      </div>
+
+      <div class="card">
+        <div class="p-num">Nº 04</div>
+        <span class="p-emoji">◐</span>
+        <div class="p-name">QRParking — Mobile</div>
+        <div class="p-desc">Application mobile de gestion de parking par QR code via Android Studio : génération, lecture et validation.</div>
+        <div class="p-tags"><span class="p-tag">JAVA</span><span class="p-tag">ANDROID</span><span class="p-tag">QR CODE</span></div>
+      </div>
+
+      <div class="card">
+        <div class="p-num">Nº 05</div>
+        <span class="p-emoji">◎</span>
+        <div class="p-name">Fonctions mathématiques</div>
+        <div class="p-desc">Développement de fonctions mathématiques en Java et Python : moyenne, inverseur de tableau, compteur de voyelles. Exercices d'algorithmie et de logique.</div>
+        <div class="p-tags"><span class="p-tag">JAVA</span><span class="p-tag">PYTHON</span><span class="p-tag">ALGO</span></div>
+      </div>
+
     </div>
   </div>
 </section>
- 
-<!-- E5 -->
-<section id="synthese" style="background:var(--bg-2)">
-  <div class="wrap sr">
-    <span class="label">Épreuve E5</span>
-    <h2>Tableau de Synthèse E5</h2>
-    <p class="intro">Récapitulatif des situations professionnelles — Option SLAM.</p>
-    <div class="e5-box">
-      <p style="font-size:2rem;margin-bottom:.75rem">📋</p>
-      <p style="font-weight:700;margin-bottom:.25rem">Tableau de synthèse disponible</p>
-      <p style="margin-bottom:1.25rem">Réalisations en formation et en milieu professionnel</p>
-      <a class="btn btn-fill" href="docs/tableau-synthese-e5.ods" download>Télécharger le tableau E5</a>
+
+<div class="divider"></div>
+
+<!-- 4. TABLEAU E5 -->
+<section id="synthese" data-chapter="4">
+  <div class="wrap reveal">
+    <span class="eyebrow">Chapitre IV · Épreuve E5</span>
+    <h2><span class="chapter-title-wrap"><span class="chapter-title-reveal">Tableau de <em>synthèse</em>.</span></span></h2>
+    <p class="lede">Au cœur de l'épreuve E5 : la synthèse des compétences mises en œuvre tout au long du parcours.</p>
+
+    <div class="e5-hero">
+      <h3>Une approche projet, même collective.</h3>
+      <p>Chacune des réalisations ci-dessous a été menée <strong>en équipe</strong> ou dans un cadre collaboratif, avec une participation active à la conception, au développement et au déploiement des solutions.</p>
+      <p>Pour coordonner le travail, nous nous sommes inspirés d'une <strong>méthode Scrum revisitée</strong> : des points de synchronisation réguliers où chacun présente l'avancée de la veille et les objectifs du jour. Cela maintient l'équipe alignée et permet de lever rapidement les blocages.</p>
+      <div class="method-box">
+        <div class="mt">// Méthode de travail</div>
+        <p>Réunions courtes et régulières · Bilan de la veille · Objectifs du jour · Adaptation continue des priorités.</p>
+      </div>
+    </div>
+
+    <div class="st-wrapper">
+      <div class="st-head">
+        <h4>Tableau de synthèse — Session 2026</h4>
+        <div class="st-btns">
+          <a class="st-btn st-btn-primary" href="docs/tableau-synthese-e5.pdf" download>↓ PDF</a>
+          <a class="st-btn st-btn-ghost" href="docs/tableau-synthese-e5.ods" download>ODS</a>
+        </div>
+      </div>
+
+      <table class="synth">
+        <thead>
+          <tr>
+            <th style="width:32%">Réalisation professionnelle</th>
+            <th style="width:11%">Période</th>
+            <th>Gérer le<br>patrimoine IT</th>
+            <th>Répondre aux<br>incidents</th>
+            <th>Présence<br>en ligne</th>
+            <th>Mode<br>projet</th>
+            <th>Service<br>IT</th>
+            <th>Développement<br>personnel</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <tr class="cat-row"><td colspan="8">Réalisations en cours de formation</td></tr>
+          <tr><td>GLPI — Gestion de parc informatique</td><td>2024–2025</td><td class="comp-cell"><span class="comp-box"></span></td><td class="comp-cell"></td><td class="comp-cell"></td><td class="comp-cell"></td><td class="comp-cell"></td><td class="comp-cell"></td></tr>
+          <tr><td>Site WordPress — Échange Erasmus</td><td>2024–2025</td><td class="comp-cell"></td><td class="comp-cell"></td><td class="comp-cell"><span class="comp-box"></span></td><td class="comp-cell"><span class="comp-box"></span></td><td class="comp-cell"><span class="comp-box"></span></td><td class="comp-cell"></td></tr>
+          <tr><td>Fonctions mathématiques Java / Python</td><td>2024–2026</td><td class="comp-cell"></td><td class="comp-cell"></td><td class="comp-cell"></td><td class="comp-cell"></td><td class="comp-cell"></td><td class="comp-cell"><span class="comp-box"></span></td></tr>
+          <tr><td>Application web de cinéma en Java</td><td>2024–2026</td><td class="comp-cell"></td><td class="comp-cell"></td><td class="comp-cell"></td><td class="comp-cell"><span class="comp-box"></span></td><td class="comp-cell"><span class="comp-box"></span></td><td class="comp-cell"></td></tr>
+          <tr><td>Application web de pharmacie en Java</td><td>2024–2026</td><td class="comp-cell"></td><td class="comp-cell"></td><td class="comp-cell"></td><td class="comp-cell"><span class="comp-box"></span></td><td class="comp-cell"><span class="comp-box"></span></td><td class="comp-cell"></td></tr>
+          <tr><td>Application mobile parking (Android Studio)</td><td>2024–2026</td><td class="comp-cell"></td><td class="comp-cell"></td><td class="comp-cell"></td><td class="comp-cell"><span class="comp-box"></span></td><td class="comp-cell"><span class="comp-box"></span></td><td class="comp-cell"></td></tr>
+          <tr><td>Certification CNIL RGPD (5 modules)</td><td>12/2024</td><td class="comp-cell"></td><td class="comp-cell"><span class="comp-box"></span></td><td class="comp-cell"></td><td class="comp-cell"></td><td class="comp-cell"><span class="comp-box"></span></td><td class="comp-cell"><span class="comp-box"></span></td></tr>
+          <tr><td>Certification Pix — Avancé 1</td><td>03/2026</td><td class="comp-cell"></td><td class="comp-cell"></td><td class="comp-cell"></td><td class="comp-cell"></td><td class="comp-cell"></td><td class="comp-cell"><span class="comp-box"></span></td></tr>
+
+          <tr class="cat-row"><td colspan="8">Réalisations en milieu professionnel — 1ʳᵉ année</td></tr>
+          <tr><td>Stage Mairie de Saint-Joseph — Maintenance et assistance</td><td>06/2025</td><td class="comp-cell"></td><td class="comp-cell"><span class="comp-box"></span></td><td class="comp-cell"></td><td class="comp-cell"></td><td class="comp-cell"><span class="comp-box"></span></td><td class="comp-cell"></td></tr>
+          <tr><td>Gestion réseau et support technique — Mairie</td><td>06/2025</td><td class="comp-cell"></td><td class="comp-cell"><span class="comp-box"></span></td><td class="comp-cell"></td><td class="comp-cell"></td><td class="comp-cell"><span class="comp-box"></span></td><td class="comp-cell"></td></tr>
+
+          <tr class="cat-row"><td colspan="8">Réalisations en milieu professionnel — 2ᵉ année</td></tr>
+          <tr><td>Modification de la solution TiBillet — Komidi</td><td>01–02/2026</td><td class="comp-cell"></td><td class="comp-cell"><span class="comp-box"></span></td><td class="comp-cell"><span class="comp-box"></span></td><td class="comp-cell"><span class="comp-box"></span></td><td class="comp-cell"><span class="comp-box"></span></td><td class="comp-cell"><span class="comp-box"></span></td></tr>
+          <tr><td>Déploiement et accompagnement utilisateurs — Komidi</td><td>02/2026</td><td class="comp-cell"></td><td class="comp-cell"><span class="comp-box"></span></td><td class="comp-cell"></td><td class="comp-cell"><span class="comp-box"></span></td><td class="comp-cell"><span class="comp-box"></span></td><td class="comp-cell"></td></tr>
+        </tbody>
+      </table>
+      <div class="st-legend"><span class="comp-box"></span>Compétence mise en œuvre dans la réalisation</div>
     </div>
   </div>
 </section>
- 
+
+<div class="divider"></div>
+
+<!-- 5. VEILLE -->
+<section id="veille" data-chapter="5">
+  <div class="wrap reveal">
+    <span class="eyebrow">Chapitre V · Veille technologique</span>
+    <h2><span class="chapter-title-wrap"><span class="chapter-title-reveal">L'<em>Intelligence Artificielle</em> générative.</span></span></h2>
+    <p class="lede">Sujet : l'IA générative sur 18 mois, du 24 octobre 2024 au 20 avril 2026.</p>
+
+    <div class="v-summary">
+      <h4>Synthèse</h4>
+      <p>Entre octobre 2024 et avril 2026, l'IA générative est passée d'un outil expérimental à une infrastructure économique. Valorisations records (OpenAI à 500 Mds $, Anthropic à 350 Mds $), montée des modèles open source (Llama, Mistral, DeepSeek), émergence des agents autonomes, adoption massive (48 % des Français utilisateurs).</p>
+      <p>Côté régulation : l'AI Act européen est entré en application, la CNIL multiplie les sanctions liées au RGPD. L'enjeu 2026 : gouvernance et retour sur investissement mesurable.</p>
+      <p class="note">Cette synthèse résume les articles clés présentés plus bas, collectés grâce à une méthodologie d'outils détaillée ci-dessous — Google Alerts, flux RSS, newsletters, réseaux sociaux…</p>
+    </div>
+
+    <h3 class="v-section-title">Mes outils de veille</h3>
+
+    <div class="v-tools">
+      <div class="vt">
+        <div class="vt-i">◆</div>
+        <div class="vt-name">Google Alerts</div>
+        <div class="vt-desc">Alertes quotidiennes sur les mots-clés « intelligence artificielle », « IA générative », « ChatGPT », « Mistral AI ».</div>
+        <a class="vt-link" href="https://www.google.fr/alerts" target="_blank" rel="noopener">→ google.fr/alerts</a>
+      </div>
+      <div class="vt">
+        <div class="vt-i">◇</div>
+        <div class="vt-name">Flux RSS — Feedly</div>
+        <div class="vt-desc">Agrégateur Feedly configuré avec les flux des principaux médias tech : InformatiqueNews, Le Monde Informatique, Actu IA, JDN.</div>
+        <a class="vt-link" href="https://feedly.com" target="_blank" rel="noopener">→ feedly.com</a>
+      </div>
+      <div class="vt">
+        <div class="vt-i">◈</div>
+        <div class="vt-name">Réseaux sociaux</div>
+        <div class="vt-desc">Listes Twitter/X et LinkedIn dédiées à l'IA. Suivi des comptes OpenAI, Anthropic, Mistral AI, Yann LeCun, Sam Altman.</div>
+        <a class="vt-link" href="https://x.com" target="_blank" rel="noopener">→ x.com</a>
+      </div>
+      <div class="vt">
+        <div class="vt-i">◉</div>
+        <div class="vt-name">Newsletters</div>
+        <div class="vt-desc">Abonnement aux newsletters hebdomadaires : OpenAI News, Anthropic Updates, Actu IA.</div>
+        <a class="vt-link" href="https://actuia.com" target="_blank" rel="noopener">→ actuia.com</a>
+      </div>
+      <div class="vt">
+        <div class="vt-i">◊</div>
+        <div class="vt-name">Sources institutionnelles</div>
+        <div class="vt-desc">Publications officielles : CNIL, info.gouv.fr, Observatoire IA Paris 1, rapports CREDOC.</div>
+        <a class="vt-link" href="https://www.cnil.fr" target="_blank" rel="noopener">→ cnil.fr</a>
+      </div>
+      <div class="vt">
+        <div class="vt-i">◐</div>
+        <div class="vt-name">Archivage — Notion</div>
+        <div class="vt-desc">Articles pertinents archivés dans Notion avec tags (date, source, thématique). Tri mensuel des faits marquants.</div>
+        <a class="vt-link" href="https://notion.so" target="_blank" rel="noopener">→ notion.so</a>
+      </div>
+    </div>
+
+    <h3 class="v-section-title">Articles clés collectés</h3>
+
+    <div class="v-articles">
+      <div class="va"><div class="va-m">Oct. 2024</div><div class="va-b"><h4>ChatGPT Search et Prix Nobel de l'IA</h4><p>Geoffrey Hinton et John Hopfield reçoivent le Prix Nobel. OpenAI lance ChatGPT Search, moteur de recherche basé sur GPT-4o.</p><div class="va-links"><a class="va-link" href="https://openai.com/fr-FR/index/introducing-chatgpt-search/" target="_blank">OpenAI</a></div></div></div>
+      <div class="va"><div class="va-m">Janv. 2025</div><div class="va-b"><h4>DeepSeek R1 bouleverse le marché</h4><p>La startup chinoise publie R1, modèle open source rivalisant avec les leaders à coût réduit. OpenAI lance Operator.</p><div class="va-links"><a class="va-link" href="https://www.informatiquenews.fr/recap-2025-les-principales-actualites-ia-de-lannee-108702" target="_blank">InformatiqueNews</a></div></div></div>
+      <div class="va"><div class="va-m">Fév. 2025</div><div class="va-b"><h4>Sommet IA de Paris · AI Act européen</h4><p>Le Sommet pour l'action sur l'IA se tient à Paris. L'AI Act européen impose ses premières obligations de transparence.</p><div class="va-links"><a class="va-link" href="https://www.macertif.com/blog/les-10-tendances-cles-de-lia-generative-en-2025-et-apres-2026" target="_blank">MaCertif</a></div></div></div>
+      <div class="va"><div class="va-m">Sept. 2025</div><div class="va-b"><h4>Mistral AI — 14 Mds $ de valorisation</h4><p>Mistral lève 2 milliards d'euros, première décacorne de la French Tech. ASML investit 1,3 milliard.</p><div class="va-links"><a class="va-link" href="https://24pm.com/intelligence-artificielle/ia-generative/mistral/1295-mistral-en-2026-utilisateurs-produits-chatbots-modeles-levee-de-fonds-investisseurs" target="_blank">24pm</a></div></div></div>
+      <div class="va"><div class="va-m">Déc. 2025</div><div class="va-b"><h4>Bilan 2025 — 202 Mds $ investis</h4><p>L'investissement mondial atteint 202 milliards de dollars. 78 % des organisations utilisent l'IA.</p><div class="va-links"><a class="va-link" href="https://www.france-epargne.fr/research/fr/state-of-ai-entering-2026" target="_blank">France Épargne</a></div></div></div>
+      <div class="va"><div class="va-m">Fév. 2026</div><div class="va-b"><h4>48 % des Français utilisent l'IA</h4><p>Le baromètre CREDOC révèle une adoption plus rapide que celle d'Internet. 26 % des TPE/PME intègrent l'IA.</p><div class="va-links"><a class="va-link" href="https://osmova.com/intelligence-artificielle/" target="_blank">Osmova</a></div></div></div>
+      <div class="va"><div class="va-m">Mars 2026</div><div class="va-b"><h4>Yann LeCun lance Ami Labs — 1 Md $</h4><p>Le chercheur français quitte Meta et fonde Ami Labs avec une levée record.</p><div class="va-links"><a class="va-link" href="https://bigmedia.bpifrance.fr/nos-dossiers/nouvelles-tendances-ia-ce-qui-va-transformer-2026" target="_blank">BPI Big Media</a></div></div></div>
+      <div class="va"><div class="va-m">Avr. 2026</div><div class="va-b"><h4>De l'IA de promesse à l'IA de résultat</h4><p>Investissements mondiaux &gt; 1 500 Mds $. L'IA déclenche la moitié des contrôles fiscaux en France.</p><div class="va-links"><a class="va-link" href="https://www.journaldunet.com/intelligence-artificielle/" target="_blank">JDN</a></div></div></div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- 6. AVENIR -->
+<section id="avenir" data-chapter="6">
+  <div class="wrap reveal">
+    <span class="eyebrow">Chapitre VI · Perspectives</span>
+    <h2><span class="chapter-title-wrap"><span class="chapter-title-reveal">Et <em>après</em> ?</span></span></h2>
+    <p class="lede">Après l'obtention de mon BTS SIO SLAM, deux pistes s'offrent à moi.</p>
+
+    <div class="av-grid">
+      <div class="card">
+        <span class="av-emoji">◈</span>
+        <div class="p-name">Poursuite d'études</div>
+        <div class="p-desc">Licence professionnelle ou Bachelor en développement d'applications, éventuellement en alternance pour allier théorie et pratique professionnelle.</div>
+      </div>
+      <div class="card">
+        <span class="av-emoji">◊</span>
+        <div class="p-name">Entrée dans la vie active</div>
+        <div class="p-desc">Intégrer une entreprise en tant que développeur junior — web, mobile ou logiciel — avec une préférence pour les projets en méthodes agiles.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
 <!-- DOCUMENTS -->
-<section id="documents">
-  <div class="wrap sr">
-    <span class="label">Documents</span>
-    <h2>Téléchargements</h2>
-    <p class="intro">Ensemble de mes documents officiels téléchargeables.</p>
+<section id="documents" data-chapter="7">
+  <div class="wrap reveal">
+    <span class="eyebrow">Documents officiels</span>
+    <h2><span class="chapter-title-wrap"><span class="chapter-title-reveal">À <em>télécharger</em>.</span></span></h2>
+    <p class="lede">Ensemble des documents officiels liés à mon parcours académique et professionnel.</p>
+
     <div class="d-grid">
-      <a class="dl" href="docs/cv-mateo-hoareau.pdf" download><div class="dl-i c1">📄</div><div><div class="dl-t">Curriculum Vitae</div><div class="dl-s">PDF — Télécharger</div></div></a>
-      <a class="dl" href="docs/tableau-synthese-e5.ods" download><div class="dl-i c3">📋</div><div><div class="dl-t">Tableau de Synthèse E5</div><div class="dl-s">ODS — Télécharger</div></div></a>
-      <a class="dl" href="docs/attestation-stage-2.pdf" download><div class="dl-i c2">📎</div><div><div class="dl-t">Attestation de stage — 2ème année</div><div class="dl-s">Association Komidi — 14/01 au 24/02/2026</div></div></a>
-      <a class="dl" href="docs/certification-cnil-rgpd.pdf" download><div class="dl-i c4">🛡️</div><div><div class="dl-t">Certification CNIL — RGPD</div><div class="dl-s">5 modules — 100, 97, 94, 100, 100%</div></div></a>
-      <a class="dl" href="docs/certification-pix.pdf" download><div class="dl-i c4">🏅</div><div><div class="dl-t">Certification Pix — 538/895</div><div class="dl-s">Niveau Avancé 1 — 23/03/2026</div></div></a>
-      <a class="dl" href="#"><div class="dl-i c2">📎</div><div><div class="dl-t">Attestation de stage — 1ère année</div><div class="dl-s">Mairie de Saint-Joseph — À fournir</div></div></a>
-      <a class="dl" href="#"><div class="dl-i c3">🎓</div><div><div class="dl-t">Diplôme Bac STMG</div><div class="dl-s">À fournir</div></div></a>
+      <a class="dl" href="docs/cv-mateo-hoareau.pdf" download><div class="dl-i">✦</div><div><div class="dl-t">Curriculum Vitae</div><div class="dl-s">PDF · TÉLÉCHARGER</div></div></a>
+      <a class="dl" href="docs/tableau-synthese-e5.pdf" download><div class="dl-i">✧</div><div><div class="dl-t">Tableau de Synthèse E5</div><div class="dl-s">PDF · TÉLÉCHARGER</div></div></a>
+      <a class="dl" href="docs/attestation-stage-2.pdf" download><div class="dl-i">◈</div><div><div class="dl-t">Attestation de stage · 2ᵉ année</div><div class="dl-s">ASSOCIATION KOMIDI</div></div></a>
+      <a class="dl dl-missing"><div class="dl-i">◇</div><div><div class="dl-t">Attestation de stage · 1ʳᵉ année</div><div class="dl-s">MAIRIE · À FOURNIR</div></div></a>
+      <a class="dl" href="docs/certification-cnil-rgpd.pdf" download><div class="dl-i">◉</div><div><div class="dl-t">Certification CNIL — RGPD</div><div class="dl-s">5 MODULES · 100, 97, 94, 100, 100%</div></div></a>
+      <a class="dl" href="docs/certification-pix.pdf" download><div class="dl-i">◎</div><div><div class="dl-t">Certification Pix — 538/895</div><div class="dl-s">AVANCÉ 1 · 23/03/2026</div></div></a>
+      <a class="dl dl-missing"><div class="dl-i">◐</div><div><div class="dl-t">Diplôme Bac STMG</div><div class="dl-s">À FOURNIR</div></div></a>
     </div>
   </div>
 </section>
- 
+
 <!-- CONTACT -->
-<section id="contact" style="background:var(--bg-2)">
-  <div class="wrap sr">
-    <span class="label">Contact</span>
-    <h2>Me contacter</h2>
-    <p class="intro" style="margin-left:auto;margin-right:auto">Pour toute question ou opportunité professionnelle.</p>
+<section id="contact" data-chapter="8">
+  <div class="wrap reveal">
+    <span class="eyebrow">Épilogue · Contact</span>
+    <h2 style="margin-bottom:.5rem"><span class="chapter-title-wrap"><span class="chapter-title-reveal">Restons en <em>contact</em>.</span></span></h2>
+    <p class="lede" style="margin-left:auto;margin-right:auto">Pour toute question, opportunité professionnelle, ou simplement pour échanger.</p>
+
+    <div class="contact-name">Matéo Hoareau.</div>
+
     <div class="c-row">
-      <a class="cc" href="mailto:mateohoareau21@gmail.com"><span style="font-size:1.2rem">✉️</span><div><div style="font-weight:600">Email</div><div style="color:var(--text-3);font-size:.8rem">mateohoareau21@gmail.com</div></div></a>
-      <a class="cc" href="https://github.com/mateohoareau" target="_blank" rel="noopener"><span style="font-size:1.2rem">🐙</span><div><div style="font-weight:600">GitHub</div><div style="color:var(--text-3);font-size:.8rem">github.com/mateohoareau</div></div></a>
+      <a class="cc" href="mailto:mateohoareau21@gmail.com"><span>✦</span><div><div class="ct">Email</div><div class="cs">MATEOHOAREAU21@GMAIL.COM</div></div></a>
+      <a class="cc" href="https://github.com/mateohoareau" target="_blank" rel="noopener"><span>◈</span><div><div class="ct">GitHub</div><div class="cs">GITHUB.COM/MATEOHOAREAU</div></div></a>
     </div>
   </div>
 </section>
- 
+
 <footer>
-  <p>© 2026 Matéo Hoareau — Portfolio BTS SIO SLAM</p>
-  <p style="margin-top:.35rem">Ce site ne collecte aucune donnée personnelle et n'utilise aucun cookie. Conforme au <a href="https://www.cnil.fr/fr/rgpd-de-quoi-parle-t-on" target="_blank" rel="noopener">RGPD</a>.</p>
+  <div class="mark">Matéo Hoareau</div>
+  <p>© MMXXVI · Portfolio BTS SIO SLAM</p>
+  <p style="margin-top:.4rem">Site statique conforme au <a href="https://www.cnil.fr/fr/rgpd-de-quoi-parle-t-on" target="_blank" rel="noopener">RGPD</a>.</p>
 </footer>
- 
+
 <div class="rgpd" id="rgpd">
-  <span>ℹ️ Site statique — aucune donnée collectée, aucun cookie.</span>
+  <span>Site statique — aucune donnée collectée, aucun cookie.</span>
   <button onclick="document.getElementById('rgpd').classList.add('off')">Compris</button>
 </div>
- 
+
 <script>
-  // Scroll reveal
-  const io=new IntersectionObserver(e=>{e.forEach(el=>{if(el.isIntersecting)el.target.classList.add('on')})},{threshold:.06});
-  document.querySelectorAll('.sr').forEach(el=>io.observe(el));
-  // Active nav
-  const secs=document.querySelectorAll('section[id]');
-  const links=document.querySelectorAll('nav a');
-  window.addEventListener('scroll',()=>{
-    let cur='';
-    secs.forEach(s=>{if(window.scrollY>=s.offsetTop-200)cur=s.id});
-    links.forEach(a=>{a.classList.toggle('active',a.getAttribute('href')==='#'+cur)});
+  // ═══════════════════════════════════════════════
+  //  CURSOR + SPOTLIGHT HALO
+  // ═══════════════════════════════════════════════
+  const cursor = document.getElementById('cursor');
+  const cursorHalo = document.getElementById('cursorHalo');
+  let mouseX = window.innerWidth / 2;
+  let mouseY = window.innerHeight / 2;
+  let haloX = mouseX, haloY = mouseY;
+
+  document.addEventListener('mousemove', e => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+    cursor.style.left = mouseX + 'px';
+    cursor.style.top = mouseY + 'px';
+  });
+
+  function animHalo(){
+    haloX += (mouseX - haloX) * 0.12;
+    haloY += (mouseY - haloY) * 0.12;
+    cursorHalo.style.left = haloX + 'px';
+    cursorHalo.style.top = haloY + 'px';
+    requestAnimationFrame(animHalo);
+  }
+  animHalo();
+
+  document.querySelectorAll('a, button, .card, .dl, .cc, .tag, .vt, .va, input, textarea').forEach(el => {
+    el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+    el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+  });
+
+  // ═══════════════════════════════════════════════
+  //  SCROLL-DRIVEN AMBIENT SPOTLIGHT (EFFECT #1)
+  //  La lumière change d'angle et d'intensité selon le scroll
+  // ═══════════════════════════════════════════════
+  const ambient = document.getElementById('ambient');
+  const atmo = document.getElementById('atmo');
+
+  // Each chapter has its own lighting signature (position + intensity + tone)
+  // Position in viewport %, intensity 0-1, warmth tone
+  const chapterLights = [
+    // 0 — Hero
+    { x: 50, y: 5,   intensity: 0.18, warmth: '#d4b880', spread: 90 },
+    // 1 — Présentation
+    { x: 25, y: 30,  intensity: 0.14, warmth: '#d4b880', spread: 70 },
+    // 2 — Stages
+    { x: 75, y: 40,  intensity: 0.15, warmth: '#e0c48d', spread: 65 },
+    // 3 — Projets
+    { x: 50, y: 20,  intensity: 0.16, warmth: '#d4b880', spread: 80 },
+    // 4 — Tableau E5 (le cœur)
+    { x: 50, y: 50,  intensity: 0.22, warmth: '#e8d4a8', spread: 100 },
+    // 5 — Veille
+    { x: 30, y: 70,  intensity: 0.13, warmth: '#c9a876', spread: 60 },
+    // 6 — Avenir
+    { x: 70, y: 30,  intensity: 0.17, warmth: '#d4b880', spread: 75 },
+    // 7 — Documents
+    { x: 50, y: 60,  intensity: 0.14, warmth: '#d4b880', spread: 65 },
+    // 8 — Contact
+    { x: 50, y: 40,  intensity: 0.20, warmth: '#e8d4a8', spread: 85 },
+  ];
+
+  const sections = Array.from(document.querySelectorAll('section[data-chapter]'));
+  const progressLine = document.getElementById('progressLine');
+
+  function lerp(a, b, t) { return a + (b - a) * t; }
+  function hexToRgb(hex) {
+    const n = parseInt(hex.slice(1), 16);
+    return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+  }
+  function rgbString(rgb, alpha = 1) {
+    return `rgba(${rgb[0]},${rgb[1]},${rgb[2]},${alpha})`;
+  }
+
+  function updateAmbient() {
+    const scrollY = window.scrollY;
+    const winH = window.innerHeight;
+    const docH = document.documentElement.scrollHeight - winH;
+
+    // Progress line
+    const progress = Math.min(scrollY / docH, 1);
+    progressLine.style.width = (progress * 100) + '%';
+
+    // Find current chapter and next chapter based on scroll position
+    let currentIdx = 0;
+    let nextIdx = 0;
+    let blend = 0;
+
+    for (let i = 0; i < sections.length; i++) {
+      const rect = sections[i].getBoundingClientRect();
+      const sectionTop = rect.top + scrollY;
+      const sectionBottom = sectionTop + rect.height;
+
+      if (scrollY + winH / 2 >= sectionTop && scrollY + winH / 2 < sectionBottom) {
+        currentIdx = i;
+        nextIdx = Math.min(i + 1, sections.length - 1);
+        // Blend based on position within section
+        blend = (scrollY + winH / 2 - sectionTop) / rect.height;
+        blend = Math.max(0, Math.min(1, blend));
+        break;
+      }
+    }
+
+    const current = chapterLights[currentIdx];
+    const next = chapterLights[nextIdx];
+
+    // Interpolate light properties between chapters
+    const x = lerp(current.x, next.x, blend);
+    const y = lerp(current.y, next.y, blend);
+    const intensity = lerp(current.intensity, next.intensity, blend);
+    const spread = lerp(current.spread, next.spread, blend);
+
+    // Interpolate warmth color
+    const c1 = hexToRgb(current.warmth);
+    const c2 = hexToRgb(next.warmth);
+    const cr = [
+      Math.round(lerp(c1[0], c2[0], blend)),
+      Math.round(lerp(c1[1], c2[1], blend)),
+      Math.round(lerp(c1[2], c2[2], blend)),
+    ];
+
+    // Apply dynamic radial gradient
+    ambient.style.background = `
+      radial-gradient(ellipse ${spread}% ${spread * 0.6}% at ${x}% ${y}%,
+        ${rgbString(cr, intensity)} 0%,
+        ${rgbString(cr, intensity * 0.3)} 30%,
+        transparent 70%)
+    `;
+
+    // Subtle atmospheric tint (very faint)
+    atmo.style.background = `
+      radial-gradient(ellipse 100% 60% at 50% ${30 + progress * 40}%,
+        ${rgbString(cr, 0.025)} 0%,
+        transparent 60%)
+    `;
+  }
+
+  // ═══════════════════════════════════════════════
+  //  GOLD PARTICLES CANVAS (EFFECT #2)
+  //  Particules dorées en parallaxe, densité par section
+  // ═══════════════════════════════════════════════
+  const canvas = document.getElementById('particles');
+  const ctx = canvas.getContext('2d');
+  let particles = [];
+  let W = 0, H = 0;
+
+  function resizeCanvas() {
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+  resizeCanvas();
+  window.addEventListener('resize', resizeCanvas);
+
+  function createParticles() {
+    particles = [];
+    const count = Math.min(60, Math.floor(W * H / 22000));
+    for (let i = 0; i < count; i++) {
+      particles.push({
+        x: Math.random() * W,
+        y: Math.random() * H,
+        size: Math.random() * 1.8 + 0.4,
+        speed: Math.random() * 0.25 + 0.05,
+        opacity: Math.random() * 0.4 + 0.1,
+        drift: (Math.random() - 0.5) * 0.3,
+        phase: Math.random() * Math.PI * 2,
+      });
+    }
+  }
+  createParticles();
+  window.addEventListener('resize', createParticles);
+
+  // Current chapter affects particle density multiplier
+  let currentDensity = 1;
+
+  function animParticles() {
+    ctx.clearRect(0, 0, W, H);
+
+    // Particles are more dense/visible in certain chapters
+    const scrollY = window.scrollY;
+    let chIdx = 0;
+    for (let i = 0; i < sections.length; i++) {
+      const rect = sections[i].getBoundingClientRect();
+      if (rect.top + scrollY <= scrollY + window.innerHeight / 2 &&
+          rect.bottom + scrollY >= scrollY + window.innerHeight / 2) {
+        chIdx = i;
+        break;
+      }
+    }
+    // Hero has most particles, projects/synthese have ambient
+    const densityByChapter = [1.2, 0.6, 0.7, 0.9, 1.3, 0.8, 0.7, 0.6, 1.0];
+    currentDensity += (densityByChapter[chIdx] - currentDensity) * 0.02;
+
+    particles.forEach(p => {
+      // Update
+      p.y -= p.speed;
+      p.x += Math.sin(p.phase) * p.drift;
+      p.phase += 0.01;
+
+      // Wrap around
+      if (p.y < -10) {
+        p.y = H + 10;
+        p.x = Math.random() * W;
+      }
+      if (p.x < -10) p.x = W + 10;
+      if (p.x > W + 10) p.x = -10;
+
+      // Draw
+      const alpha = p.opacity * currentDensity;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+      const gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size * 3);
+      gradient.addColorStop(0, `rgba(232, 212, 168, ${alpha})`);
+      gradient.addColorStop(0.5, `rgba(212, 184, 128, ${alpha * 0.5})`);
+      gradient.addColorStop(1, 'rgba(212, 184, 128, 0)');
+      ctx.fillStyle = gradient;
+      ctx.fill();
+
+      // Small bright core
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size * 0.5, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(255, 240, 210, ${alpha * 1.2})`;
+      ctx.fill();
+    });
+
+    requestAnimationFrame(animParticles);
+  }
+  animParticles();
+
+  // ═══════════════════════════════════════════════
+  //  MAIN SCROLL LOOP
+  // ═══════════════════════════════════════════════
+  let rafPending = false;
+  function onScroll() {
+    if (!rafPending) {
+      requestAnimationFrame(() => {
+        updateAmbient();
+        rafPending = false;
+      });
+      rafPending = true;
+    }
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  updateAmbient();
+
+  // ═══════════════════════════════════════════════
+  //  REVEAL ON SCROLL + CHAPTER TRANSITIONS
+  // ═══════════════════════════════════════════════
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('on');
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '-50px 0px' });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  // Dividers reveal
+  const dividerIO = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add('revealed');
+    });
+  }, { threshold: 0.5 });
+  document.querySelectorAll('.divider').forEach(el => dividerIO.observe(el));
+
+  // ═══════════════════════════════════════════════
+  //  ACTIVE NAV (top pill + side dots)
+  // ═══════════════════════════════════════════════
+  const navLinks = document.querySelectorAll('nav a');
+  const dotLinks = document.querySelectorAll('.dot-nav a');
+
+  function updateNav() {
+    let current = '';
+    sections.forEach(s => {
+      if (window.scrollY >= s.offsetTop - 250) current = s.id;
+    });
+    navLinks.forEach(a => {
+      a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+    });
+    dotLinks.forEach(a => {
+      a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+    });
+  }
+  window.addEventListener('scroll', updateNav, { passive: true });
+
+  // Register dot-nav in cursor hover states
+  dotLinks.forEach(el => {
+    el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+    el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
   });
 </script>
 </body>
