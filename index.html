@@ -1298,7 +1298,7 @@
           <div class="info-row"><span class="k">Localisation</span><span class="v">Saint-Joseph, Réunion</span></div>
           <div class="info-row"><span class="k">Formation</span><span class="v">BTS SIO · SLAM</span></div>
           <div class="info-row"><span class="k">Établissement</span><span class="v">Lycée Pierre-Poivre</span></div>
-          <div class="info-row"><span class="k">Candidat n°</span><span class="v" style="color:var(--text-3)">À compléter</span></div>
+          <div class="info-row"><span class="k">Candidat n°</span><span class="v">2248216667</span></div>
         </div>
       </div>
 
@@ -1448,7 +1448,7 @@
         <h4>Tableau de synthèse — Session 2026</h4>
         <div class="st-btns">
           <a class="st-btn st-btn-primary" href="docs/tableau-synthese-e5.pdf" download>↓ PDF</a>
-          <a class="st-btn st-btn-ghost" href="docs/tableau-synthese-e5.ods" download>ODS</a>
+          <a class="st-btn st-btn-ghost" href="docs/tableau-synthese-e5.xlsx" download>XLSX</a>
         </div>
       </div>
 
@@ -1600,10 +1600,10 @@
       <a class="dl" href="docs/cv-mateo-hoareau.pdf" download><div class="dl-i">✦</div><div><div class="dl-t">Curriculum Vitae</div><div class="dl-s">PDF · TÉLÉCHARGER</div></div></a>
       <a class="dl" href="docs/tableau-synthese-e5.pdf" download><div class="dl-i">✧</div><div><div class="dl-t">Tableau de Synthèse E5</div><div class="dl-s">PDF · TÉLÉCHARGER</div></div></a>
       <a class="dl" href="docs/attestation-stage-2.pdf" download><div class="dl-i">◈</div><div><div class="dl-t">Attestation de stage · 2ᵉ année</div><div class="dl-s">ASSOCIATION KOMIDI</div></div></a>
-      <a class="dl dl-missing"><div class="dl-i">◇</div><div><div class="dl-t">Attestation de stage · 1ʳᵉ année</div><div class="dl-s">MAIRIE · À FOURNIR</div></div></a>
+      <a class="dl" href="docs/attestation-stage-1.pdf" download><div class="dl-i">◇</div><div><div class="dl-t">Attestation de stage · 1ʳᵉ année</div><div class="dl-s">MAIRIE DE SAINT-JOSEPH</div></div></a>
       <a class="dl" href="docs/certification-cnil-rgpd.pdf" download><div class="dl-i">◉</div><div><div class="dl-t">Certification CNIL — RGPD</div><div class="dl-s">5 MODULES · 100, 97, 94, 100, 100%</div></div></a>
       <a class="dl" href="docs/certification-pix.pdf" download><div class="dl-i">◎</div><div><div class="dl-t">Certification Pix — 538/895</div><div class="dl-s">AVANCÉ 1 · 23/03/2026</div></div></a>
-      <a class="dl dl-missing"><div class="dl-i">◐</div><div><div class="dl-t">Diplôme Bac STMG</div><div class="dl-s">À FOURNIR</div></div></a>
+      <a class="dl" href="docs/diplome-bac-stmg.pdf" download><div class="dl-i">◐</div><div><div class="dl-t">Diplôme Bac STMG</div><div class="dl-s">MENTION ASSEZ BIEN · 2024</div></div></a>
     </div>
   </div>
 </section>
@@ -1627,11 +1627,11 @@
 <footer>
   <div class="mark">Matéo Hoareau</div>
   <p>© MMXXVI · Portfolio BTS SIO SLAM</p>
-  <p style="margin-top:.4rem">Site statique conforme au <a href="https://www.cnil.fr/fr/rgpd-de-quoi-parle-t-on" target="_blank" rel="noopener">RGPD</a>.</p>
+  <p style="margin-top:.4rem">Mesure d'audience anonyme via Cloudflare Web Analytics · Conforme au <a href="https://www.cnil.fr/fr/rgpd-de-quoi-parle-t-on" target="_blank" rel="noopener">RGPD</a>.</p>
 </footer>
 
 <div class="rgpd" id="rgpd">
-  <span>Site statique — aucune donnée collectée, aucun cookie.</span>
+  <span>Site statique · Mesure d'audience anonyme sans cookie ni traceur publicitaire.</span>
   <button onclick="document.getElementById('rgpd').classList.add('off')">Compris</button>
 </div>
 
@@ -1923,6 +1923,369 @@
     el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
     el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
   });
+
+  // ═══════════════════════════════════════════════
+  //  CLOUDFLARE + GOOGLE SHEETS EVENT TRACKING
+  //  Suivi des actions importantes (RGPD-friendly)
+  // ═══════════════════════════════════════════════
+  const sessionStart = Date.now();
+  const GSHEETS_URL = 'https://script.google.com/macros/s/AKfycbxyQtczKrIZwUdBSpw0a7Fm2L3EKlIrEbww9Mc3cmp7fx1v99OL5fCiPOpGMpMof5_s/exec';
+
+  function track(eventName, data = {}) {
+    // Log pour debug (visible dans la console navigateur)
+    console.log('📊 Event tracked:', eventName, data);
+
+    // Envoi au Google Sheets (non-bloquant, fire-and-forget)
+    try {
+      const payload = {
+        event: eventName,
+        data: data,
+        userAgent: navigator.userAgent,
+        page: window.location.pathname + window.location.hash
+      };
+      // Utilise sendBeacon si disponible (plus fiable, fonctionne même en fermeture de page)
+      if (navigator.sendBeacon) {
+        const blob = new Blob([JSON.stringify(payload)], { type: 'text/plain;charset=UTF-8' });
+        navigator.sendBeacon(GSHEETS_URL, blob);
+      } else {
+        // Fallback fetch avec mode no-cors
+        fetch(GSHEETS_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'text/plain;charset=UTF-8' },
+          body: JSON.stringify(payload)
+        }).catch(() => {});
+      }
+    } catch(e) {
+      // Silencieux : l'analytics ne doit jamais casser le site
+    }
+  }
+
+  // ── Tracking des téléchargements de documents ──
+  document.querySelectorAll('a[download]').forEach(link => {
+    link.addEventListener('click', () => {
+      const href = link.getAttribute('href') || '';
+      const fileName = href.split('/').pop() || 'unknown';
+      track('download', { file: fileName });
+    });
+  });
+
+  // ── Tracking des liens externes (GitHub, email, articles) ──
+  document.querySelectorAll('a[href^="http"], a[href^="mailto"]').forEach(link => {
+    link.addEventListener('click', () => {
+      const href = link.getAttribute('href') || '';
+      let type = 'external_link';
+      if (href.startsWith('mailto:')) type = 'email_click';
+      else if (href.includes('github.com')) type = 'github_click';
+
+      track(type, { url: href.substring(0, 120) });
+    });
+  });
+
+  // ── Tracking des clics sur les CTA principaux ──
+  document.querySelectorAll('.btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const label = btn.textContent.trim().substring(0, 50);
+      track('cta_click', { button: label });
+    });
+  });
+
+  // ── Tracking des clics sur la nav (sections les plus visitées) ──
+  document.querySelectorAll('nav a, .dot-nav a').forEach(link => {
+    link.addEventListener('click', () => {
+      const target = link.getAttribute('href') || '';
+      track('nav_click', { section: target.replace('#', '') });
+    });
+  });
+
+  // ── Tracking de profondeur de scroll ──
+  const scrollMilestones = [25, 50, 75, 100];
+  const reachedMilestones = new Set();
+  window.addEventListener('scroll', () => {
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    if (docHeight <= 0) return;
+    const percentage = Math.round((scrollTop / docHeight) * 100);
+
+    scrollMilestones.forEach(milestone => {
+      if (percentage >= milestone && !reachedMilestones.has(milestone)) {
+        reachedMilestones.add(milestone);
+        track('scroll_depth', { percent: milestone });
+      }
+    });
+  }, { passive: true });
+
+  // ── Tracking du temps passé par section ──
+  const sectionTimers = {};
+  const sectionStartTimes = {};
+  const sectionObs = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      const id = entry.target.id;
+      if (!id) return;
+
+      if (entry.isIntersecting) {
+        sectionStartTimes[id] = Date.now();
+      } else if (sectionStartTimes[id]) {
+        const duration = Math.round((Date.now() - sectionStartTimes[id]) / 1000);
+        sectionTimers[id] = (sectionTimers[id] || 0) + duration;
+        delete sectionStartTimes[id];
+      }
+    });
+  }, { threshold: 0.5 });
+  document.querySelectorAll('section[id]').forEach(s => sectionObs.observe(s));
+
+  // ── Fin de session : envoi des stats finales ──
+  function flushSessionStats() {
+    // Finalise les sections encore visibles
+    Object.keys(sectionStartTimes).forEach(id => {
+      const duration = Math.round((Date.now() - sectionStartTimes[id]) / 1000);
+      sectionTimers[id] = (sectionTimers[id] || 0) + duration;
+    });
+    // Envoie le temps passé par section
+    Object.entries(sectionTimers).forEach(([section, seconds]) => {
+      if (seconds > 2) {
+        track('section_time', { section, seconds });
+      }
+    });
+    // Durée totale de session
+    track('session_end', {
+      total_seconds: Math.round((Date.now() - sessionStart) / 1000),
+      sections_viewed: Object.keys(sectionTimers).length
+    });
+  }
+  window.addEventListener('beforeunload', flushSessionStats);
+  window.addEventListener('pagehide', flushSessionStats);
+
+  // ── Détection visiteur nouveau / récurrent ──
+  // Utilise localStorage (pas un cookie, donc pas de bandeau obligatoire)
+  let isReturning = false;
+  let visitCount = 1;
+  try {
+    const stored = localStorage.getItem('mh_visits');
+    if (stored) {
+      visitCount = parseInt(stored) + 1;
+      isReturning = true;
+    }
+    localStorage.setItem('mh_visits', String(visitCount));
+    localStorage.setItem('mh_last_visit', new Date().toISOString());
+  } catch(e){}
+
+  track('session_start', {
+    returning: isReturning,
+    visit_count: visitCount,
+    referrer: (document.referrer || 'direct').substring(0, 100),
+    screen: `${window.innerWidth}x${window.innerHeight}`,
+    language: navigator.language || 'unknown'
+  });
+
+  // ═══════════════════════════════════════════════
+  //  NOUVEAUX ÉVÉNEMENTS AVANCÉS
+  // ═══════════════════════════════════════════════
+
+  // ── ① TAB VISIBILITY (onglet actif vs arrière-plan) ──
+  let tabActiveTime = 0;
+  let tabLastActive = Date.now();
+  let isTabVisible = !document.hidden;
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+      // Tab became hidden
+      if (isTabVisible) {
+        tabActiveTime += Date.now() - tabLastActive;
+        track('tab_hidden', {
+          active_seconds: Math.round(tabActiveTime / 1000)
+        });
+        isTabVisible = false;
+      }
+    } else {
+      // Tab became visible again
+      tabLastActive = Date.now();
+      isTabVisible = true;
+      track('tab_visible_again', {
+        total_active_seconds: Math.round(tabActiveTime / 1000)
+      });
+    }
+  });
+
+  // ── ② SCROLL BACK UP (remonte = intéressé) ──
+  let lastScrollY = window.scrollY;
+  let scrollBackCount = 0;
+  let lastScrollBackTrack = 0;
+
+  window.addEventListener('scroll', () => {
+    const currentY = window.scrollY;
+    // Detect significant upward scroll (> 200px) after having scrolled down
+    if (currentY < lastScrollY - 200 && lastScrollY > 800) {
+      scrollBackCount++;
+      // Throttle: only track every 3s max
+      const now = Date.now();
+      if (now - lastScrollBackTrack > 3000) {
+        track('scroll_back_up', {
+          from_position: Math.round(lastScrollY),
+          to_position: Math.round(currentY),
+          total_back_ups: scrollBackCount
+        });
+        lastScrollBackTrack = now;
+      }
+    }
+    lastScrollY = currentY;
+  }, { passive: true });
+
+  // ── ③ FAST SCROLL vs SLOW (survol vs lecture) ──
+  let scrollSamples = [];
+  let lastScrollTime = Date.now();
+  let lastScrollPos = window.scrollY;
+  let scrollBehaviorTracked = false;
+
+  window.addEventListener('scroll', () => {
+    const now = Date.now();
+    const dt = now - lastScrollTime;
+    const dy = Math.abs(window.scrollY - lastScrollPos);
+    if (dt > 0 && dy > 0) {
+      const speed = dy / dt; // pixels per ms
+      scrollSamples.push(speed);
+      // Keep only last 50 samples
+      if (scrollSamples.length > 50) scrollSamples.shift();
+    }
+    lastScrollTime = now;
+    lastScrollPos = window.scrollY;
+
+    // Evaluate after enough samples, once
+    if (!scrollBehaviorTracked && scrollSamples.length >= 30) {
+      const avgSpeed = scrollSamples.reduce((a, b) => a + b, 0) / scrollSamples.length;
+      let behavior = 'moderate';
+      if (avgSpeed > 2.5) behavior = 'fast_scroll'; // survol rapide
+      else if (avgSpeed < 0.8) behavior = 'slow_reading'; // lecture attentive
+      track('scroll_behavior', {
+        type: behavior,
+        avg_speed_px_per_ms: avgSpeed.toFixed(2)
+      });
+      scrollBehaviorTracked = true;
+    }
+  }, { passive: true });
+
+  // ── ④ RETURN VISITS (24h / semaine / mois) ──
+  // Calculé au démarrage basé sur la dernière visite stockée
+  try {
+    const lastVisitStr = localStorage.getItem('mh_last_visit_before');
+    if (lastVisitStr) {
+      const lastVisit = new Date(lastVisitStr);
+      const now = new Date();
+      const hoursSince = (now - lastVisit) / (1000 * 60 * 60);
+
+      let returnType = null;
+      if (hoursSince < 24) returnType = 'return_24h';
+      else if (hoursSince < 24 * 7) returnType = 'return_week';
+      else if (hoursSince < 24 * 30) returnType = 'return_month';
+      else returnType = 'return_long';
+
+      if (returnType) {
+        track(returnType, {
+          hours_since_last: Math.round(hoursSince),
+          visit_number: visitCount
+        });
+      }
+    }
+    // Sauvegarde la visite courante pour la prochaine fois
+    localStorage.setItem('mh_last_visit_before', new Date().toISOString());
+  } catch(e){}
+
+  // ── ⑤ DOWNLOADED MULTIPLE DOCS (intérêt sérieux) ──
+  let downloadsInSession = new Set();
+  document.querySelectorAll('a[download]').forEach(link => {
+    link.addEventListener('click', () => {
+      const href = link.getAttribute('href') || '';
+      const fileName = href.split('/').pop() || 'unknown';
+      downloadsInSession.add(fileName);
+
+      if (downloadsInSession.size === 2) {
+        track('serious_interest_2docs', {
+          files: Array.from(downloadsInSession)
+        });
+      } else if (downloadsInSession.size === 3) {
+        track('serious_interest_3docs', {
+          files: Array.from(downloadsInSession)
+        });
+      } else if (downloadsInSession.size >= 5) {
+        track('very_serious_interest_allfiles', {
+          files: Array.from(downloadsInSession),
+          count: downloadsInSession.size
+        });
+      }
+    });
+  });
+
+  // ── ⑥ FULL JOURNEY COMPLETION (toutes sections visitées) ──
+  const allSectionIds = Array.from(document.querySelectorAll('section[id]')).map(s => s.id);
+  const sectionsVisited = new Set();
+  let journeyCompleted = false;
+
+  const journeyObs = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        sectionsVisited.add(entry.target.id);
+
+        if (!journeyCompleted && sectionsVisited.size === allSectionIds.length) {
+          journeyCompleted = true;
+          track('full_journey_completed', {
+            sections_count: sectionsVisited.size,
+            time_to_complete_seconds: Math.round((Date.now() - sessionStart) / 1000)
+          });
+        }
+      }
+    });
+  }, { threshold: 0.3 });
+  document.querySelectorAll('section[id]').forEach(s => journeyObs.observe(s));
+
+  // ── ⑦ HOVER PROJECT LONG (hésitation sur un projet) ──
+  let projectHoverTimer = null;
+  let currentHoveredProject = null;
+
+  document.querySelectorAll('#projets .card').forEach(card => {
+    const projectName = card.querySelector('.p-name')?.textContent.trim() || 'unknown';
+
+    card.addEventListener('mouseenter', () => {
+      currentHoveredProject = projectName;
+      projectHoverTimer = setTimeout(() => {
+        track('project_hover_long', {
+          project: projectName,
+          duration_seconds: 3
+        });
+      }, 3000); // 3 secondes de hover = intérêt
+    });
+
+    card.addEventListener('mouseleave', () => {
+      if (projectHoverTimer) {
+        clearTimeout(projectHoverTimer);
+        projectHoverTimer = null;
+      }
+      currentHoveredProject = null;
+    });
+  });
+
+  // ── ⑧ PRINT PAGE (impression) ──
+  window.addEventListener('beforeprint', () => {
+    track('print_started', {
+      timestamp: new Date().toISOString()
+    });
+  });
+  window.addEventListener('afterprint', () => {
+    track('print_completed', {
+      timestamp: new Date().toISOString()
+    });
+  });
+
+  // Aussi : raccourci Ctrl+P / Cmd+P
+  document.addEventListener('keydown', (e) => {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'p') {
+      track('print_shortcut_used');
+    }
+  });
 </script>
+
+<!-- Cloudflare Web Analytics -->
+<script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "0c9bc0ac5248492aace68439134f3b51"}'></script>
+<!-- End Cloudflare Web Analytics -->
+
 </body>
 </html>
