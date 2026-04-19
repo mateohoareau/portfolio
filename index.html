@@ -2348,6 +2348,593 @@
       track('print_shortcut_used');
     }
   });
+
+  // ═══════════════════════════════════════════════
+  //  TRACKING AVANCÉ — PRESHOT QUESTIONS
+  // ═══════════════════════════════════════════════
+
+  // ── ⑨ SÉLECTION DE TEXTE (ce qu'ils surlignent/copient) ──
+  let lastSelection = '';
+  document.addEventListener('mouseup', () => {
+    const selection = window.getSelection();
+    const text = selection.toString().trim();
+    if (text.length >= 5 && text !== lastSelection) {
+      lastSelection = text;
+      // Trouver dans quelle section la sélection a eu lieu
+      let sectionId = 'unknown';
+      if (selection.anchorNode) {
+        let node = selection.anchorNode;
+        while (node && node !== document.body) {
+          if (node.id && node.tagName === 'SECTION') {
+            sectionId = node.id;
+            break;
+          }
+          node = node.parentNode;
+        }
+      }
+      track('text_selected', {
+        text: text.substring(0, 200),
+        length: text.length,
+        section: sectionId
+      });
+    }
+  });
+
+  // ── ⑩ COPIE (Ctrl+C) ──
+  document.addEventListener('copy', (e) => {
+    const text = window.getSelection().toString().trim();
+    if (text.length > 0) {
+      track('text_copied', {
+        text: text.substring(0, 200),
+        length: text.length
+      });
+    }
+  });
+
+  // ── ⑪ CLIC DROIT (intention de copier/inspecter) ──
+  let rightClickCount = 0;
+  document.addEventListener('contextmenu', (e) => {
+    rightClickCount++;
+    const target = e.target.tagName.toLowerCase();
+    track('right_click', {
+      on: target,
+      text_context: (e.target.textContent || '').substring(0, 100),
+      count_in_session: rightClickCount
+    });
+  });
+
+  // ── ⑫ RECHERCHE DANS LA PAGE (Ctrl+F) ──
+  document.addEventListener('keydown', (e) => {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
+      track('page_search_opened');
+    }
+  });
+
+  // ── ⑬ ZOOM DANS LA PAGE (Ctrl++, Ctrl+-, Ctrl+0) ──
+  document.addEventListener('keydown', (e) => {
+    if ((e.ctrlKey || e.metaKey) && (e.key === '+' || e.key === '=' || e.key === '-' || e.key === '0')) {
+      track('page_zoom', { action: e.key === '0' ? 'reset' : (e.key === '-' ? 'out' : 'in') });
+    }
+  });
+
+  // ── ⑭ DEVTOOLS OUVERTS (inspection) ──
+  let devtoolsOpen = false;
+  setInterval(() => {
+    const threshold = 160;
+    const widthDiff = window.outerWidth - window.innerWidth;
+    const heightDiff = window.outerHeight - window.innerHeight;
+    const isOpen = widthDiff > threshold || heightDiff > threshold;
+    if (isOpen && !devtoolsOpen) {
+      devtoolsOpen = true;
+      track('devtools_opened', { side: widthDiff > threshold ? 'right' : 'bottom' });
+    } else if (!isOpen && devtoolsOpen) {
+      devtoolsOpen = false;
+    }
+  }, 2000);
+
+  // ── ⑮ ZONE DU TABLEAU E5 — TRACKING APPROFONDI ──
+  const tableau = document.querySelector('#synthese table.synth');
+  if (tableau) {
+    // Hover sur chaque ligne pour voir quelle compétence/réalisation attire l'œil
+    tableau.querySelectorAll('tbody tr:not(.cat-row)').forEach((row, idx) => {
+      let enterTime = 0;
+      row.addEventListener('mouseenter', () => { enterTime = Date.now(); });
+      row.addEventListener('mouseleave', () => {
+        const duration = Math.round((Date.now() - enterTime) / 1000);
+        if (duration >= 2) {
+          const realisation = row.querySelector('td')?.textContent.trim().substring(0, 60) || 'unknown';
+          track('tableau_row_hover', { realisation, duration_sec: duration });
+        }
+      });
+    });
+    // Clic sur une case X (curiosité)
+    tableau.querySelectorAll('.comp-box').forEach((box) => {
+      box.addEventListener('click', (e) => {
+        const row = box.closest('tr');
+        const realisation = row?.querySelector('td')?.textContent.trim().substring(0, 60) || 'unknown';
+        track('tableau_cell_clicked', { realisation });
+      });
+    });
+  }
+
+  // ── ⑯ TEMPS SUR CHAQUE PROJET (plus précis que juste hover_long) ──
+  document.querySelectorAll('#projets .card').forEach(card => {
+    let enterTime = 0;
+    card.addEventListener('mouseenter', () => { enterTime = Date.now(); });
+    card.addEventListener('mouseleave', () => {
+      if (enterTime === 0) return;
+      const duration = Math.round((Date.now() - enterTime) / 1000);
+      const projectName = card.querySelector('.p-name')?.textContent.trim() || 'unknown';
+      if (duration >= 1) {
+        track('project_view_duration', { project: projectName, duration_sec: duration });
+      }
+      enterTime = 0;
+    });
+  });
+
+  // ── ⑰ FOCUS / BLUR sur la fenêtre (suivi attention) ──
+  window.addEventListener('blur', () => {
+    track('window_blur', { elapsed_sec: Math.round((Date.now() - sessionStart) / 1000) });
+  });
+  window.addEventListener('focus', () => {
+    track('window_focus', { elapsed_sec: Math.round((Date.now() - sessionStart) / 1000) });
+  });
+
+  // ── ⑱ DÉTECTION ÉCRAN PARTAGÉ (split screen) ──
+  if (window.innerWidth < window.screen.width * 0.7) {
+    track('split_screen_detected', {
+      viewport_width: window.innerWidth,
+      screen_width: window.screen.width,
+      ratio: (window.innerWidth / window.screen.width).toFixed(2)
+    });
+  }
+
+  // ── ⑲ CHANGEMENT D'ORIENTATION (mobile) ──
+  window.addEventListener('orientationchange', () => {
+    track('orientation_change', {
+      orientation: window.screen.orientation?.type || 'unknown',
+      angle: window.screen.orientation?.angle ?? 'unknown'
+    });
+  });
+
+  // ── ⑳ SCROLL JUSQU'À UNE SECTION SPÉCIFIQUE (première fois) ──
+  const sectionsReached = new Set();
+  const reachObs = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting && entry.target.id && !sectionsReached.has(entry.target.id)) {
+        sectionsReached.add(entry.target.id);
+        const timeToReach = Math.round((Date.now() - sessionStart) / 1000);
+        track('section_first_reached', {
+          section: entry.target.id,
+          time_to_reach_sec: timeToReach
+        });
+      }
+    });
+  }, { threshold: 0.5 });
+  document.querySelectorAll('section[id]').forEach(s => reachObs.observe(s));
+
+  // ── ㉑ CLIC SUR IMAGE / EMOJI DE PROJET ──
+  document.querySelectorAll('.p-emoji, .av-emoji, .vt-i').forEach(el => {
+    el.addEventListener('click', () => {
+      const parent = el.closest('.card, .vt');
+      const name = parent?.querySelector('.p-name, .vt-name')?.textContent.trim() || 'unknown';
+      track('emoji_clicked', { element: name });
+    });
+  });
+
+  // ── ㉒ TENTATIVE DE DRAG D'IMAGE (intention de sauvegarder) ──
+  document.addEventListener('dragstart', (e) => {
+    track('drag_attempt', {
+      type: e.target.tagName.toLowerCase(),
+      target: (e.target.textContent || '').substring(0, 80)
+    });
+  });
+
+  // ═══════════════════════════════════════════════════════════════
+  //  🎯 TRACKING AVANCÉ — DÉTECTION DE JURY + PRÉDICTION DE QUESTIONS
+  // ═══════════════════════════════════════════════════════════════
+
+  // ── ㉓ EMPREINTE CANVAS (identification unique persistante) ──
+  function getCanvasFingerprint() {
+    try {
+      const canvas = document.createElement('canvas');
+      canvas.width = 200; canvas.height = 50;
+      const ctx = canvas.getContext('2d');
+      ctx.textBaseline = 'top';
+      ctx.font = "14px 'Arial'";
+      ctx.fillStyle = '#f60';
+      ctx.fillRect(125, 1, 62, 20);
+      ctx.fillStyle = '#069';
+      ctx.fillText('Portfolio-MH-2026', 2, 15);
+      ctx.fillStyle = 'rgba(102, 204, 0, 0.7)';
+      ctx.fillText('Portfolio-MH-2026', 4, 17);
+      const dataURL = canvas.toDataURL();
+      let hash = 0;
+      for (let i = 0; i < dataURL.length; i++) {
+        hash = ((hash << 5) - hash) + dataURL.charCodeAt(i);
+        hash |= 0;
+      }
+      return 'fp_' + Math.abs(hash).toString(36);
+    } catch(e) { return 'fp_unknown'; }
+  }
+  const canvasFp = getCanvasFingerprint();
+
+  // ── ㉔ DONNÉES HARDWARE ÉTENDUES ──
+  const hardwareInfo = {
+    cpuCores: navigator.hardwareConcurrency || 'unknown',
+    ram: navigator.deviceMemory || 'unknown',
+    touchPoints: navigator.maxTouchPoints || 0,
+    pointerType: window.matchMedia('(pointer: fine)').matches ? 'mouse' : (window.matchMedia('(pointer: coarse)').matches ? 'touch' : 'unknown'),
+    hoverSupport: window.matchMedia('(hover: hover)').matches,
+    darkMode: window.matchMedia('(prefers-color-scheme: dark)').matches,
+    reducedMotion: window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+    colorScheme: window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light',
+    pixelRatio: window.devicePixelRatio || 1,
+    colorDepth: window.screen.colorDepth || 'unknown'
+  };
+
+  // GPU info via WebGL
+  try {
+    const gl = document.createElement('canvas').getContext('webgl');
+    if (gl) {
+      const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
+      if (debugInfo) {
+        hardwareInfo.gpu = gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL).substring(0, 80);
+      }
+    }
+  } catch(e) {}
+
+  // Battery (si disponible)
+  if (navigator.getBattery) {
+    navigator.getBattery().then(battery => {
+      track('hardware_info', {
+        ...hardwareInfo,
+        fingerprint: canvasFp,
+        battery_level: Math.round(battery.level * 100),
+        battery_charging: battery.charging
+      });
+    }).catch(() => {
+      track('hardware_info', { ...hardwareInfo, fingerprint: canvasFp });
+    });
+  } else {
+    track('hardware_info', { ...hardwareInfo, fingerprint: canvasFp });
+  }
+
+  // ── ㉕ HEATMAP — CAPTURE POSITIONS DE CLIC (échantillonnage) ──
+  let clickSamples = [];
+  document.addEventListener('click', (e) => {
+    const x = Math.round((e.clientX / window.innerWidth) * 100);
+    const y = Math.round((e.clientY / window.innerHeight) * 100);
+    clickSamples.push({ x, y, t: Date.now() - sessionStart });
+    if (clickSamples.length >= 5) {
+      track('click_heatmap_batch', { samples: clickSamples });
+      clickSamples = [];
+    }
+  });
+
+  // ── ㉖ MOUVEMENT DE CURSEUR (échantillonnage toutes les 2s) ──
+  let lastMouseX = 0, lastMouseY = 0;
+  let mouseDistance = 0;
+  let mouseSamples = [];
+  document.addEventListener('mousemove', (e) => {
+    if (lastMouseX !== 0) {
+      mouseDistance += Math.hypot(e.clientX - lastMouseX, e.clientY - lastMouseY);
+    }
+    lastMouseX = e.clientX; lastMouseY = e.clientY;
+  });
+  setInterval(() => {
+    if (lastMouseX > 0 && mouseDistance > 50) {
+      mouseSamples.push({
+        x: Math.round((lastMouseX / window.innerWidth) * 100),
+        y: Math.round((lastMouseY / window.innerHeight) * 100),
+        dist: Math.round(mouseDistance)
+      });
+      mouseDistance = 0;
+      if (mouseSamples.length >= 10) {
+        track('cursor_path', { samples: mouseSamples });
+        mouseSamples = [];
+      }
+    }
+  }, 3000);
+
+  // ── ㉗ RAGE CLICKS (frustration) ──
+  let clickHistory = [];
+  document.addEventListener('click', (e) => {
+    const now = Date.now();
+    clickHistory.push({ x: e.clientX, y: e.clientY, t: now });
+    clickHistory = clickHistory.filter(c => now - c.t < 1500);
+    if (clickHistory.length >= 3) {
+      const avgX = clickHistory.reduce((s, c) => s + c.x, 0) / clickHistory.length;
+      const avgY = clickHistory.reduce((s, c) => s + c.y, 0) / clickHistory.length;
+      const variance = clickHistory.reduce((s, c) =>
+        s + Math.hypot(c.x - avgX, c.y - avgY), 0) / clickHistory.length;
+      if (variance < 50) {
+        track('rage_click', {
+          count: clickHistory.length,
+          target: e.target.tagName.toLowerCase() + (e.target.className ? '.' + e.target.className.substring(0, 30) : '')
+        });
+        clickHistory = [];
+      }
+    }
+  });
+
+  // ── ㉘ RYTHME DE SCROLL (pattern unique) ──
+  let scrollTimings = [];
+  let lastScrollTime = 0;
+  window.addEventListener('scroll', () => {
+    const now = Date.now();
+    if (lastScrollTime > 0) {
+      const delta = now - lastScrollTime;
+      if (delta < 2000) scrollTimings.push(delta);
+    }
+    lastScrollTime = now;
+    if (scrollTimings.length >= 20) {
+      const avg = scrollTimings.reduce((a,b) => a+b, 0) / scrollTimings.length;
+      const variance = scrollTimings.reduce((a,b) => a + Math.pow(b-avg, 2), 0) / scrollTimings.length;
+      track('scroll_rhythm', {
+        avg_delta_ms: Math.round(avg),
+        variance: Math.round(Math.sqrt(variance)),
+        samples: scrollTimings.length
+      });
+      scrollTimings = [];
+    }
+  });
+
+  // ── ㉙ RE-VISITES DE SECTIONS (indicateur fort de jury) ──
+  const sectionVisits = {};
+  const revisitObs = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting && entry.target.id) {
+        const id = entry.target.id;
+        sectionVisits[id] = (sectionVisits[id] || 0) + 1;
+        if (sectionVisits[id] === 2) {
+          track('section_revisited', { section: id, visit_number: 2 });
+        } else if (sectionVisits[id] === 3) {
+          track('section_revisited', { section: id, visit_number: 3 });
+        } else if (sectionVisits[id] >= 4) {
+          track('section_heavily_revisited', { section: id, visit_number: sectionVisits[id] });
+        }
+      }
+    });
+  }, { threshold: 0.5 });
+  document.querySelectorAll('section[id]').forEach(s => revisitObs.observe(s));
+
+  // ── ㉚ DERNIÈRE SECTION AVANT DÉPART ──
+  let currentSection = 'hero';
+  const lastSectionObs = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting && entry.target.id) {
+        currentSection = entry.target.id;
+      }
+    });
+  }, { threshold: 0.3 });
+  document.querySelectorAll('section[id]').forEach(s => lastSectionObs.observe(s));
+  window.addEventListener('pagehide', () => {
+    track('last_section_before_leave', {
+      section: currentSection,
+      total_time_sec: Math.round((Date.now() - sessionStart) / 1000)
+    });
+  });
+
+  // ── ㉛ DÉTECTION JURY — SCORING AUTOMATIQUE ──
+  // On calcule un score au fil de la session et on envoie le verdict
+  let juryScore = 0;
+  const juryIndicators = {
+    long_session: 0,      // reste longtemps
+    revisits: 0,          // revient sur des sections
+    downloads_many: 0,    // télécharge plusieurs docs
+    tableau_focus: 0,     // s'attarde sur le Tableau E5
+    slow_reading: 0,      // lit lentement
+    devtools: 0,          // pas un jury mais curieux tech
+    print: 0,             // imprime
+    text_selected: 0      // surligne du texte
+  };
+
+  // Track les signaux
+  const juryTrackers = {
+    'serious_interest_3docs': 'downloads_many',
+    'serious_interest_2docs': 'downloads_many',
+    'very_serious_interest_allfiles': 'downloads_many',
+    'full_journey_completed': 'long_session',
+    'slow_reading': 'slow_reading',
+    'section_heavily_revisited': 'revisits',
+    'section_revisited': 'revisits',
+    'tableau_row_hover': 'tableau_focus',
+    'tableau_cell_clicked': 'tableau_focus',
+    'print_started': 'print',
+    'print_completed': 'print',
+    'text_selected': 'text_selected'
+  };
+
+  // Override track pour scorer
+  const originalTrack = track;
+  window.track = function(eventName, data = {}) {
+    originalTrack(eventName, data);
+    const indicator = juryTrackers[eventName];
+    if (indicator) {
+      juryIndicators[indicator]++;
+    }
+  };
+
+  // Calcul du profil visiteur après 60 secondes
+  setTimeout(() => {
+    const sessionSec = Math.round((Date.now() - sessionStart) / 1000);
+
+    // Calcul du score jury (0-100)
+    let score = 0;
+    if (sessionSec > 120) score += 15;
+    if (sessionSec > 300) score += 15;
+    if (juryIndicators.downloads_many > 0) score += 20;
+    if (juryIndicators.tableau_focus > 2) score += 20;
+    if (juryIndicators.revisits > 0) score += 10;
+    if (juryIndicators.slow_reading > 0) score += 10;
+    if (juryIndicators.text_selected > 0) score += 5;
+    if (juryIndicators.print > 0) score += 15;
+    if (hardwareInfo.pointerType === 'mouse') score += 5; // desktop plus probable que jury
+
+    // Classification
+    let profile = 'visitor';
+    if (score >= 60) profile = 'likely_jury';
+    else if (score >= 40) profile = 'serious_evaluator';
+    else if (score >= 25) profile = 'interested_visitor';
+    else if (sessionSec < 15) profile = 'bounce';
+    else profile = 'casual_visitor';
+
+    track('visitor_profile_computed', {
+      profile: profile,
+      score: score,
+      session_sec: sessionSec,
+      indicators: juryIndicators
+    });
+  }, 60000);
+
+  // ── ㉜ SCORE D'ENGAGEMENT FINAL (à la sortie) ──
+  function computeFinalEngagement() {
+    const sessionSec = Math.round((Date.now() - sessionStart) / 1000);
+    let engagement = 0;
+    engagement += Math.min(sessionSec / 3, 30);
+    engagement += Math.min(Object.keys(sectionVisits).length * 5, 30);
+    engagement += Math.min((juryIndicators.downloads_many || 0) * 10, 20);
+    engagement += Math.min((juryIndicators.slow_reading || 0) * 3, 10);
+    engagement += Math.min((juryIndicators.text_selected || 0) * 2, 10);
+    return Math.round(Math.min(engagement, 100));
+  }
+  window.addEventListener('pagehide', () => {
+    track('engagement_score_final', {
+      score: computeFinalEngagement(),
+      sections_visited: Object.keys(sectionVisits).length,
+      indicators: juryIndicators
+    });
+  });
+
+  // ── ㉝ FORMATEUR DE LECTURE (rythme moyen) ──
+  let readingStart = Date.now();
+  let pausesCount = 0;
+  let totalPauseDuration = 0;
+  let lastActivityTime = Date.now();
+  ['scroll', 'mousemove', 'click', 'keypress'].forEach(evt => {
+    document.addEventListener(evt, () => {
+      const now = Date.now();
+      const inactive = now - lastActivityTime;
+      if (inactive > 5000 && inactive < 180000) {
+        pausesCount++;
+        totalPauseDuration += inactive;
+      }
+      lastActivityTime = now;
+    });
+  });
+  window.addEventListener('pagehide', () => {
+    track('reading_pattern', {
+      pauses: pausesCount,
+      total_pause_sec: Math.round(totalPauseDuration / 1000)
+    });
+  });
+
+  // ── ㉞ DÉTECTION DE BOT ──
+  const botSignals = {
+    webdriver: navigator.webdriver === true,
+    headless: /headless|phantom|slimerjs/i.test(navigator.userAgent),
+    no_languages: !navigator.languages || navigator.languages.length === 0,
+    no_plugins: navigator.plugins.length === 0
+  };
+  if (Object.values(botSignals).some(v => v)) {
+    track('bot_detected', botSignals);
+  }
+
+  // ── ㉟ PAYS ESTIMÉ (via timezone + langue) ──
+  function guessCountry() {
+    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
+    const lang = navigator.language || '';
+    const tzToCountry = {
+      'Indian/Reunion': 'RE', 'Europe/Paris': 'FR', 'Europe/London': 'UK',
+      'America/New_York': 'US', 'America/Los_Angeles': 'US', 'America/Chicago': 'US',
+      'Asia/Tokyo': 'JP', 'Asia/Shanghai': 'CN', 'Asia/Kolkata': 'IN',
+      'Europe/Berlin': 'DE', 'Europe/Madrid': 'ES', 'Europe/Rome': 'IT',
+      'Europe/Amsterdam': 'NL', 'Europe/Brussels': 'BE', 'Europe/Zurich': 'CH',
+      'Australia/Sydney': 'AU', 'America/Toronto': 'CA'
+    };
+    return tzToCountry[tz] || (lang.split('-')[1] || 'unknown');
+  }
+  track('country_guessed', { country: guessCountry(), tz: Intl.DateTimeFormat().resolvedOptions().timeZone });
+
+  // ── ㊱ TEMPS DE RÉFLEXION AVANT TÉLÉCHARGEMENT ──
+  document.querySelectorAll('a[download]').forEach(link => {
+    link.addEventListener('click', () => {
+      const timeFromStart = Math.round((Date.now() - sessionStart) / 1000);
+      const filename = link.getAttribute('href').split('/').pop();
+      track('time_to_download', {
+        file: filename,
+        time_from_arrival_sec: timeFromStart
+      });
+    });
+  });
+
+  // ── ㊲ PROFONDEUR DE LECTURE DU TABLEAU E5 ──
+  const tableauSection = document.querySelector('#synthese');
+  if (tableauSection) {
+    let tableauTimeStart = null;
+    let tableauTotalTime = 0;
+    const tableauObs = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && entry.intersectionRatio > 0.5) {
+          if (!tableauTimeStart) tableauTimeStart = Date.now();
+        } else if (tableauTimeStart) {
+          tableauTotalTime += Date.now() - tableauTimeStart;
+          tableauTimeStart = null;
+        }
+      });
+    }, { threshold: [0.5] });
+    tableauObs.observe(tableauSection);
+    window.addEventListener('pagehide', () => {
+      if (tableauTimeStart) tableauTotalTime += Date.now() - tableauTimeStart;
+      if (tableauTotalTime > 5000) {
+        track('tableau_e5_deep_read', {
+          total_time_sec: Math.round(tableauTotalTime / 1000)
+        });
+      }
+    });
+  }
+
+  // ── ㊳ VITESSE DE CONNEXION MESURÉE ──
+  if ('connection' in navigator && navigator.connection) {
+    const c = navigator.connection;
+    track('connection_details', {
+      effectiveType: c.effectiveType || 'unknown',
+      downlink: c.downlink || 'unknown',
+      rtt: c.rtt || 'unknown',
+      saveData: c.saveData || false
+    });
+  }
+
+  // ── ㊴ PAGE LOAD PERFORMANCE ──
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      try {
+        const timing = performance.timing;
+        const loadTime = timing.loadEventEnd - timing.navigationStart;
+        const domTime = timing.domContentLoadedEventEnd - timing.navigationStart;
+        if (loadTime > 0 && loadTime < 60000) {
+          track('page_performance', {
+            load_time_ms: loadTime,
+            dom_ready_ms: domTime
+          });
+        }
+      } catch(e) {}
+    }, 100);
+  });
+
+  // ── ㊵ RETOUR POUR LA N-IÈME FOIS ──
+  try {
+    const visitCount = parseInt(localStorage.getItem('mh_visit_count') || '0');
+    const newCount = visitCount + 1;
+    localStorage.setItem('mh_visit_count', String(newCount));
+    if (newCount >= 3) {
+      track('loyal_visitor', { visit_number: newCount });
+    }
+    if (newCount >= 5) {
+      track('super_loyal_visitor', { visit_number: newCount });
+    }
+  } catch(e) {}
 </script>
 
 <!-- Cloudflare Web Analytics -->
