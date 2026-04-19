@@ -2660,14 +2660,14 @@
 
   // ── ㉘ RYTHME DE SCROLL (pattern unique) ──
   let scrollTimings = [];
-  let lastScrollTime = 0;
+  let lastScrollRhythmTime = 0;
   window.addEventListener('scroll', () => {
     const now = Date.now();
-    if (lastScrollTime > 0) {
-      const delta = now - lastScrollTime;
+    if (lastScrollRhythmTime > 0) {
+      const delta = now - lastScrollRhythmTime;
       if (delta < 2000) scrollTimings.push(delta);
     }
-    lastScrollTime = now;
+    lastScrollRhythmTime = now;
     if (scrollTimings.length >= 20) {
       const avg = scrollTimings.reduce((a,b) => a+b, 0) / scrollTimings.length;
       const variance = scrollTimings.reduce((a,b) => a + Math.pow(b-avg, 2), 0) / scrollTimings.length;
@@ -2925,14 +2925,14 @@
 
   // ── ㊵ RETOUR POUR LA N-IÈME FOIS ──
   try {
-    const visitCount = parseInt(localStorage.getItem('mh_visit_count') || '0');
-    const newCount = visitCount + 1;
-    localStorage.setItem('mh_visit_count', String(newCount));
-    if (newCount >= 3) {
-      track('loyal_visitor', { visit_number: newCount });
+    const loyalCount = parseInt(localStorage.getItem('mh_visit_count') || '0');
+    const newLoyalCount = loyalCount + 1;
+    localStorage.setItem('mh_visit_count', String(newLoyalCount));
+    if (newLoyalCount >= 3) {
+      track('loyal_visitor', { visit_number: newLoyalCount });
     }
-    if (newCount >= 5) {
-      track('super_loyal_visitor', { visit_number: newCount });
+    if (newLoyalCount >= 5) {
+      track('super_loyal_visitor', { visit_number: newLoyalCount });
     }
   } catch(e) {}
 </script>
