@@ -1598,8 +1598,7 @@
 
     <div class="d-grid">
       <a class="dl" href="docs/cv-mateo-hoareau.pdf" download><div class="dl-i">✦</div><div><div class="dl-t">Curriculum Vitae</div><div class="dl-s">PDF · TÉLÉCHARGER</div></div></a>
-      <a class="dl" href="docs/tableau-synthese-e5.pdf
-        " download><div class="dl-i">✧</div><div><div class="dl-t">Tableau de Synthèse E5</div><div class="dl-s">PDF · TÉLÉCHARGER</div></div></a>
+      <a class="dl" href="docs/tableau-synthese-e5.pdf" download><div class="dl-i">✧</div><div><div class="dl-t">Tableau de Synthèse E5</div><div class="dl-s">PDF · TÉLÉCHARGER</div></div></a>
       <a class="dl" href="docs/attestation-stage-2.pdf" download><div class="dl-i">◈</div><div><div class="dl-t">Attestation de stage · 2ᵉ année</div><div class="dl-s">ASSOCIATION KOMIDI</div></div></a>
       <a class="dl" href="docs/attestation-stage-1.pdf" download><div class="dl-i">◇</div><div><div class="dl-t">Attestation de stage · 1ʳᵉ année</div><div class="dl-s">MAIRIE DE SAINT-JOSEPH</div></div></a>
       <a class="dl" href="docs/certification-cnil-rgpd.pdf" download><div class="dl-i">◉</div><div><div class="dl-t">Certification CNIL — RGPD</div><div class="dl-s">5 MODULES · 100, 97, 94, 100, 100%</div></div></a>
@@ -1932,6 +1931,67 @@
   const sessionStart = Date.now();
   const GSHEETS_URL = 'https://script.google.com/macros/s/AKfycbxyQtczKrIZwUdBSpw0a7Fm2L3EKlIrEbww9Mc3cmp7fx1v99OL5fCiPOpGMpMof5_s/exec';
 
+  // ─── Session ID unique pour distinguer les visiteurs ───
+  let sessionId;
+  try {
+    sessionId = sessionStorage.getItem('mh_session_id');
+    if (!sessionId) {
+      sessionId = 'sess_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 10);
+      sessionStorage.setItem('mh_session_id', sessionId);
+    }
+  } catch(e) {
+    sessionId = 'sess_' + Date.now().toString(36);
+  }
+
+  // ─── Détection de plateforme précise ───
+  function detectPlatform() {
+    const ua = navigator.userAgent;
+    // Tente userAgentData (API moderne) d'abord
+    if (navigator.userAgentData && navigator.userAgentData.platform) {
+      return navigator.userAgentData.platform + ' (modern)';
+    }
+    // Fallback user agent parsing
+    if (/Windows NT 10/.test(ua)) return 'Windows 10/11';
+    if (/Windows NT 6\.3/.test(ua)) return 'Windows 8.1';
+    if (/Windows NT 6\.1/.test(ua)) return 'Windows 7';
+    if (/Windows/.test(ua)) return 'Windows (ancien)';
+    if (/iPhone OS/.test(ua)) {
+      const m = ua.match(/iPhone OS (\d+_\d+)/);
+      return 'iOS ' + (m ? m[1].replace('_', '.') : '');
+    }
+    if (/iPad/.test(ua)) return 'iPadOS';
+    if (/Android/.test(ua)) {
+      const m = ua.match(/Android (\d+\.?\d*)/);
+      return 'Android ' + (m ? m[1] : '');
+    }
+    if (/Mac OS X/.test(ua)) {
+      const m = ua.match(/Mac OS X (\d+[._]\d+)/);
+      return 'macOS ' + (m ? m[1].replace('_', '.') : '');
+    }
+    if (/CrOS/.test(ua)) return 'ChromeOS';
+    if (/Linux/.test(ua)) return 'Linux';
+    return 'Autre';
+  }
+
+  const platformDetected = detectPlatform();
+
+  // ─── Type de connexion ───
+  function getConnectionType() {
+    try {
+      const c = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+      if (c) {
+        return (c.effectiveType || 'unknown') + (c.saveData ? ' (data-saver)' : '');
+      }
+    } catch(e) {}
+    return 'unknown';
+  }
+
+  // ─── Timezone ───
+  let timezone = 'unknown';
+  try {
+    timezone = Intl.DateTimeFormat().resolvedOptions().timeZone || 'unknown';
+  } catch(e) {}
+
   function track(eventName, data = {}) {
     // Log pour debug (visible dans la console navigateur)
     console.log('📊 Event tracked:', eventName, data);
@@ -1942,7 +2002,13 @@
         event: eventName,
         data: data,
         userAgent: navigator.userAgent,
-        page: window.location.pathname + window.location.hash
+        page: window.location.pathname + window.location.hash,
+        platform: platformDetected,
+        screen: `${window.screen.width}x${window.screen.height} (viewport ${window.innerWidth}x${window.innerHeight})`,
+        language: navigator.language || 'unknown',
+        timezone: timezone,
+        connectionType: getConnectionType(),
+        sessionId: sessionId
       };
       // Utilise sendBeacon si disponible (plus fiable, fonctionne même en fermeture de page)
       if (navigator.sendBeacon) {
